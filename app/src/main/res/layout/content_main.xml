@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/content_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="edu.ucsd.dejaphotoapp.MainActivity"
+    tools:showIn="@layout/activity_main">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="When selecting background image consider the photo's:"
+        android:id="@+id/text"
+        android:textSize="32sp"
+        android:layout_marginTop="25dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="15dp"
+        android:layout_marginStart="15dp" />
+
+    <Switch
+        android:id="@+id/proximity"
+        android:layout_width="330dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="26dp"
+        android:text="Proximity"
+        android:layout_marginRight="26dp"
+        android:layout_marginEnd="26dp"
+        android:layout_below="@+id/text"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <Switch
+        android:id="@+id/timeOfDay"
+        android:layout_width="330dp"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/proximity"
+        android:layout_alignRight="@+id/proximity"
+        android:layout_below="@+id/proximity"
+        android:layout_marginTop="16dp"
+        android:text="Time-of-day" />
+
+    <Switch
+        android:id="@+id/recency"
+        android:layout_width="330dp"
+        android:layout_height="wrap_content"
+        android:text="Recency"
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/timeOfDay"
+        android:layout_alignLeft="@+id/proximity"
+        android:layout_alignStart="@+id/proximity" />
+
+    <Switch
+        android:id="@+id/customAlbum"
+        android:layout_width="330dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="52dp"
+        android:text="Use custom album"
+        android:layout_below="@+id/recency"
+        android:layout_alignRight="@+id/recency"
+        android:layout_alignEnd="@+id/recency" />
+
+</RelativeLayout>
+

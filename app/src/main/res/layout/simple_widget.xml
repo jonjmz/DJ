@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/widget_margin"
+    android:background="#7fc3c6">
+
+    <Button
+        android:layout_height="40dp"
+        android:layout_width="40dp"
+        android:background="@drawable/rightx"
+        android:id="@+id/right"
+        android:layout_marginRight="48dp"
+        android:layout_marginEnd="48dp"
+        android:layout_alignTop="@+id/trash"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+    <Button
+        android:layout_height="40dp"
+        android:layout_width="40dp"
+        android:background="@drawable/trashx"
+        android:id="@+id/trash"
+        android:layout_marginRight="44dp"
+        android:layout_marginEnd="44dp"
+        android:layout_alignTop="@+id/left"
+        android:layout_toLeftOf="@+id/heart"
+        android:layout_toStartOf="@+id/heart" />
+    <Button
+        android:id="@+id/heart"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/heartx"
+        android:layout_marginRight="48dp"
+        android:layout_marginEnd="48dp"
+        android:layout_alignTop="@+id/right"
+        android:layout_toLeftOf="@+id/right"
+        android:layout_toStartOf="@+id/right" />
+
+    <Button
+        android:id="@+id/left"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="36dp"
+        android:background="@drawable/leftx"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/trash"
+        android:layout_toStartOf="@+id/trash"
+        android:layout_marginRight="35dp"
+        android:layout_marginEnd="35dp" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:textSize="23sp"
+        android:textStyle="bold"/>
+
+</RelativeLayout>
