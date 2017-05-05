@@ -18,16 +18,16 @@ public class Photo implements Comparable, Serializable {
     String reference;   // Reference to image in album
 
     public Photo() {
-        super();
-        this.releasable = true;
-        this.karmaable = true;
-    }
-
-    public Photo(boolean isDefault) {
-        super();
         this.releasable = false;
         this.karmaable = false;
         this.reference = "Default Location";
+    }
+
+    public Photo(String reference) {
+        super();
+        this.releasable = true;
+        this.karmaable = true;
+        this.reference = reference;
     }
 
     /**
