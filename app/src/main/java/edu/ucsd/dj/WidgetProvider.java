@@ -33,7 +33,7 @@ public class WidgetProvider extends AppWidgetProvider {
                     R.layout.simple_widget);
             remoteViews.setTextViewText(R.id.textView, number);
 
-            Intent intent = new Intent(context, SimpleWidgetProvider.class);
+            Intent intent = new Intent(context, WidgetProvider.class);
             intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
             intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, appWidgetIds);
             PendingIntent pendingIntent = PendingIntent.getBroadcast(context,
