@@ -20,8 +20,8 @@ public class MainActivity extends AppCompatActivity {
         askPermission(Manifest.permission.SET_WALLPAPER, SET_WALLPAPER_PERMISSION);
         DJPhotoCollection collection = new DJPhotoCollection(MainActivity.this);
         collection.update();
-        //DJWallpaperManager manager = new DJWallpaperManager(MainActivity.this);
-        //manager.setWallpaper(collection.next());
+        DJWallpaperManager manager = new DJWallpaperManager(MainActivity.this);
+        manager.setWallpaper(collection.next());
 
     }
     private void askPermission(String permission, int requestCode){
