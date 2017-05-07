@@ -12,11 +12,11 @@ import java.util.HashMap;
  */
 
 public class Photo implements Comparable, Serializable {
-    long score;          // Used to order photos with precalulated scores
-    boolean hasKarma;   // Used to keep track of karma
-    boolean releasable; // Check if it is releasable, only defualt photo is not
-    boolean karmaable;  // Check if it is krama-able, only defualt photo is not
-    String pathname;   // Reference to image in album
+    private long score;          // Used to order photos with precalulated scores
+    private boolean hasKarma;   // Used to keep track of karma
+    private boolean releasable; // Check if it is releasable, only defualt photo is not
+    private boolean karmaable;  // Check if it is krama-able, only defualt photo is not
+    private String pathname;   // Reference to image in album
 
     public Photo() {
         this.releasable = false;
@@ -130,5 +130,9 @@ public class Photo implements Comparable, Serializable {
      */
     public Bitmap getBitmap() {
         return BitmapFactory.decodeFile(pathname);
+    }
+
+    public String getPathname(){
+        return pathname;
     }
 }
