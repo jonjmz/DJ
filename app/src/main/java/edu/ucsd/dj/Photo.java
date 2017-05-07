@@ -1,5 +1,7 @@
 package edu.ucsd.dj;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
 
 import java.io.Serializable;
@@ -14,20 +16,19 @@ public class Photo implements Comparable, Serializable {
     boolean hasKarma;   // Used to keep track of karma
     boolean releasable; // Check if it is releasable, only defualt photo is not
     boolean karmaable;  // Check if it is krama-able, only defualt photo is not
-    Photo previous;     // Used to return to previous photo
-    String reference;   // Reference to image in album
+    String pathname;   // Reference to image in album
 
     public Photo() {
+        this.releasable = false;
+        this.karmaable = false;
+        this.pathname = "Default Location";
+    }
+
+    public Photo(String reference) {
         super();
         this.releasable = true;
         this.karmaable = true;
-    }
-
-    public Photo(boolean isDefault) {
-        super();
-        this.releasable = false;
-        this.karmaable = false;
-        this.reference = "Default Location";
+        this.pathname = reference;
     }
 
     /**
@@ -55,22 +56,6 @@ public class Photo implements Comparable, Serializable {
         }
         // Score Calculations Here
         score = (long) Math.sqrt((double) scoreSquared);
-    }
-
-    public void setAsWallpaper() {
-        // TODO: Set this photo as wallpaper
-    }
-
-    public Photo getPrevious() {
-        return previous;
-    }
-
-    public void setPrevious(Photo previous) {
-        this.previous = previous;
-    }
-
-    public boolean hasPrevious() {
-        return previous != null;
     }
 
     public boolean hasKarma() {
@@ -104,7 +89,7 @@ public class Photo implements Comparable, Serializable {
      */
     @Override
     public boolean equals(Object o) {
-        return reference.equals(((Photo) o).reference);
+        return pathname.equals(((Photo) o).pathname);
     }
 
     /**
@@ -116,7 +101,7 @@ public class Photo implements Comparable, Serializable {
      */
     @Override
     public int hashCode() {
-        return reference.hashCode();
+        return pathname.hashCode();
     }
 
     /**
@@ -136,5 +121,14 @@ public class Photo implements Comparable, Serializable {
         if (score < ((Photo) o).score) return -1;
         else if (score > ((Photo) o).score) return 1;
         else return 0;
+    }
+
+    /**
+     * Returns this photo as a Bit Map.
+     *
+     * @return a Bit Map object.
+     */
+    public Bitmap getBitmap() {
+        return BitmapFactory.decodeFile(pathname);
     }
 }
