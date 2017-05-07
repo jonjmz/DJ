@@ -4,57 +4,48 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="@dimen/widget_margin"
-    android:background="#7fc3c6">
+    android:background="#45FFFFFF">
 
     <Button
-        android:layout_height="40dp"
-        android:layout_width="40dp"
-        android:background="@drawable/rightx"
         android:id="@+id/right"
-        android:layout_marginRight="48dp"
-        android:layout_marginEnd="48dp"
+        android:background="@drawable/rightx"
         android:layout_alignTop="@+id/trash"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:layout_height="45dp"
+        android:layout_width="45dp"
+        android:layout_marginRight="48dp"
+        android:layout_marginEnd="40dp"
+        />
     <Button
-        android:layout_height="40dp"
-        android:layout_width="40dp"
-        android:background="@drawable/trashx"
         android:id="@+id/trash"
-        android:layout_marginRight="44dp"
-        android:layout_marginEnd="44dp"
+        android:background="@drawable/trashx"
         android:layout_alignTop="@+id/left"
         android:layout_toLeftOf="@+id/heart"
-        android:layout_toStartOf="@+id/heart" />
+        android:layout_toStartOf="@+id/heart"
+        android:layout_height="45dp"
+        android:layout_width="45dp"
+        android:layout_marginEnd="35dp"
+        />
     <Button
         android:id="@+id/heart"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
         android:background="@drawable/heartx"
-        android:layout_marginRight="48dp"
-        android:layout_marginEnd="48dp"
         android:layout_alignTop="@+id/right"
         android:layout_toLeftOf="@+id/right"
-        android:layout_toStartOf="@+id/right" />
+        android:layout_toStartOf="@+id/right"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_marginEnd="35dp"
+        />
 
     <Button
         android:id="@+id/left"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="36dp"
         android:background="@drawable/leftx"
-        android:layout_alignParentTop="true"
         android:layout_toLeftOf="@+id/trash"
         android:layout_toStartOf="@+id/trash"
-        android:layout_marginRight="35dp"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="35dp" />
-
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:textSize="23sp"
-        android:textStyle="bold"/>
 
 </RelativeLayout>
