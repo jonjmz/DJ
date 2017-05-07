@@ -6,6 +6,7 @@ package edu.ucsd.dj;
 
 import android.annotation.TargetApi;
 import android.app.PendingIntent;
+import android.app.WallpaperManager;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
@@ -18,6 +19,7 @@ import android.widget.RemoteViews;
 import com.github.johnpersano.supertoasts.library.Style;
 import com.github.johnpersano.supertoasts.library.SuperActivityToast;
 
+import java.io.IOException;
 import java.util.Random;
 
 /**
@@ -25,6 +27,7 @@ import java.util.Random;
  */
 
 import java.util.Random;
+import java.util.Set;
 
 import static android.content.ContentValues.TAG;
 
@@ -34,18 +37,12 @@ public class WidgetProvider extends AppWidgetProvider {
     private static String PREVIOUS = "previous";
     private static String RELEASE = "release";
     private static String KARMA = "karma";
-    private DJPhotoCollection collection;
-    private DJWallpaperManager manager;
 
     @Override
     public void onEnabled(Context context) {
         super.onEnabled(context);
-        /*
-        collection = new DJPhotoCollection(context);
-        collection.update();
-        manager = new DJWallpaperManager(context);
-        */
 
+        PhotoCollection.getInstance().update( context );
     }
 
     @Override
@@ -93,20 +90,26 @@ public class WidgetProvider extends AppWidgetProvider {
         Log.i("Testing ", "onReceive: " + intent.getAction());
 
         if (intent.getAction().equals(NEXT)) {
-            //do some really cool stuff here
-            Photo photo = collection.next();
-            manager.setWallpaper(photo);
-            Log.i("Testing" , "Setting this particular photo: " + photo.getPathname());
+
+            Photo photo = PhotoCollection.getInstance().next();
+            try {
+                WallpaperManager.getInstance(context).setBitmap( photo.getBitmap() );
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         else if (intent.getAction().equals(PREVIOUS)) {
-            //do some really cool stuff here
-            Photo photo = collection.previous();
-            manager.setWallpaper(photo);
-            Log.i("Testing" , "Setting this particular photo: " + photo.getPathname());
 
+            Photo photo = PhotoCollection.getInstance().previous();
+            try {
+                WallpaperManager.getInstance(context).setBitmap( photo.getBitmap() );
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         else if (intent.getAction().equals(KARMA)) {
-            //do some really cool stuff here
+
+            // TODO implement me
             Log.i("Testing", "This is action: " + intent.getAction());
         }
         else if (intent.getAction().equals(RELEASE)) {
@@ -120,11 +123,6 @@ public class WidgetProvider extends AppWidgetProvider {
                     .setDuration(Style.DURATION_LONG)
                     .setFrame(Style.FRAME_LOLLIPOP)
             Log.i("Testing", "This is action: " + intent.getAction());
-
-
         }
-
-
-
     }
 }
