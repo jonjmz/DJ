@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
-        android:minWidth="120dp"
-        android:minHeight="60dp"
-        android:minResizeHeight="73dp"
-        android:updatePeriodMillis="1800000"
-        android:initialLayout="@layout/simple_widget"
-        android:resizeMode="horizontal"
-        android:widgetCategory="home_screen|keyguard"
-        android:previewImage="@drawable/preview">
-    </appwidget-provider>
-</PreferenceScreen>
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    android:minWidth="120dp"
+    android:minHeight="60dp"
+    android:minResizeHeight="73dp"
+    android:updatePeriodMillis="1800000"
+    android:initialLayout="@layout/simple_widget"
+    android:resizeMode="horizontal|vertical"
+    android:widgetCategory="home_screen"
+    android:previewImage="@drawable/preview">
+</appwidget-provider>

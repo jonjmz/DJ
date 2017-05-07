@@ -7,7 +7,7 @@ import android.graphics.Bitmap;
 import java.io.IOException;
 
 /**
- * @author Jake Sutto
+ * @author Jake Sutton
  * @since 5/2/17
  *
  * The class handles settings wallpaper functionality of the application
