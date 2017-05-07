@@ -7,26 +7,32 @@ import android.graphics.Bitmap;
 import java.io.IOException;
 
 /**
- * Created by jakesutton on 5/2/17.
+ * @author Jake Sutto
+ * @since 5/2/17
+ *
+ * The class handles settings wallpaper functionality of the application
  */
 
 public class DJWallpaperManager {
 
+    // Built in wallpaper manager
     WallpaperManager manager;
 
     /**
-     * TODO
+     * Constructor
      *
-     * @param context
+     * @param context takes in the current context of the application so
+     *                to set the wallpaper
      */
     public DJWallpaperManager(Context context) {
         manager = WallpaperManager.getInstance(context);
     }
 
     /**
-     * TODO
+     * Set the wallpaper of the phone to a specified photo
+     * Adjusts the wallpaper accordingly to fit on the screen
      *
-     * @param photo
+     * @param photo Photo to be set as the wallpaper
      */
     public void setWallpaper(Photo photo) {
         // get bitmap
