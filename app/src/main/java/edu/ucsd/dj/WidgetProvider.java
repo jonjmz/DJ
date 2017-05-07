@@ -10,9 +10,13 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.util.Log;
 import android.widget.RemoteViews;
+
+import com.github.johnpersano.supertoasts.library.Style;
+import com.github.johnpersano.supertoasts.library.SuperActivityToast;
 
 import java.util.Random;
 
@@ -105,8 +109,16 @@ public class WidgetProvider extends AppWidgetProvider {
             //do some really cool stuff here
             Log.i("Testing", "This is action: " + intent.getAction());
         }
-        else if (intent.getAction().equals(PREVIOUS)) {
+        else if (intent.getAction().equals(RELEASE)) {
             //do some really cool stuff here
+            SuperActivityToast.create(getActivity(), new Style(), Style.TYPE_BUTTON)
+                    .setButtonText("UNDO")
+                    .setButtonIconResource(R.drawable.ic_undo)
+                    .setOnButtonClickListener("good_tag_name", null, onButtonClickListener)
+                    .setProgressBarColor(Color.WHITE)
+                    .setText("Photo deleted")
+                    .setDuration(Style.DURATION_LONG)
+                    .setFrame(Style.FRAME_LOLLIPOP)
             Log.i("Testing", "This is action: " + intent.getAction());
 
 
