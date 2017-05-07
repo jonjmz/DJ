@@ -15,6 +15,7 @@ public class Photo implements Comparable, Serializable {
     private double score;       // Used to order photos with precalulated scores
     private boolean hasKarma;   // Used to keep track of karma
     private boolean releasable; // Check if it is releasable, only defualt photo is not
+    private boolean released;   // Check if it is released
     private boolean karmaable;  // Check if it is krama-able, only defualt photo is not
     private int dateTaken;      // Stores date image was taken
     private String pathname;    // Reference to image in album
@@ -73,6 +74,14 @@ public class Photo implements Comparable, Serializable {
 
     public boolean isReleasable() {
         return releasable;
+    }
+
+    public boolean isReleased() {
+        return released;
+    }
+
+    public void release() {
+        released = true;
     }
 
     public void giveKarma() {
