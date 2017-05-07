@@ -95,7 +95,7 @@ public class PhotoCollection {
 
 
                     String data = cur.getString(index); // the filepath
-                    Photo photo = new Photo(data);
+                    Photo photo = new Photo(data, dateColumn);
 
                     // Checking for duplicate
                     if (!album.contains(photo)) {
