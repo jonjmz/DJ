@@ -18,15 +18,32 @@ import java.util.Deque;
 import java.util.LinkedList;
 
 /**
- * TODO
+ * @author Jake Sutton & Huy Hac Nguyen
+ * @since 5/3/2017
+ * A photo collection class that handles processing photos from the gallery for
+ * the widget.The class frequently update and process the photos from the
+ * gallery and put it in a collection. Depending on the mode (Deja Vu or normal)
+ * the class provides the backend functionality for the
+ * user interface
+ *
+ *
  */
 public class DJPhotoCollection implements Serializable  {
 
+    //Context passed to class from the current Activity
     private Context context;
+    //Collection of photos queried from the gallery
     private ArrayList<Photo> album;
+    //A queue to handle previous feature, keeping track of your browsing history
     private Deque<Photo> history;
+    //Current pointer to the image that's being set as the wallpaper
     private int curr;
 
+
+    /**
+     * Constructor
+     * @param ct Current context of the activity
+     */
     public DJPhotoCollection(Context ct) {
         context = ct;
         album = new ArrayList<Photo>();
@@ -34,6 +51,11 @@ public class DJPhotoCollection implements Serializable  {
         curr = 0;
     }
 
+    /**
+     *  Updates the list of photo by querying from the current gallery and put
+     *  them into the current photo array
+     *
+     */
     public void update() {
         // which image properties are we querying
         String[] projection = new String[] {
@@ -54,8 +76,13 @@ public class DJPhotoCollection implements Serializable  {
             null        // Ordering
         );
         if ( cur != null && cur.getCount() > 0 ) {
+            //Logging the size of the image gallery
             Log.i("DeviceImageManager", " query count=" + cur.getCount());
+
+            //Moving the cursor to the first image of the gallery
             if (cur.moveToFirst()) {
+
+                //Taking the name of the album and the date
                 String bucket;
                 String date;
                 int bucketColumn = cur.getColumnIndexOrThrow(
@@ -73,12 +100,14 @@ public class DJPhotoCollection implements Serializable  {
                     Log.i("ListingImages", " bucket=" + bucket
                             + "  date_taken=" + date);
 
-                    int index = cur.getColumnIndex(MediaStore.Images.Media.DATA);
+                    //Get the index column of the filepath
+                    int index = cur.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
 
 
                 String data = cur.getString(index); // the filepath
                 Photo photo = new Photo(data);
 
+                // Checking for duplicate
                 if (!album.contains(photo)) {
                     album.add( photo );
                 }
@@ -92,9 +121,11 @@ public class DJPhotoCollection implements Serializable  {
     }
 
     /**
-     * TODO
-     *
-     * @return
+     * Return the next photo from the current list
+     * If there is no image, return the stock image
+     * Increases the current pointer to the next image
+     * If a photo is blacklisted, it will not be returned
+     * @return A photo object from the album data structure
      */
     public Photo next() {
 
@@ -114,8 +145,9 @@ public class DJPhotoCollection implements Serializable  {
     }
 
     /**
-     * TODO
-     * @return
+     * Return the previous photo from user's history
+     *
+     * @return A photo object from the history data structure
      */
     public Photo previous() {
 
@@ -126,9 +158,10 @@ public class DJPhotoCollection implements Serializable  {
     }
 
     /**
-     * TODO
+     * Checks if there is a previous photo in the history data structure
      *
-     * @return
+     * @return true if there is a photo in history
+     *         false if there isn't a photo in history
      */
     public boolean hasPrevious() {
         return !history.isEmpty();
@@ -136,7 +169,8 @@ public class DJPhotoCollection implements Serializable  {
 
     /**
      * Save current album to file using album field as name.
-     * @param context
+     *
+     * @param context The current state of the application
      * @see {@linktourl http://stackoverflow.com/questions/4118751/how-do-i-serialize-an-object-and-save-it-to-a-file-in-android}
      */
     public void saveToFile(Context context){
@@ -154,7 +188,8 @@ public class DJPhotoCollection implements Serializable  {
 
     /**
      * Load Album using album field
-     * @param context
+     * @param context Current state of the application
+     * @param albumName the name of the album that needs to be loaded
      * @see {@linktourl http://stackoverflow.com/questions/4118751/how-do-i-serialize-an-object-and-save-it-to-a-file-in-android}
      */
     public static DJPhotoCollection loadFromFile(Context context, String albumName){
