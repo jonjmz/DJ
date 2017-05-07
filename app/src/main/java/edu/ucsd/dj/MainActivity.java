@@ -1,11 +1,15 @@
 package edu.ucsd.dj;
 
 import android.Manifest;
+import android.app.WallpaperManager;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import java.io.IOException;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -19,11 +23,17 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.content_main);
         askPermission(Manifest.permission.READ_EXTERNAL_STORAGE, READ_STORAGE_PERMISSION);
         askPermission(Manifest.permission.SET_WALLPAPER, SET_WALLPAPER_PERMISSION);
-        DJPhotoCollection collection = new DJPhotoCollection(MainActivity.this);
-        collection.update();
-        DJWallpaperManager manager = new DJWallpaperManager(MainActivity.this);
-        manager.setWallpaper(collection.next());
 
+        PhotoCollection.getInstance().update(getApplicationContext());
+        Photo photo = PhotoCollection.getInstance().next();
+
+        // some kind of location class, adds overlay, returns bitmap
+
+        try {
+            WallpaperManager.getInstance(MainActivity.this).setBitmap( photo.getBitmap() );
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
     private void askPermission(String permission, int requestCode){
         if (ContextCompat.checkSelfPermission(this,
