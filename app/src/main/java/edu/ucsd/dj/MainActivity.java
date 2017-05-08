@@ -35,8 +35,8 @@ public class MainActivity extends AppCompatActivity {
         PhotoCollection.getInstance().update(getApplicationContext());
         Photo photo = PhotoCollection.getInstance().next();
 
-  /*      Button hb = (Button) findViewById(R.id.trash);
-        hb.setOnClickListener(new View.OnClickListener() {
+        Button hb = (Button) findViewById(R.id.trash);
+     /*   hb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Snackbar.make(v, "SNACKBAR", Snackbar.LENGTH_SHORT)

@@ -42,7 +42,7 @@ public class WidgetProvider extends AppWidgetProvider {
     private static String PREVIOUS = "previous";
     private static String RELEASE = "release";
     private static String KARMA = "karma";
-
+    private RemoteViews rViews;
     @Override
     public void onEnabled(Context context) {
         super.onEnabled(context);
@@ -90,7 +90,7 @@ public class WidgetProvider extends AppWidgetProvider {
 
             remoteViews.setOnClickPendingIntent(R.id.left, pendingIntentPrevious);
             remoteViews.setOnClickPendingIntent(R.id.trash, pendingIntentRelease);
-            remoteViews.setOnClickPendingIntent(heart, pendingIntentKarma);
+            remoteViews.setOnClickPendingIntent(R.id.heart, pendingIntentKarma);
             remoteViews.setOnClickPendingIntent(R.id.right, pendingIntentNext);
             appWidgetManager.updateAppWidget(widgetId, remoteViews);
         }
@@ -119,22 +119,36 @@ public class WidgetProvider extends AppWidgetProvider {
             }
         }
         else if (intent.getAction().equals(KARMA)) {
+            rViews = new RemoteViews( context.getPackageName(), R.layout.simple_widget);
+            //Button button = (Button) rViews;
             Photo photo = PhotoCollection.getInstance().current();
             if (!photo.hasKarma()){
                 photo.giveKarma();
-            }
-            else photo.removeKarma();
+                Toast.makeText(context, "Karma given"     , Toast.LENGTH_SHORT).show();
+                rViews.setImageViewResource(R.id.heart, R.drawable.filled_heart);
 
+            }
+            else {
+                photo.removeKarma();
+                Toast.makeText(context, "Karma taken"     , Toast.LENGTH_SHORT).show();
+                rViews.setImageViewResource(R.id.heart, R.drawable.open_heart);
+
+            }
             // TODO toggle button pressed/not
+
             Log.i("Testing", "This is action: " + intent.getAction());
         }
         else if (intent.getAction().equals(RELEASE)) {
             //go to next photo
             Photo photo = PhotoCollection.getInstance().next();
-            photo.release();
-            photo = PhotoCollection.getInstance().next();
+            if (photo.isReleasable() && !photo.isReleased()){
+                Toast.makeText(context, "Photo released, tap again to undo", Toast.LENGTH_SHORT).show();
+                //maybe a delay for 5 seconds
+                //TODO unrelease method
+                photo.release();
+                photo = PhotoCollection.getInstance().next();
+            }
 
-            //where's my snackbar
             try {
                 WallpaperManager.getInstance(context).setBitmap( photo.getBitmap() );
             } catch (IOException e) {
@@ -143,5 +157,6 @@ public class WidgetProvider extends AppWidgetProvider {
             Log.i("Testing", "This is action: " + intent.getAction());
         }
     }
+
 
 }
