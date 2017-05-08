@@ -12,11 +12,13 @@ import java.util.HashMap;
  */
 
 public class Photo implements Comparable, Serializable {
-    private long score;          // Used to order photos with precalulated scores
+    private double score;       // Used to order photos with precalulated scores
     private boolean hasKarma;   // Used to keep track of karma
     private boolean releasable; // Check if it is releasable, only defualt photo is not
+    private boolean released;   // Check if it is released
     private boolean karmaable;  // Check if it is krama-able, only defualt photo is not
-    private String pathname;   // Reference to image in album
+    private int dateTaken;      // Stores date image was taken
+    private String pathname;    // Reference to image in album
 
     public Photo() {
         this.releasable = false;
@@ -24,8 +26,8 @@ public class Photo implements Comparable, Serializable {
         this.pathname = "Default Location";
     }
 
-    public Photo(String reference) {
-        super();
+    public Photo(String reference, int dateTaken) {
+        this.dateTaken = dateTaken;
         this.releasable = true;
         this.karmaable = true;
         this.pathname = reference;
@@ -33,26 +35,30 @@ public class Photo implements Comparable, Serializable {
 
     /**
      * Calculates score for this photo at this time/location with these settings.
-     * Used to prepare photo for sorting by photo set.
+     * Used to prepare photo for sorting by photo set. Implemented as distance function
+     * in up to four dimensions
      */
     public void calculateScore() {
-        // Score is distance formula in up to 4 dimensions
         long scoreSquared = 0;
-        // TODO: If considering recency, add distance to photo
+        // If considering recency, add distance to photo
         if (true) {
-            scoreSquared += 0;
+            // Get current time to compare with.
+            long  now = System.currentTimeMillis();
+            // Calculates the ratio of the actual age over the possible age.
+            double ratio = (now - dateTaken) / dateTaken;
+            scoreSquared += Math.pow(ratio, 2);
         }
         // TODO: If considering time of day, add distance to photo
-        if (true) {
-            scoreSquared += 0;
+        if (false) {
+            scoreSquared += Math.pow(0, 2);
         }
         // TODO: If considering location, add distance to photo
-        if (true) {
-            scoreSquared += 0;
+        if (false) {
+            scoreSquared += Math.pow(0, 2);
         }
         // TODO: If considering karma, add distance to photo
-        if (true) {
-            scoreSquared += Math.pow(20000, 2); // half circumference of earth in kilimeters
+        if (false) {
+            if (!hasKarma) scoreSquared += Math.pow(1, 2);
         }
         // Score Calculations Here
         score = (long) Math.sqrt((double) scoreSquared);
@@ -68,6 +74,14 @@ public class Photo implements Comparable, Serializable {
 
     public boolean isReleasable() {
         return releasable;
+    }
+
+    public boolean isReleased() {
+        return released;
+    }
+
+    public void release() {
+        released = true;
     }
 
     public void giveKarma() {

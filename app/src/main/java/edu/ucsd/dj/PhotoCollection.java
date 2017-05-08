@@ -51,6 +51,7 @@ public class PhotoCollection {
         String[] projection = new String[] {
                 MediaStore.Images.Media._ID,
                 MediaStore.Images.Media.BUCKET_DISPLAY_NAME,
+
                 MediaStore.Images.Media.DATE_TAKEN,
                 MediaStore.Images.Media.DATA
         };
@@ -95,7 +96,7 @@ public class PhotoCollection {
 
 
                     String data = cur.getString(index); // the filepath
-                    Photo photo = new Photo(data);
+                    Photo photo = new Photo(data, dateColumn);
 
                     // Checking for duplicate
                     if (!album.contains(photo)) {
@@ -111,6 +112,14 @@ public class PhotoCollection {
     }
 
     /**
+     * Releases the current photo from the album
+     * next() should be called immediately after this method
+     */
+    public void release() {
+        album.get(curr).release();
+    }
+
+    /**
      * Return the next photo from the current list
      * If there is no image, return the stock image
      * Increases the current pointer to the next image
@@ -122,7 +131,10 @@ public class PhotoCollection {
         // TODO return the special image
         if (album.size() < 1) return null;
 
-        history.addFirst(album.get(curr));
+        // Add to history if it is not released
+        if(!album.get(curr).isReleased()){
+            history.addFirst(album.get(curr));
+        }
 
         curr++;
 

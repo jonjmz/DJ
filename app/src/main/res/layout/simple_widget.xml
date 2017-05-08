@@ -1,51 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="@dimen/widget_margin"
+    android:orientation="horizontal"
+    android:padding="20dp"
+    android:weightSum="10"
+    android:gravity="center"
+    android:stretchMode="spacingWidthUniform"
     android:background="#45FFFFFF">
 
     <Button
-        android:id="@+id/right"
-        android:background="@drawable/rightx"
-        android:layout_alignTop="@+id/trash"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_height="45dp"
-        android:layout_width="45dp"
-        android:layout_marginRight="48dp"
-        android:layout_marginEnd="40dp"
-        />
+        android:id="@+id/left"
+        android:layout_width="45sp"
+        android:layout_height="45sp"
+        android:layout_marginEnd="20sp"
+        android:layout_column="0"
+        android:layout_row="0"
+        android:background="@drawable/leftx" />
+
     <Button
         android:id="@+id/trash"
-        android:background="@drawable/trashx"
-        android:layout_alignTop="@+id/left"
-        android:layout_toLeftOf="@+id/heart"
-        android:layout_toStartOf="@+id/heart"
-        android:layout_height="45dp"
-        android:layout_width="45dp"
-        android:layout_marginEnd="35dp"
-        />
+        android:layout_width="45sp"
+        android:layout_height="45sp"
+        android:layout_marginEnd="20sp"
+        android:layout_row="0"
+        android:layout_column="1"
+        android:background="@drawable/trashx" />
+
     <Button
         android:id="@+id/heart"
-        android:background="@drawable/heartx"
-        android:layout_alignTop="@+id/right"
-        android:layout_toLeftOf="@+id/right"
-        android:layout_toStartOf="@+id/right"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
-        android:layout_marginEnd="35dp"
-        />
+        android:layout_width="45sp"
+        android:layout_height="45sp"
+        android:layout_marginEnd="20sp"
+        android:layout_row="0"
+        android:layout_column="2"
+        android:background="@drawable/heartx" />
 
     <Button
-        android:id="@+id/left"
-        android:background="@drawable/leftx"
-        android:layout_toLeftOf="@+id/trash"
-        android:layout_toStartOf="@+id/trash"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="35dp" />
+        android:id="@+id/right"
+        android:layout_width="45sp"
+        android:layout_height="45sp"
+        android:layout_row="0"
+        android:layout_column="3"
+        android:background="@drawable/rightx" />
 
-</RelativeLayout>
+</LinearLayout>
