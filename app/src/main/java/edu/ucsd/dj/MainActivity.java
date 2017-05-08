@@ -4,12 +4,20 @@ import android.Manifest;
 import android.app.WallpaperManager;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.Toast;
 
 import java.io.IOException;
+
+import static edu.ucsd.dj.R.id.heart;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -27,6 +35,15 @@ public class MainActivity extends AppCompatActivity {
         PhotoCollection.getInstance().update(getApplicationContext());
         Photo photo = PhotoCollection.getInstance().next();
 
+  /*      Button hb = (Button) findViewById(R.id.trash);
+        hb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Snackbar.make(v, "SNACKBAR", Snackbar.LENGTH_SHORT)
+                        .setAction("undo", null).show();
+            }
+        });
+*/
         // some kind of location class, adds overlay, returns bitmap
 
         try {
@@ -63,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
+
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {

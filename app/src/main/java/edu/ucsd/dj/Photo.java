@@ -64,13 +64,9 @@ public class Photo implements Comparable, Serializable {
         score = (long) Math.sqrt((double) scoreSquared);
     }
 
-    public boolean hasKarma() {
-        return hasKarma();
-    }
+    public boolean hasKarma() { return hasKarma; }
 
-    public boolean isKarmable() {
-        return karmaable;
-    }
+    public boolean isKarmable() { return karmaable; }
 
     public boolean isReleasable() {
         return releasable;

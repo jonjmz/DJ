@@ -146,6 +146,14 @@ public class PhotoCollection {
         return result;
     }
 
+    /*
+     * Returns the current photo
+     */
+    public Photo current() {
+        Photo result = album.get(curr);
+        return result;
+    }
+
     /**
      * Return the previous photo from user's history
      *
