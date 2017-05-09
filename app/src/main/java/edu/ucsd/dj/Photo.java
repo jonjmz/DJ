@@ -75,25 +75,24 @@ public class Photo implements Comparable, Serializable {
         long  now = System.currentTimeMillis();
         double scoreSquared = 0;
         // If considering recency, add distance to photo
-        if (true) {
+        if (Settings.isConsideringRecency()) {
             // Get current time to compare with.
             // Calculates the ratio of the actual age over the possible age.
             double ratio = (now - dateTaken) / (double)now;
             scoreSquared += Math.pow(ratio, 2);
         }
         // If considering time of day, add distance to photo
-        if (true) {
+        if (Settings.isConsideringTOD()) {
             if(timeOfDay != TimeOfDay.getTimeOfDay(now))
                 scoreSquared += 1;
         }
-        // TODO: If considering address, add distance to photo
-        if (false) {
+        // If considering address
+        if (Settings.isConsideringProximity()) {
             scoreSquared += Math.pow(0, 2);
         }
-        // TODO: If considering karma, add distance to photo
-        if (false) {
-            if (!hasKarma) scoreSquared += Math.pow(1, 2);
-        }
+        // We always consider karma
+        if (!hasKarma) scoreSquared += 1;
+
         // Score Calculations Here
         score = Math.sqrt(scoreSquared);
     }
