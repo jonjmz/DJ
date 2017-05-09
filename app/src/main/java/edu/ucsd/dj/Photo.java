@@ -2,12 +2,11 @@ package edu.ucsd.dj;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+
+import android.location.Address;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import java.io.Serializable;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.TimeZone;
@@ -42,8 +41,12 @@ public class Photo implements Comparable, Serializable {
     private boolean released;    // Check if it is released
     private boolean karmaable;   // Check if it is krama-able, only defualt photo is not
     private long dateTaken;      // Stores date image was taken
-    private String pathname;     // Reference to image in album
     private TimeOfDay timeOfDay; //Stores the time of day
+    private String pathname;    // Reference to image in album
+    private Address address;
+    private boolean hasValidCoordinates;
+    private double latitude;
+    private double longitude;
 
     public Photo() {
         this.releasable = false;
@@ -52,16 +55,19 @@ public class Photo implements Comparable, Serializable {
     }
 
     public Photo(String reference, long dateTaken) {
+        // TODO - Log something in here.
+
         this.dateTaken = dateTaken;
-        Log.v("Photo()", reference);
         this.timeOfDay = TimeOfDay.getTimeOfDay(dateTaken);
         this.releasable = true;
         this.karmaable = true;
         this.pathname = reference;
+        this.dateTaken = dateTaken;
     }
 
+
     /**
-     * Calculates score for this photo at this time/location with these settings.
+     * Calculates score for this photo at this time/address with these settings.
      * Used to prepare photo for sorting by photo set. Implemented as distance function
      * in up to four dimensions
      */
@@ -80,7 +86,7 @@ public class Photo implements Comparable, Serializable {
             if(timeOfDay != TimeOfDay.getTimeOfDay(now))
                 scoreSquared += 1;
         }
-        // TODO: If considering location, add distance to photo
+        // TODO: If considering address, add distance to photo
         if (false) {
             scoreSquared += Math.pow(0, 2);
         }
@@ -126,6 +132,24 @@ public class Photo implements Comparable, Serializable {
     public long getDateTaken() { return dateTaken; }
 
     public double getScore(){ return score; }
+
+    public Address getAddress() {return address; }
+    public void setAddress(Address loc) { address = loc; }
+
+    public boolean hasValidCoordinates() { return hasValidCoordinates; }
+
+    public void setHasValidCoordinates(boolean hasValidCoordinates) {
+        this.hasValidCoordinates = hasValidCoordinates;
+    }
+
+
+    public double getLatitude() { return latitude; }
+    public void setLatitude(double latitude) { this.latitude = latitude; }
+
+    public double getLongitude() { return longitude; }
+    public void setLongitude(double longitude) { this.longitude = longitude; }
+
+
     /**
      * Indicates whether some other object is "equal to" this one.
      *
