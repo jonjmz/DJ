@@ -32,4 +32,36 @@ public class PhotoCollectionTest {
 
     }
 
+    @Test
+    public void testRelease() throws Exception {
+
+    }
+
+    @Test
+    public void testNext() throws Exception {
+
+    }
+
+    @Test
+    public void testPrevious() throws Exception {
+
+    }
+
+    @Test
+    public void testCurrent() throws Exception {
+
+    }
+
+    @Test
+    public void testHasPrevious() throws Exception {
+
+    }
+    
+    @Test
+    public void testSaveToFile() throws Exception {
+
+    }
+
+
+
 }
