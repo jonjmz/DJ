@@ -2,6 +2,8 @@ package edu.ucsd.dj;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
+import android.test.AndroidTestCase;
+import android.util.Log;
 
 import org.junit.Test;
 
@@ -16,7 +18,7 @@ public class PhotoCollectionTest {
     @Test
     public void useAppContext() throws Exception {
         // Context of the app under test.
-        Context appContext = InstrumentationRegistry.getTargetContext();
+        Context appContext = InstrumentationRegistry.getTargetContext().getApplicationContext();
 
         assertEquals("edu.ucsd.dj", appContext.getPackageName());
     }
@@ -25,6 +27,14 @@ public class PhotoCollectionTest {
     public void testConstructor() throws Exception {
         PhotoCollection collection = new PhotoCollection();
         assertNotEquals(collection, collection.getInstance());
+    }
+
+    @Test
+    public void prioritizeRecent(){
+        PhotoCollection collection = PhotoCollection.getInstance();
+        Context appContext = InstrumentationRegistry.getTargetContext().getApplicationContext();
+        collection.update(appContext);
+        assert(collection.current().getPathname().startsWith("Now"));
     }
 
     @Test
