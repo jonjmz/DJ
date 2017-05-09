@@ -71,24 +71,4 @@ public class PhotoTest {
 
     }
 
-    @Test
-    public void testCompareTo() throws Exception {
-        Photo a = new Photo("reference", 10000);
-        Photo b = new Photo("reference", 209000);
-        Photo c = new Photo("", 4000000);
-
-        a.calculateScore();
-        b.calculateScore();
-        c.calculateScore();
-
-        assertEquals(a.compareTo(b), 1);
-        assertEquals(b.compareTo(a), -1);
-        assertEquals(a.compareTo(c), 1);
-        assertEquals(c.compareTo(b), -1);
-        assertEquals(c.compareTo(c), 0);
-
-
-    }
-
-
 }
