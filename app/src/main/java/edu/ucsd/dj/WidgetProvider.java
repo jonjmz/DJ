@@ -13,6 +13,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
+import android.os.Handler;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -43,6 +44,7 @@ public class WidgetProvider extends AppWidgetProvider {
     private static String RELEASE = "release";
     private static String KARMA = "karma";
     private RemoteViews rViews;
+    private static int doubleClickCounter = 0;
     @Override
     public void onEnabled(Context context) {
         super.onEnabled(context);
@@ -122,31 +124,47 @@ public class WidgetProvider extends AppWidgetProvider {
             rViews = new RemoteViews( context.getPackageName(), R.layout.simple_widget);
             //Button button = (Button) rViews;
             Photo photo = PhotoCollection.getInstance().current();
-            if (!photo.hasKarma()){
+            if (!photo.hasKarma() && photo.isKarmable()){
                 photo.giveKarma();
                 Toast.makeText(context, "Karma given"     , Toast.LENGTH_SHORT).show();
                 rViews.setImageViewResource(R.id.heart, R.drawable.filled_heart);
-
             }
-            else {
+            else if (photo.isKarmable()){
                 photo.removeKarma();
                 Toast.makeText(context, "Karma taken"     , Toast.LENGTH_SHORT).show();
                 rViews.setImageViewResource(R.id.heart, R.drawable.open_heart);
-
             }
+
             // TODO toggle button pressed/not
 
             Log.i("Testing", "This is action: " + intent.getAction());
         }
         else if (intent.getAction().equals(RELEASE)) {
             //go to next photo
+            doubleClickCounter++;
+           /* Handler handler = new Handler();
+            Runnable r = new Runnable() {
+
+                @Override
+                public void run() {
+                    doubleClickCounter = 0;
+                }
+            };
+*/
             Photo photo = PhotoCollection.getInstance().next();
             if (photo.isReleasable() && !photo.isReleased()){
-                Toast.makeText(context, "Photo released, tap again to undo", Toast.LENGTH_SHORT).show();
-                //maybe a delay for 5 seconds
-                //TODO unrelease method
-                photo.release();
-                photo = PhotoCollection.getInstance().next();
+                if (doubleClickCounter == 1){
+                    Toast.makeText(context, "Photo released, double tap to undo", Toast.LENGTH_SHORT).show();
+                    //handler.postDelayed(r, 250000);
+                    photo.release();
+                    photo = PhotoCollection.getInstance().next();
+                }
+                else if (doubleClickCounter == 2){
+                    photo = PhotoCollection.getInstance().previous();
+                    photo.removeRelease();
+                    Toast.makeText(context, "Photo unreleased", Toast.LENGTH_SHORT).show();
+                    doubleClickCounter = 0;
+                }
             }
 
             try {

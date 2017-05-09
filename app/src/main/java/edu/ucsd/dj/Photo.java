@@ -80,6 +80,8 @@ public class Photo implements Comparable, Serializable {
         released = true;
     }
 
+    public void removeRelease() { released = false; }
+
     public void giveKarma() {
         hasKarma = true;
     }
