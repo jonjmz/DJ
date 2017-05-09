@@ -2,6 +2,8 @@ package edu.ucsd.dj;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
+import android.test.AndroidTestCase;
+import android.util.Log;
 
 import org.junit.Test;
 
@@ -16,7 +18,7 @@ public class PhotoCollectionTest {
     @Test
     public void useAppContext() throws Exception {
         // Context of the app under test.
-        Context appContext = InstrumentationRegistry.getTargetContext();
+        Context appContext = InstrumentationRegistry.getTargetContext().getApplicationContext();
 
         assertEquals("edu.ucsd.dj", appContext.getPackageName());
     }
@@ -28,8 +30,59 @@ public class PhotoCollectionTest {
     }
 
     @Test
+    public void prioritizeRecent(){
+        PhotoCollection collection = PhotoCollection.getInstance();
+        Context appContext = InstrumentationRegistry.getTargetContext().getApplicationContext();
+        collection.update(appContext);
+        assert(collection.current().getPathname().startsWith("Now"));
+    }
+
+    @Test
     public void testUpdate() throws Exception {
 
     }
+
+    @Test
+    public void testRelease() throws Exception {
+
+    }
+
+    @Test
+    public void testNext() throws Exception {
+        PhotoCollection collection = PhotoCollection.getInstance();
+        Context appContext = InstrumentationRegistry.getTargetContext().getApplicationContext();
+        collection.update(appContext);
+        Photo last = collection.current();
+        Photo current = collection.next();
+        assert(!current.equals(last));
+    }
+
+    @Test
+    public void testPrevious() throws Exception {
+        PhotoCollection collection = PhotoCollection.getInstance();
+        Context appContext = InstrumentationRegistry.getTargetContext().getApplicationContext();
+        collection.update(appContext);
+        Photo current = collection.current();
+        collection.next();
+        Photo previous = collection.previous();
+        assert(current.equals(previous));
+    }
+
+    @Test
+    public void testCurrent() throws Exception {
+
+    }
+
+    @Test
+    public void testHasPrevious() throws Exception {
+
+    }
+    
+    @Test
+    public void testSaveToFile() throws Exception {
+
+    }
+
+
 
 }
