@@ -90,6 +90,9 @@ public class Photo implements Comparable, Serializable {
         hasKarma = false;
     }
 
+    public int getDateTaken() { return dateTaken; }
+
+    public double getScore(){ return score; }
     /**
      * Indicates whether some other object is "equal to" this one.
      *

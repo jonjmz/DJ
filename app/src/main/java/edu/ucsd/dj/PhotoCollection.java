@@ -35,7 +35,7 @@ public class PhotoCollection {
         return ourInstance;
     }
 
-    private PhotoCollection() {
+    protected PhotoCollection() {
         album = new ArrayList<Photo>();
         history = new LinkedList<Photo>();
         curr = 0;
