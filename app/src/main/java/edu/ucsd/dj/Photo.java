@@ -51,7 +51,7 @@ public class Photo implements Comparable, Serializable {
     public Photo() {
         this.releasable = false;
         this.karmaable = false;
-        this.pathname = "Default Location";
+        this.pathname = "android.resource://"+BuildConfig.APPLICATION_ID+"/" + R.drawable.dejaphotodefault;
     }
 
     public Photo(String reference, long dateTaken) {
