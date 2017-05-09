@@ -75,7 +75,7 @@ public class PhotoCollection {
 
                 //Taking the name of the album and the date
                 String bucket;
-                String date;
+                long date;
                 int bucketColumn = cur.getColumnIndexOrThrow(
                         MediaStore.Images.Media.BUCKET_DISPLAY_NAME);
 
@@ -85,7 +85,7 @@ public class PhotoCollection {
                 do {
                     // Get the field values
                     bucket = cur.getString(bucketColumn);
-                    date = cur.getString(dateColumn);
+                    date = cur.getLong(dateColumn);
 
                     // Do something with the values.
                     Log.i("ListingImages", " bucket=" + bucket
@@ -96,7 +96,7 @@ public class PhotoCollection {
 
 
                     String data = cur.getString(index); // the filepath
-                    Photo photo = new Photo(data, dateColumn);
+                    Photo photo = new Photo(data, date);
 
                     // Checking for duplicate
                     if (!album.contains(photo)) {
@@ -107,6 +107,9 @@ public class PhotoCollection {
 
             }
 
+            for (Photo p : album) {
+                p.calculateScore();
+            }
             Collections.sort(album);
         }
     }

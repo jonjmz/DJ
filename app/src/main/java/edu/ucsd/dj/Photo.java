@@ -3,6 +3,7 @@ package edu.ucsd.dj;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -17,7 +18,7 @@ public class Photo implements Comparable, Serializable {
     private boolean releasable; // Check if it is releasable, only defualt photo is not
     private boolean released;   // Check if it is released
     private boolean karmaable;  // Check if it is krama-able, only defualt photo is not
-    private int dateTaken;      // Stores date image was taken
+    private long dateTaken;      // Stores date image was taken
     private String pathname;    // Reference to image in album
 
     public Photo() {
@@ -26,7 +27,7 @@ public class Photo implements Comparable, Serializable {
         this.pathname = "Default Location";
     }
 
-    public Photo(String reference, int dateTaken) {
+    public Photo(String reference, long dateTaken) {
         this.dateTaken = dateTaken;
         this.releasable = true;
         this.karmaable = true;
@@ -39,13 +40,13 @@ public class Photo implements Comparable, Serializable {
      * in up to four dimensions
      */
     public void calculateScore() {
-        long scoreSquared = 0;
+        double scoreSquared = 0;
         // If considering recency, add distance to photo
         if (true) {
             // Get current time to compare with.
             long  now = System.currentTimeMillis();
             // Calculates the ratio of the actual age over the possible age.
-            double ratio = (now - dateTaken) / dateTaken;
+            double ratio = (now - dateTaken) / (double)now;
             scoreSquared += Math.pow(ratio, 2);
         }
         // TODO: If considering time of day, add distance to photo
@@ -61,7 +62,8 @@ public class Photo implements Comparable, Serializable {
             if (!hasKarma) scoreSquared += Math.pow(1, 2);
         }
         // Score Calculations Here
-        score = (long) Math.sqrt((double) scoreSquared);
+        score = Math.sqrt(scoreSquared);
+        Log.v("calculateScore()", "Calculated score for " + pathname);
     }
 
     public boolean hasKarma() { return hasKarma; }
@@ -90,7 +92,7 @@ public class Photo implements Comparable, Serializable {
         hasKarma = false;
     }
 
-    public int getDateTaken() { return dateTaken; }
+    public long getDateTaken() { return dateTaken; }
 
     public double getScore(){ return score; }
     /**
