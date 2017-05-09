@@ -2,9 +2,6 @@ package edu.ucsd.dj;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.location.Address;
-import android.location.Geocoder;
-import android.media.ExifInterface;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -16,8 +13,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Deque;
 import java.util.LinkedList;
-import java.util.List;
-import java.util.Locale;
 
 /**
  * Created by jakesutton on 5/6/17.
@@ -87,6 +82,7 @@ public class PhotoCollection {
 
                 CoordinatesLoader latLngLoader = new CoordinatesLoader();
                 AddressLoader addressLoader= new AddressLoader(context);
+                PhotoLabeler labeller = new PhotoLabeler();
 
                 do {
                     // Get the field values
@@ -112,6 +108,8 @@ public class PhotoCollection {
                         // TODO Remove me for efficiency... do when building image.
                         if (photo.hasValidCoordinates()) {
                             addressLoader.loadAddressFor(photo);
+
+                            String temp = labeller.label(photo);
                         }
 
                         album.add( photo );
