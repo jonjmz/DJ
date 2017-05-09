@@ -7,13 +7,13 @@
     android:weightSum="10"
     android:gravity="center"
     android:stretchMode="spacingWidthUniform"
-    android:background="#45FFFFFF">
+    android:background="#25FFFFFF">
 
     <Button
         android:id="@+id/left"
         android:layout_width="45sp"
         android:layout_height="45sp"
-        android:layout_marginEnd="20sp"
+        android:layout_marginEnd="40sp"
         android:layout_column="0"
         android:layout_row="0"
         android:background="@drawable/leftx" />
@@ -22,7 +22,7 @@
         android:id="@+id/trash"
         android:layout_width="45sp"
         android:layout_height="45sp"
-        android:layout_marginEnd="20sp"
+        android:layout_marginEnd="40sp"
         android:layout_row="0"
         android:layout_column="1"
         android:background="@drawable/trashx" />
@@ -31,7 +31,7 @@
         android:id="@+id/heart"
         android:layout_width="45sp"
         android:layout_height="45sp"
-        android:layout_marginEnd="20sp"
+        android:layout_marginEnd="40sp"
         android:layout_row="0"
         android:layout_column="2"
         android:background="@drawable/heartx" />

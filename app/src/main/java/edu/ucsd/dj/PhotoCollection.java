@@ -2,24 +2,26 @@ package edu.ucsd.dj;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.location.Address;
+import android.location.Geocoder;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.util.Log;
 
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Deque;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by jakesutton on 5/6/17.
  */
-
 public class PhotoCollection {
 
     //Collection of photos queried from the gallery
@@ -47,11 +49,12 @@ public class PhotoCollection {
      *
      */
     public void update(Context context) {
+
+        // TODO - this method is a mess. Refactor into other classes.
         // which image properties are we querying
         String[] projection = new String[] {
                 MediaStore.Images.Media._ID,
                 MediaStore.Images.Media.BUCKET_DISPLAY_NAME,
-
                 MediaStore.Images.Media.DATE_TAKEN,
                 MediaStore.Images.Media.DATA
         };
@@ -82,6 +85,9 @@ public class PhotoCollection {
                 int dateColumn = cur.getColumnIndexOrThrow(
                         MediaStore.Images.Media.DATE_TAKEN);
 
+                CoordinatesLoader latLngLoader = new CoordinatesLoader();
+                AddressLoader addressLoader= new AddressLoader(context);
+
                 do {
                     // Get the field values
                     bucket = cur.getString(bucketColumn);
@@ -94,17 +100,24 @@ public class PhotoCollection {
                     //Get the index column of the filepath
                     int index = cur.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
 
+                    String pathName = cur.getString(index);
 
-                    String data = cur.getString(index); // the filepath
-                    Photo photo = new Photo(data, date);
+                    Photo photo = new Photo(pathName, date);
 
                     // Checking for duplicate
                     if (!album.contains(photo)) {
+
+                        latLngLoader.loadCoordinatesFor(photo);
+
+                        // TODO Remove me for efficiency... do when building image.
+                        if (photo.hasValidCoordinates()) {
+                            addressLoader.loadAddressFor(photo);
+                        }
+
                         album.add( photo );
                     }
 
                 } while (cur.moveToNext());
-
             }
 
             for (Photo p : album) {

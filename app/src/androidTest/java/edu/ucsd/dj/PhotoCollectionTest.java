@@ -1,6 +1,7 @@
 package edu.ucsd.dj;
 
 import android.content.Context;
+import android.os.SystemClock;
 import android.support.test.InstrumentationRegistry;
 import android.test.AndroidTestCase;
 import android.util.Log;
@@ -35,6 +36,15 @@ public class PhotoCollectionTest {
         Context appContext = InstrumentationRegistry.getTargetContext().getApplicationContext();
         collection.update(appContext);
         assert(collection.current().getPathname().startsWith("Now"));
+    }
+
+    @Test
+    public void prioritizeTimeOfDay(){
+        PhotoCollection collection = PhotoCollection.getInstance();
+        Context appContext = InstrumentationRegistry.getTargetContext().getApplicationContext();
+        collection.update(appContext);
+        Photo.TimeOfDay tod = Photo.TimeOfDay.getTimeOfDay(System.currentTimeMillis());
+        assert(collection.current().getPathname().contains("" + tod));
     }
 
     @Test
