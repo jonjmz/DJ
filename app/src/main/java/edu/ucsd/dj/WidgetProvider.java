@@ -50,14 +50,7 @@ public class WidgetProvider extends AppWidgetProvider {
 
         PhotoCollection.getInstance().update( context );
     }
-    public class MyUndoListener implements View.OnClickListener{
 
-        @Override
-        public void onClick(View v) {
-
-            // Code to undo the user's last action
-        }
-    }
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         final int count = appWidgetIds.length;
@@ -74,6 +67,8 @@ public class WidgetProvider extends AppWidgetProvider {
             Intent intentPrevious = new Intent(context, WidgetProvider.class);
             Intent intentRelease = new Intent(context, WidgetProvider.class);
             Intent intentKarma = new Intent(context, WidgetProvider.class);
+
+            Photo photo = PhotoCollection.getInstance().current();
 
             intentNext.setAction(NEXT);
             intentPrevious.setAction(PREVIOUS);
@@ -97,6 +92,18 @@ public class WidgetProvider extends AppWidgetProvider {
         }
     }
 
+    private void highlightKarma(Context context, Photo photo) {
+        rViews = new RemoteViews( context.getPackageName(), R.layout.simple_widget);
+        if (photo.isKarmable() && photo.hasKarma()) {
+            Toast.makeText(context, "++++++++++", Toast.LENGTH_SHORT).show();
+            rViews.setImageViewResource(R.id.heart, R.mipmap.filled);
+        }
+        else if (!photo.hasKarma()){
+            Toast.makeText(context, "----------", Toast.LENGTH_SHORT).show();
+            rViews.setImageViewResource(R.id.heart, R.mipmap.open);
+        }
+    }
+
     @Override
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
@@ -107,6 +114,7 @@ public class WidgetProvider extends AppWidgetProvider {
             Photo photo = PhotoCollection.getInstance().next();
             try {
                 WallpaperManager.getInstance(context).setBitmap( photo.getBitmap() );
+                highlightKarma(context, photo);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -115,55 +123,31 @@ public class WidgetProvider extends AppWidgetProvider {
             Photo photo = PhotoCollection.getInstance().previous();
             try {
                 WallpaperManager.getInstance(context).setBitmap( photo.getBitmap() );
+                highlightKarma(context, photo);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
         else if (intent.getAction().equals(KARMA)) {
-            rViews = new RemoteViews( context.getPackageName(), R.layout.simple_widget);
-            //Button button = (Button) rViews;
             Photo photo = PhotoCollection.getInstance().current();
             if (!photo.hasKarma() && photo.isKarmable()){
                 photo.giveKarma();
-                Toast.makeText(context, "Karma given"     , Toast.LENGTH_SHORT).show();
-                rViews.setImageViewResource(R.id.heart, R.drawable.filled_heart);
+                Toast.makeText(context, "Karma given, tap again to remove", Toast.LENGTH_SHORT).show();
             }
             else if (photo.isKarmable()){
                 photo.removeKarma();
-                Toast.makeText(context, "Karma taken"     , Toast.LENGTH_SHORT).show();
-                rViews.setImageViewResource(R.id.heart, R.drawable.open_heart);
+                Toast.makeText(context, "Karma taken", Toast.LENGTH_SHORT).show();
             }
-
-            // TODO toggle button pressed/not
-
+            highlightKarma(context, photo);
             Log.i("Testing", "This is action: " + intent.getAction());
         }
         else if (intent.getAction().equals(RELEASE)) {
-            //go to next photo
-            doubleClickCounter++;
-           /* Handler handler = new Handler();
-            Runnable r = new Runnable() {
-
-                @Override
-                public void run() {
-                    doubleClickCounter = 0;
-                }
-            };
-*/
             Photo photo = PhotoCollection.getInstance().next();
-            if (photo.isReleasable() && !photo.isReleased()){
-                if (doubleClickCounter == 1){
-                    Toast.makeText(context, "Photo released, double tap to undo", Toast.LENGTH_SHORT).show();
-                    //handler.postDelayed(r, 250000);
-                    photo.release();
-                    photo = PhotoCollection.getInstance().next();
-                }
-                else if (doubleClickCounter == 2){
-                    photo = PhotoCollection.getInstance().previous();
-                    photo.removeRelease();
-                    Toast.makeText(context, "Photo unreleased", Toast.LENGTH_SHORT).show();
-                    doubleClickCounter = 0;
-                }
+            if (photo.isReleasable()){
+                Toast.makeText(context, "Photo released", Toast.LENGTH_SHORT).show();
+                photo.release();
+                photo = PhotoCollection.getInstance().next();
+                highlightKarma(context, photo);
             }
 
             try {
