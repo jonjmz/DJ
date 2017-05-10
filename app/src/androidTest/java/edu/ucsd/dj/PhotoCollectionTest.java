@@ -1,10 +1,7 @@
 package edu.ucsd.dj;
 
 import android.content.Context;
-import android.os.SystemClock;
 import android.support.test.InstrumentationRegistry;
-import android.test.AndroidTestCase;
-import android.util.Log;
 
 import org.junit.Test;
 
@@ -43,7 +40,7 @@ public class PhotoCollectionTest {
         PhotoCollection collection = PhotoCollection.getInstance();
         Context appContext = InstrumentationRegistry.getTargetContext().getApplicationContext();
         collection.update(appContext);
-        Photo.TimeOfDay tod = Photo.TimeOfDay.getTimeOfDay(System.currentTimeMillis());
+        PhotoInfo.TimeOfDay tod = PhotoInfo.TimeOfDay.getTimeOfDay(System.currentTimeMillis());
         assert(collection.current().getPathname().contains("" + tod));
     }
 

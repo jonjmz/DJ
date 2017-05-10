@@ -48,16 +48,16 @@ public class CoordinatesLoader {
                     photo.getPathname());
 
             // Configure the photo object to reflect this data.
-            photo.setHasValidCoordinates(true);
-            photo.setLatitude(Double.parseDouble(la));
-            photo.setLongitude(Double.parseDouble(lg));
+            photo.getInfo().setHasValidCoordinates(true);
+            photo.getInfo().setLatitude(Double.parseDouble(la));
+            photo.getInfo().setLongitude(Double.parseDouble(lg));
         } else {
 
             Log.i("CoordinatesLoader", "Failure: Failed to get location data for " +
                     photo.getPathname() + ". Setting hasValidCoordinates to false.");
 
             // Declare information missing for this photo.
-            photo.setHasValidCoordinates(false);
+            photo.getInfo().setHasValidCoordinates(false);
         }
 
     }

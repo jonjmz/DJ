@@ -23,7 +23,7 @@ public class PhotoLabeler {
 
         // Default to 'Location Unknown'
         String result = "Location Unknown";
-        Address address = photo.getAddress();
+        Address address = photo.getInfo().getAddress();
 
         // Save relevant pieces of information.
         String place = address.getAddressLine(0);
@@ -32,7 +32,7 @@ public class PhotoLabeler {
         String country = address.getCountryName();
 
         // If the photo has valid location data...
-        if (photo.hasValidCoordinates()) {
+        if (photo.getInfo().hasValidCoordinates()) {
 
 
             Log.i("PhotoLabeler", "Success. Attempting to build label for " + photo.getPathname());

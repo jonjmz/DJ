@@ -7,62 +7,31 @@ import android.location.Address;
 import android.support.annotation.NonNull;
 
 import java.io.Serializable;
-import java.util.Calendar;
 import java.util.HashMap;
-import java.util.TimeZone;
 
 /**
  * Created by jonathanjimenez on 5/1/17.
  */
 
 public class Photo implements Comparable, Serializable {
-    enum TimeOfDay{
-        Night, Morning, Afternoon, Evening;
-
-        static TimeOfDay getTimeOfDay(long miliseconds) {
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTimeZone(TimeZone.getTimeZone("PST"));
-            calendar.setTimeInMillis(miliseconds);
-            int hour = calendar.get(Calendar.HOUR_OF_DAY);
-            if (hour < 6){
-                return Night;
-            } else if (hour < 12){
-                return Morning;
-            } else if (hour < 18){
-                return Afternoon;
-            } else {
-                return Evening;
-            }
-        }
-    }
     private double score;        // Used to order photos with precalulated scores
-    private boolean hasKarma;    // Used to keep track of karma
-    private boolean releasable;  // Check if it is releasable, only defualt photo is not
-    private boolean released;    // Check if it is released
-    private boolean karmaable;   // Check if it is krama-able, only defualt photo is not
-    private long dateTaken;      // Stores date image was taken
-    private TimeOfDay timeOfDay; //Stores the time of day
     private String pathname;    // Reference to image in album
-    private Address address;
-    private boolean hasValidCoordinates;
-    private double latitude;
-    private double longitude;
+    private PhotoInfo info; // Store photo Exif data for score calculations
+
+    private boolean locked; // Applies to default photo, keeps it from being released or karmaed
+    private boolean released;    // Check if it is released
+    private boolean hasKarma;    // Used to keep track of karma
 
     public Photo() {
-        this.releasable = false;
-        this.karmaable = false;
+        this.locked = false;
         this.pathname = "android.resource://"+BuildConfig.APPLICATION_ID+"/" + R.drawable.dejaphotodefault;
     }
 
     public Photo(String reference, long dateTaken) {
         // TODO - Log something in here.
-
-        this.dateTaken = dateTaken;
-        this.timeOfDay = TimeOfDay.getTimeOfDay(dateTaken);
-        this.releasable = true;
-        this.karmaable = true;
+        this.info = new PhotoInfo(dateTaken);
+        this.locked = true;
         this.pathname = reference;
-        this.dateTaken = dateTaken;
     }
 
 
@@ -78,12 +47,12 @@ public class Photo implements Comparable, Serializable {
         if (Settings.isConsideringRecency()) {
             // Get current time to compare with.
             // Calculates the ratio of the actual age over the possible age.
-            double ratio = (now - dateTaken) / (double)now;
+            double ratio = (now - info.getDateTaken()) / (double)now;
             scoreSquared += Math.pow(ratio, 2);
         }
         // If considering time of day, add distance to photo
         if (Settings.isConsideringTOD()) {
-            if(timeOfDay != TimeOfDay.getTimeOfDay(now))
+            if(info.getTimeOfDay() != PhotoInfo.TimeOfDay.getTimeOfDay(now))
                 scoreSquared += 1;
         }
         // If considering address
@@ -97,56 +66,27 @@ public class Photo implements Comparable, Serializable {
         score = Math.sqrt(scoreSquared);
     }
 
-    private static double TimeOfDayDifference(Photo a, Photo b){
-        return 0;
+    public PhotoInfo getInfo() { return info; }
+
+    public String getPathname(){
+        return pathname;
     }
-
-
-    public boolean hasKarma() { return hasKarma; }
-
-    public boolean isKarmable() { return karmaable; }
-
-    public boolean isReleasable() {
-        return releasable;
-    }
-
-    public boolean isReleased() {
-        return released;
-    }
-
-    public void release() {
-        released = true;
-    }
-
-    public void removeRelease() { released = false; }
-
-    public void giveKarma() {
-        hasKarma = true;
-    }
-
-    public void removeKarma() {
-        hasKarma = false;
-    }
-
-    public long getDateTaken() { return dateTaken; }
 
     public double getScore(){ return score; }
 
-    public Address getAddress() {return address; }
-    public void setAddress(Address loc) { address = loc; }
+    public boolean hasKarma() { return hasKarma; }
 
-    public boolean hasValidCoordinates() { return hasValidCoordinates; }
+    public boolean isKarmable() { return !locked; }
 
-    public void setHasValidCoordinates(boolean hasValidCoordinates) {
-        this.hasValidCoordinates = hasValidCoordinates;
-    }
+    public void giveKarma() { hasKarma = true; }
 
+    public void removeKarma() { hasKarma = false; }
 
-    public double getLatitude() { return latitude; }
-    public void setLatitude(double latitude) { this.latitude = latitude; }
+    public boolean isReleasable() { return !locked; }
 
-    public double getLongitude() { return longitude; }
-    public void setLongitude(double longitude) { this.longitude = longitude; }
+    public boolean isReleased() { return released; }
+
+    public void release() { released = true; }
 
 
     /**
@@ -201,9 +141,5 @@ public class Photo implements Comparable, Serializable {
      */
     public Bitmap getBitmap() {
         return BitmapFactory.decodeFile(pathname);
-    }
-
-    public String getPathname(){
-        return pathname;
     }
 }

@@ -106,7 +106,7 @@ public class PhotoCollection {
                         latLngLoader.loadCoordinatesFor(photo);
 
                         // TODO Remove me for efficiency... do when building image.
-                        if (photo.hasValidCoordinates()) {
+                        if (photo.getInfo().hasValidCoordinates()) {
                             addressLoader.loadAddressFor(photo);
 
                             String temp = labeller.label(photo);

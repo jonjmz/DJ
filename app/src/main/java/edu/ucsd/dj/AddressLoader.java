@@ -36,7 +36,7 @@ public class AddressLoader {
     public void loadAddressFor( Photo photo ) {
 
         // Don't do anything if the photo doesn't have valid location information.
-        if (!photo.hasValidCoordinates()) {
+        if (!photo.getInfo().hasValidCoordinates()) {
 
             Log.i("AddressLoader", "Attempted to load location data from a " +
                     "photo with invalid coordinates.");
@@ -48,7 +48,7 @@ public class AddressLoader {
 
         List<Address> addresses;
         try {
-            addresses = coder.getFromLocation(photo.getLatitude(), photo.getLongitude(), 1);
+            addresses = coder.getFromLocation(photo.getInfo().getLatitude(), photo.getInfo().getLongitude(), 1);
 
             Address chosenLocation;
             if (!addresses.isEmpty()) {
@@ -60,11 +60,11 @@ public class AddressLoader {
                 Log.i("AddressLoader", "Geocoder returned no results, setting default location.");
 
                 chosenLocation = new Address(Locale.getDefault());
-                chosenLocation.setLatitude(photo.getLatitude());
-                chosenLocation.setLongitude(photo.getLongitude());
+                chosenLocation.setLatitude(photo.getInfo().getLatitude());
+                chosenLocation.setLongitude(photo.getInfo().getLongitude());
             }
 
-            photo.setAddress( chosenLocation );
+            photo.getInfo().setAddress( chosenLocation );
 
         } catch (IOException e) {
 
