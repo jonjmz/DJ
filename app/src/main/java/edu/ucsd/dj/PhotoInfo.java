@@ -23,8 +23,6 @@ public class PhotoInfo {
         this.address = address;
     }
 
-
-
     public long getDateTaken() { return dateTaken; }
 
     public TimeOfDay getTimeOfDay() { return timeOfDay; }

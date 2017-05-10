@@ -23,14 +23,14 @@ public class Photo implements Comparable, Serializable {
     private boolean hasKarma;    // Used to keep track of karma
 
     public Photo() {
-        this.locked = false;
+        this.locked = true;
         this.pathname = "android.resource://"+BuildConfig.APPLICATION_ID+"/" + R.drawable.dejaphotodefault;
     }
 
     public Photo(String reference, long dateTaken) {
         // TODO - Log something in here.
         this.info = new PhotoInfo(dateTaken);
-        this.locked = true;
+        this.locked = false;
         this.pathname = reference;
     }
 
