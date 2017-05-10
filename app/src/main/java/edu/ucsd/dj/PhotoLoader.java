@@ -27,9 +27,9 @@ public class PhotoLoader extends ContextWrapper {
                 MediaStore.Images.Media.DATE_TAKEN,
                 MediaStore.Images.Media.DATA
         };
-        selectionClause = "";
-        selectionArgs = new String[] {""};
-        sortOrder = "";
+        selectionClause = null;
+        selectionArgs = null;
+        sortOrder = null;
         images = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
     }
 
@@ -74,6 +74,15 @@ public class PhotoLoader extends ContextWrapper {
                             " path_name: " + pathName);
 
                     Photo photo = new Photo(pathName, date);
+                    CoordinatesLoader latLngLoader = new CoordinatesLoader();
+                    AddressLoader addressLoader = new AddressLoader(this.getBaseContext());
+                    PhotoLabeler labeler = new PhotoLabeler();
+                    latLngLoader.loadCoordinatesFor(photo);
+                    if (photo.getInfo().hasValidCoordinates()) {
+                        addressLoader.loadAddressFor(photo);
+                    }
+
+                    photo.calculateScore();
                     album.add(photo);
 
 

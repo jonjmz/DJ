@@ -45,84 +45,17 @@ public class PhotoCollection {
      */
     public void update(Context context) {
 
-        // TODO - this method is a mess. Refactor into other classes.
-        // which image properties are we querying
-        String[] projection = new String[] {
-                MediaStore.Images.Media._ID,
-                MediaStore.Images.Media.BUCKET_DISPLAY_NAME,
-                MediaStore.Images.Media.DATE_TAKEN,
-                MediaStore.Images.Media.DATA
-        };
+        PhotoLoader loader = new PhotoLoader(context);
+        ArrayList<Photo> newAlbum = loader.getPhotos();
 
-        // content:// style URI for the "primary" external storage volume
-        Uri images = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-
-        // Make the query.
-        Cursor cur = context.getContentResolver().query(images,
-                projection, // Which columns to return
-                null,       // Which rows to return (all rows)
-                null,       // Selection arguments (none)
-                null        // Ordering
-        );
-        if ( cur != null && cur.getCount() > 0 ) {
-            //Logging the size of the image gallery
-            Log.i("DeviceImageManager", " query count=" + cur.getCount());
-
-            //Moving the cursor to the first image of the gallery
-            if (cur.moveToFirst()) {
-
-                //Taking the name of the album and the date
-                String bucket;
-                long date;
-                int bucketColumn = cur.getColumnIndexOrThrow(
-                        MediaStore.Images.Media.BUCKET_DISPLAY_NAME);
-
-                int dateColumn = cur.getColumnIndexOrThrow(
-                        MediaStore.Images.Media.DATE_TAKEN);
-
-                CoordinatesLoader latLngLoader = new CoordinatesLoader();
-                AddressLoader addressLoader= new AddressLoader(context);
-                PhotoLabeler labeller = new PhotoLabeler();
-
-                do {
-                    // Get the field values
-                    bucket = cur.getString(bucketColumn);
-                    date = cur.getLong(dateColumn);
-
-                    // Do something with the values.
-                    Log.i("ListingImages", " bucket=" + bucket
-                            + "  date_taken=" + date);
-
-                    //Get the index column of the filepath
-                    int index = cur.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-
-                    String pathName = cur.getString(index);
-
-                    Photo photo = new Photo(pathName, date);
-
-                    // Checking for duplicate
-                    if (!album.contains(photo)) {
-
-                        latLngLoader.loadCoordinatesFor(photo);
-
-                        // TODO Remove me for efficiency... do when building image.
-                        if (photo.getInfo().hasValidCoordinates()) {
-                            addressLoader.loadAddressFor(photo);
-
-                            String temp = labeller.label(photo);
-                        }
-
-                        album.add( photo );
-                    }
-
-                } while (cur.moveToNext());
+        for(Photo photo: newAlbum){
+            if(!album.contains(photo)) {
+                album.add( photo );
             }
-
-            for (Photo p : album) {
-                p.calculateScore();
-            }
-            Collections.sort(album);
         }
+
+        Collections.sort(album);
+
     }
 
     /**
