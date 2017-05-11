@@ -1,5 +1,9 @@
 package edu.ucsd.dj;
 
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.location.Address;
 import android.util.Log;
 
@@ -17,7 +21,7 @@ public class PhotoLabeler {
      * @param photo
      * @return Written location of this image.
      */
-    public String label(Photo photo) {
+    public String generateLabel(Photo photo) {
 
         Log.i("PhotoLabeler", "Attempting to get label components for " + photo.getPathname());
 
@@ -49,4 +53,20 @@ public class PhotoLabeler {
 
         return result;
     }
+
+    public Bitmap label(Photo photo){
+        
+        Bitmap bitmap = photo.getBitmap();
+        String text = generateLabel(photo);
+        Canvas canvas = new Canvas(bitmap);
+
+        //TODO refactor paint class
+        Paint paint = new Paint();
+        paint.setColor(Color.WHITE);
+        paint.setTextSize(30);
+        canvas.drawText(text, 0, 0, paint);
+        return bitmap;
+
+    }
+
 }

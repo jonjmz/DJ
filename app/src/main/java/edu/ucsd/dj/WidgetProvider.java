@@ -94,7 +94,7 @@ public class WidgetProvider extends AppWidgetProvider {
 
     private void highlightKarma(Context context, Photo photo) {
         rViews = new RemoteViews( context.getPackageName(), R.layout.simple_widget);
-        if (photo.isKarmable() && photo.hasKarma()) {
+        if (photo.hasKarma()) {
             Toast.makeText(context, "++++++++++", Toast.LENGTH_SHORT).show();
             rViews.setImageViewResource(R.id.heart, R.mipmap.filled);
         }
@@ -130,11 +130,11 @@ public class WidgetProvider extends AppWidgetProvider {
         }
         else if (intent.getAction().equals(KARMA)) {
             Photo photo = PhotoCollection.getInstance().current();
-            if (!photo.hasKarma() && photo.isKarmable()){
+            if (!photo.hasKarma()){
                 photo.giveKarma();
                 Toast.makeText(context, "Karma given, tap again to remove", Toast.LENGTH_SHORT).show();
             }
-            else if (photo.isKarmable()){
+            else{
                 photo.removeKarma();
                 Toast.makeText(context, "Karma taken", Toast.LENGTH_SHORT).show();
             }
@@ -142,13 +142,13 @@ public class WidgetProvider extends AppWidgetProvider {
             Log.i("Testing", "This is action: " + intent.getAction());
         }
         else if (intent.getAction().equals(RELEASE)) {
+
             Photo photo = PhotoCollection.getInstance().next();
-            if (photo.isReleasable()){
-                Toast.makeText(context, "Photo released", Toast.LENGTH_SHORT).show();
-                photo.release();
-                photo = PhotoCollection.getInstance().next();
-                highlightKarma(context, photo);
-            }
+            Toast.makeText(context, "Photo released", Toast.LENGTH_SHORT).show();
+            photo.release();
+            photo = PhotoCollection.getInstance().next();
+            highlightKarma(context, photo);
+
 
             try {
                 WallpaperManager.getInstance(context).setBitmap( photo.getBitmap() );
