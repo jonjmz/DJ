@@ -118,12 +118,6 @@ public class Photo implements Comparable, Serializable {
         else return 0;
     }
 
-    /**
-     * Returns this photo as a Bit Map.
-     *
-     * @return a Bit Map object.
-     */
-    public Bitmap getBitmap() {
-        return BitmapFactory.decodeFile(pathname);
-    }
+
+
 }

@@ -116,7 +116,10 @@ public class WidgetProvider extends AppWidgetProvider {
         else if (intent.getAction().equals(PREVIOUS)) {
             Photo photo = PhotoCollection.getInstance().previous();
             try {
-                WallpaperManager.getInstance(context).setBitmap( photo.getBitmap() );
+                PhotoLabeler labeler = new PhotoLabeler();
+                Bitmap newBackground = labeler.labeledBitmapFor( photo );
+
+                WallpaperManager.getInstance(context).setBitmap( newBackground );
                 highlightKarma(context, photo);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -145,7 +148,10 @@ public class WidgetProvider extends AppWidgetProvider {
 
 
             try {
-                WallpaperManager.getInstance(context).setBitmap( photo.getBitmap() );
+                PhotoLabeler labeler = new PhotoLabeler();
+                Bitmap newBackground = labeler.labeledBitmapFor( photo );
+
+                WallpaperManager.getInstance(context).setBitmap( newBackground );
             } catch (IOException e) {
                 e.printStackTrace();
             }

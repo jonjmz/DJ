@@ -5,6 +5,9 @@ import android.app.WallpaperManager;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -35,8 +38,10 @@ public class MainActivity extends AppCompatActivity {
         if(PhotoCollection.getInstance().next() == null){
             //TODO refactor later
             try {
+
                 Bitmap defaultPhoto = BitmapFactory.decodeResource(getResources(),
                         R.drawable.dejaphotodefault);
+
                 WallpaperManager.getInstance(this).setBitmap( defaultPhoto);
             } catch (Exception e) {
                 e.printStackTrace();

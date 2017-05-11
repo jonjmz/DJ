@@ -1,6 +1,7 @@
 package edu.ucsd.dj;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -13,7 +14,14 @@ import android.util.Log;
  * Created by Jake Sutton on 5/9/17.
  */
 public class PhotoLabeler {
+    BitmapFactory.Options options;
 
+    public PhotoLabeler(){
+        options = new BitmapFactory.Options();
+        options.inMutable = true;
+        options.inScaled = true;
+
+    }
     /**
      * Returns string corresponding to the geographic location described
      * by the data saved in the photo object 'photo'.
@@ -55,8 +63,7 @@ public class PhotoLabeler {
     }
 
     public Bitmap labeledBitmapFor(Photo photo){
-        
-        Bitmap bitmap = photo.getBitmap();
+        Bitmap bitmap = BitmapFactory.decodeFile(photo.getPathname(), options);
         String text = generateLabel(photo);
         Canvas canvas = new Canvas(bitmap);
 
