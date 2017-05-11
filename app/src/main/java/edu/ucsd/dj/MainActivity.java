@@ -3,6 +3,9 @@ package edu.ucsd.dj;
 import android.Manifest;
 import android.app.WallpaperManager;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -18,6 +21,21 @@ public class MainActivity extends AppCompatActivity {
     private static final int SET_WALLPAPER_PERMISSION = 69;
 
     @Override
+    protected void onStart() {
+        super.onStart();
+
+        //TODO refactor later
+        try {
+            Bitmap defaultPhoto = BitmapFactory.decodeResource(getResources(),
+                    R.drawable.dejaphotodefault);
+            WallpaperManager.getInstance(this).setBitmap( defaultPhoto);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.content_main);
@@ -29,11 +47,6 @@ public class MainActivity extends AppCompatActivity {
 
         // some kind of location class, adds overlay, returns bitmap
 
-        try {
-            WallpaperManager.getInstance(MainActivity.this).setBitmap( photo.getBitmap() );
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
     private void askPermission(String permission, int requestCode){
         if (ContextCompat.checkSelfPermission(this,

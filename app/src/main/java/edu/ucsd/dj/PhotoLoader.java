@@ -7,6 +7,10 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.util.Log;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -48,11 +52,11 @@ public class PhotoLoader extends ContextWrapper {
             if(cur == null){
                 //Cursor is null, meaning there is an error that needs to be resolved
                 Log.d("NullPointerException", "Cursor is null");
-                return null;
+                return album;
             }
             //If there is no photo in the gallery, perform adding a default photo into the album
             else if(cur.getCount() < 1){
-                album.add(new Photo());
+                //TODO handle a null/0 count photocollection
                 return album;
             }
             else {
@@ -75,7 +79,7 @@ public class PhotoLoader extends ContextWrapper {
 
                     Photo photo = new Photo(pathName, date);
                     CoordinatesLoader latLngLoader = new CoordinatesLoader();
-                    AddressLoader addressLoader = new AddressLoader(this.getBaseContext());
+                    AddressLoader addressLoader = new AddressLoader(getApplicationContext());
                     PhotoLabeler labeler = new PhotoLabeler();
                     latLngLoader.loadCoordinatesFor(photo);
                     if (photo.getInfo().hasValidCoordinates()) {
@@ -95,4 +99,5 @@ public class PhotoLoader extends ContextWrapper {
         }
         return null;
     }
+
 }

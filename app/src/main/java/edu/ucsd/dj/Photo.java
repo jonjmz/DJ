@@ -18,19 +18,12 @@ public class Photo implements Comparable, Serializable {
     private String pathname;    // Reference to image in album
     private PhotoInfo info; // Store photo Exif data for score calculations
 
-    private boolean locked; // Applies to default photo, keeps it from being released or karmaed
     private boolean released;    // Check if it is released
     private boolean hasKarma;    // Used to keep track of karma
-
-    public Photo() {
-        this.locked = false;
-        this.pathname = "android.resource://"+BuildConfig.APPLICATION_ID+"/" + R.drawable.dejaphotodefault;
-    }
 
     public Photo(String reference, long dateTaken) {
         // TODO - Log something in here.
         this.info = new PhotoInfo(dateTaken);
-        this.locked = true;
         this.pathname = reference;
     }
 
@@ -76,13 +69,9 @@ public class Photo implements Comparable, Serializable {
 
     public boolean hasKarma() { return hasKarma; }
 
-    public boolean isKarmable() { return !locked; }
-
     public void giveKarma() { hasKarma = true; }
 
     public void removeKarma() { hasKarma = false; }
-
-    public boolean isReleasable() { return !locked; }
 
     public boolean isReleased() { return released; }
 
