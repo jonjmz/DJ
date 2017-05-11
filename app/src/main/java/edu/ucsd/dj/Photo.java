@@ -3,7 +3,6 @@ package edu.ucsd.dj;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
-import android.location.Address;
 import android.support.annotation.NonNull;
 
 import java.io.Serializable;
@@ -61,17 +60,13 @@ public class Photo implements Comparable, Serializable {
 
     public PhotoInfo getInfo() { return info; }
 
-    public String getPathname(){
-        return pathname;
-    }
+    public String getPathname(){ return pathname; }
 
     public double getScore(){ return score; }
 
     public boolean hasKarma() { return hasKarma; }
 
-    public void giveKarma() { hasKarma = true; }
-
-    public void removeKarma() { hasKarma = false; }
+    public void setHasKarma(boolean karma) { this.hasKarma = karma; }
 
     public boolean isReleased() { return released; }
 

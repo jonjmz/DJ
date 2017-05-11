@@ -11,30 +11,19 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
+import android.graphics.Bitmap;
 import android.os.Build;
-import android.os.Handler;
 import android.util.Log;
-import android.view.MotionEvent;
-import android.view.View;
-import android.widget.Button;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 
 
 
 import java.io.IOException;
-import java.util.Random;
 
 /**
  * Created by Josh on 5/2/2017.
  */
-
-import java.util.Random;
-import java.util.Set;
-
-import static android.content.ContentValues.TAG;
-import static edu.ucsd.dj.R.id.heart;
 
 @TargetApi(Build.VERSION_CODES.CUPCAKE)
 public class WidgetProvider extends AppWidgetProvider {
@@ -113,8 +102,13 @@ public class WidgetProvider extends AppWidgetProvider {
 
             Photo photo = PhotoCollection.getInstance().next();
             try {
-                WallpaperManager.getInstance(context).setBitmap( photo.getBitmap() );
+
+                PhotoLabeler labeler = new PhotoLabeler();
+                Bitmap newBackground = labeler.labeledBitmapFor( photo );
+
+                WallpaperManager.getInstance(context).setBitmap( newBackground );
                 highlightKarma(context, photo);
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -131,11 +125,11 @@ public class WidgetProvider extends AppWidgetProvider {
         else if (intent.getAction().equals(KARMA)) {
             Photo photo = PhotoCollection.getInstance().current();
             if (!photo.hasKarma()){
-                photo.giveKarma();
+                photo.setHasKarma(true);
                 Toast.makeText(context, "Karma given, tap again to remove", Toast.LENGTH_SHORT).show();
             }
             else{
-                photo.removeKarma();
+                photo.setHasKarma(false);
                 Toast.makeText(context, "Karma taken", Toast.LENGTH_SHORT).show();
             }
             highlightKarma(context, photo);

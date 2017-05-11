@@ -23,7 +23,7 @@ public class PhotoLabeler {
      */
     public String generateLabel(Photo photo) {
 
-        Log.i("PhotoLabeler", "Attempting to get label components for " + photo.getPathname());
+        Log.i("PhotoLabeler", "Attempting to get labeledBitmapFor components for " + photo.getPathname());
 
         // Default to 'Location Unknown'
         String result = "Location Unknown";
@@ -39,7 +39,7 @@ public class PhotoLabeler {
         if (photo.getInfo().hasValidCoordinates()) {
 
 
-            Log.i("PhotoLabeler", "Success. Attempting to build label for " + photo.getPathname());
+            Log.i("PhotoLabeler", "Success. Attempting to build labeledBitmapFor for " + photo.getPathname());
 
             // Order and concatenate information in order of specificity.
             if (country != null && !country.isEmpty()) result = country;
@@ -48,13 +48,13 @@ public class PhotoLabeler {
             if (place != null && !place.isEmpty()) result = place + ", " + result;
         }
 
-        Log.i("PhotoLabeler", "Success. Returning label for " + photo.getPathname() + " -> " +
+        Log.i("PhotoLabeler", "Success. Returning labeledBitmapFor for " + photo.getPathname() + " -> " +
             result);
 
         return result;
     }
 
-    public Bitmap label(Photo photo){
+    public Bitmap labeledBitmapFor(Photo photo){
         
         Bitmap bitmap = photo.getBitmap();
         String text = generateLabel(photo);

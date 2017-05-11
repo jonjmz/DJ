@@ -68,6 +68,8 @@ public class PhotoLoader extends ContextWrapper {
                         MediaStore.Images.Media.DATE_TAKEN);
                 int index = cur.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
 
+                CoordinatesLoader latLngLoader = new CoordinatesLoader();
+                AddressLoader addressLoader = new AddressLoader(getApplicationContext());
                 do {
                     // Get the field values
                     date = cur.getLong(dateColumn);
@@ -78,9 +80,6 @@ public class PhotoLoader extends ContextWrapper {
                             " path_name: " + pathName);
 
                     Photo photo = new Photo(pathName, date);
-                    CoordinatesLoader latLngLoader = new CoordinatesLoader();
-                    AddressLoader addressLoader = new AddressLoader(getApplicationContext());
-                    PhotoLabeler labeler = new PhotoLabeler();
                     latLngLoader.loadCoordinatesFor(photo);
                     if (photo.getInfo().hasValidCoordinates()) {
                         addressLoader.loadAddressFor(photo);

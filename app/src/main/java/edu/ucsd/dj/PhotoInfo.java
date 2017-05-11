@@ -10,7 +10,7 @@ import java.util.TimeZone;
  */
 
 public class PhotoInfo {
-    private long dateTaken;                 // Stores date image was taken
+    private long dateTaken;                // Stores date image was taken
     private PhotoInfo.TimeOfDay timeOfDay; // Stores the time of day
     private Address address;
     private boolean hasValidCoordinates;
@@ -20,7 +20,6 @@ public class PhotoInfo {
     public PhotoInfo(long dateTaken) {
         this.timeOfDay = PhotoInfo.TimeOfDay.getTimeOfDay(dateTaken);
         this.dateTaken = dateTaken;
-        this.address = address;
     }
 
     public long getDateTaken() { return dateTaken; }
@@ -28,21 +27,17 @@ public class PhotoInfo {
     public TimeOfDay getTimeOfDay() { return timeOfDay; }
 
     public Address getAddress() { return address; }
-
     public void setAddress(Address loc) { address = loc; }
 
     public boolean hasValidCoordinates() { return hasValidCoordinates; }
-
     public void setHasValidCoordinates(boolean hasValidCoordinates) {
         this.hasValidCoordinates = hasValidCoordinates;
     }
 
     public double getLatitude() { return latitude; }
-
     public void setLatitude(double latitude) { this.latitude = latitude; }
 
     public double getLongitude() { return longitude; }
-
     public void setLongitude(double longitude) { this.longitude = longitude; }
 
     enum TimeOfDay{
