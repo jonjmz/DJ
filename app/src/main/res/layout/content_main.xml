@@ -31,7 +31,7 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentEnd="true"
-        android:checked="true"/>
+        />
 
     <Switch
         android:id="@+id/timeOfDay"
@@ -42,8 +42,7 @@
         android:layout_alignEnd="@+id/proximity"
         android:layout_alignRight="@+id/proximity"
         android:layout_below="@+id/proximity"
-        android:layout_marginTop="17sp"
-        android:checked="true"/>
+        android:layout_marginTop="17sp"/>
 
     <Switch
         android:id="@+id/recency"
@@ -55,7 +54,7 @@
         android:layout_below="@+id/timeOfDay"
         android:layout_alignLeft="@+id/proximity"
         android:layout_alignStart="@+id/proximity"
-        android:checked="true"/>
+        tools:ignore="RtlHardcoded" />
 
     <Switch
         android:id="@+id/customAlbum"
@@ -69,4 +68,3 @@
         android:layout_alignEnd="@+id/recency" />
 
 </RelativeLayout>
-
