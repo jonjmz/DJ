@@ -8,6 +8,9 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.Switch;
+import android.widget.TextView;
 
 import java.io.IOException;
 
@@ -16,6 +19,11 @@ public class MainActivity extends AppCompatActivity {
 
     private static final int READ_STORAGE_PERMISSION = 123;
     private static final int SET_WALLPAPER_PERMISSION = 69;
+    Settings settings;
+    private Switch proximitySwitch;
+    private Switch timeOfDaySwitch;
+    private Switch recencySwitch;
+//    private Switch customAlbumSwitch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +42,62 @@ public class MainActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        proximitySwitch = (Switch) findViewById(R.id.proximity);
+        timeOfDaySwitch = (Switch) findViewById(R.id.timeOfDay);
+        recencySwitch = (Switch) findViewById(R.id.recency);
+//        customAlbumSwitch = (Switch) findViewById(R.id.customAlbum);
+
+        proximitySwitch.setChecked(true); //Default is true.
+        timeOfDaySwitch.setChecked(true); //Default is true.
+        recencySwitch.setChecked(true); //Default is true.
+//        customAlbumSwitch.setChecked(false); //Default is true.
+
+        proximitySwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked)
+                    settings.setConsiderProximity(true);
+                else
+                    settings.setConsiderProximity(false);
+            }
+        });
+
+        timeOfDaySwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked)
+                    settings.setConsiderTOD(true);
+                else
+                    settings.setConsiderTOD(false);
+            }
+        });
+
+        recencySwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked)
+                    settings.setConsiderRecency(true);
+                else
+                    settings.setConsiderRecency(false);
+            }
+        });
+
+        /*
+        customAlbumSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked)
+                    settings.setUsingCustomAlbum(true);
+                else
+                    settings.setUsingCustomAlbum(false);
+            }
+        });
+        */
     }
     private void askPermission(String permission, int requestCode){
         if (ContextCompat.checkSelfPermission(this,
