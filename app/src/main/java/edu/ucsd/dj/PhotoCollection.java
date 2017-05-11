@@ -44,6 +44,7 @@ public class PhotoCollection {
         PhotoLoader loader = new PhotoLoader(context);
         ArrayList<Photo> newAlbum = loader.getPhotos();
 
+        //TODO optimization problem
         for(Photo photo: newAlbum){
             if(!album.contains(photo)) {
                 album.add( photo );

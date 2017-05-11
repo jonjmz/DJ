@@ -32,15 +32,16 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        //TODO refactor later
-        try {
-            Bitmap defaultPhoto = BitmapFactory.decodeResource(getResources(),
-                    R.drawable.dejaphotodefault);
-            WallpaperManager.getInstance(this).setBitmap( defaultPhoto);
-        } catch (Exception e) {
-            e.printStackTrace();
+        if(PhotoCollection.getInstance().next() == null){
+            //TODO refactor later
+            try {
+                Bitmap defaultPhoto = BitmapFactory.decodeResource(getResources(),
+                        R.drawable.dejaphotodefault);
+                WallpaperManager.getInstance(this).setBitmap( defaultPhoto);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
-
     }
 
     @Override
@@ -51,8 +52,6 @@ public class MainActivity extends AppCompatActivity {
         askPermission(Manifest.permission.SET_WALLPAPER, SET_WALLPAPER_PERMISSION);
 
         PhotoCollection.getInstance().update(getApplicationContext());
-        Photo photo = PhotoCollection.getInstance().next();
-
         // some kind of location class, adds overlay, returns bitmap
 
         proximitySwitch = (Switch) findViewById(R.id.proximity);
