@@ -16,12 +16,37 @@ import android.util.Log;
 public class PhotoLabeler {
     BitmapFactory.Options options;
 
+    /**
+     * Constructor, configures options so that bitmaps returned by this class'
+     * BitmapFactory are mutable.
+     */
     public PhotoLabeler(){
         options = new BitmapFactory.Options();
         options.inMutable = true;
         options.inScaled = true;
-
     }
+
+    /**
+     * Returns the Bitmap represenation of this image with a location
+     * label drawn onto it.
+     *
+     * @param photo
+     * @return Bitmap representing the photo with a location label.
+     */
+    public Bitmap labeledBitmapFor(Photo photo){
+
+        Bitmap bitmap = BitmapFactory.decodeFile(photo.getPathname(), options);
+        String text = generateLabel(photo);
+        Canvas canvas = new Canvas(bitmap);
+
+        //TODO refactor paint class
+        Paint paint = new Paint();
+        paint.setColor(Color.BLUE);
+        paint.setTextSize(30);
+        canvas.drawText(text, 200, 200, paint);
+        return bitmap;
+    }
+
     /**
      * Returns string corresponding to the geographic location described
      * by the data saved in the photo object 'photo'.
@@ -29,23 +54,24 @@ public class PhotoLabeler {
      * @param photo
      * @return Written location of this image.
      */
-    public String generateLabel(Photo photo) {
+    private String generateLabel(Photo photo) {
 
         Log.i("PhotoLabeler", "Attempting to get labeledBitmapFor components for " + photo.getPathname());
 
         // Default to 'Location Unknown'
         String result = "Location Unknown";
-        Address address = photo.getInfo().getAddress();
 
-        // Save relevant pieces of information.
-        String place = address.getAddressLine(0);
-        String city = address.getLocality();
-        String state = address.getAdminArea();
-        String country = address.getCountryName();
-
-        // If the photo has valid location data...
         if (photo.getInfo().hasValidCoordinates()) {
 
+            Address address = photo.getInfo().getAddress();
+
+            // Save relevant pieces of information.
+            String place = address.getAddressLine(0);
+            String city = address.getLocality();
+            String state = address.getAdminArea();
+            String country = address.getCountryName();
+
+            // If the photo has valid location data...
 
             Log.i("PhotoLabeler", "Success. Attempting to build labeledBitmapFor for " + photo.getPathname());
 
@@ -56,24 +82,7 @@ public class PhotoLabeler {
             if (place != null && !place.isEmpty()) result = place + ", " + result;
         }
 
-        Log.i("PhotoLabeler", "Success. Returning labeledBitmapFor for " + photo.getPathname() + " -> " +
-            result);
-
         return result;
-    }
-
-    public Bitmap labeledBitmapFor(Photo photo){
-        Bitmap bitmap = BitmapFactory.decodeFile(photo.getPathname(), options);
-        String text = generateLabel(photo);
-        Canvas canvas = new Canvas(bitmap);
-
-        //TODO refactor paint class
-        Paint paint = new Paint();
-        paint.setColor(Color.WHITE);
-        paint.setTextSize(30);
-        canvas.drawText(text, 0, 0, paint);
-        return bitmap;
-
     }
 
 }
