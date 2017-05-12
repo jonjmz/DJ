@@ -107,7 +107,7 @@ public class WidgetProvider extends AppWidgetProvider {
                 AddressLoader loader = new AddressLoader(context);
                 loader.loadAddressFor(photo);
 
-                Bitmap newBackground = labeler.labeledBitmapFor( photo );
+                Bitmap newBackground = labeler.labeledBitmapFor( photo, context );
 
                 WallpaperManager.getInstance(context).setBitmap( newBackground );
                 highlightKarma(context, photo);
@@ -124,7 +124,7 @@ public class WidgetProvider extends AppWidgetProvider {
                 AddressLoader loader = new AddressLoader(context);
                 loader.loadAddressFor(photo);
 
-                Bitmap newBackground = labeler.labeledBitmapFor( photo );
+                Bitmap newBackground = labeler.labeledBitmapFor( photo, context );
 
                 WallpaperManager.getInstance(context).setBitmap( newBackground );
                 highlightKarma(context, photo);
@@ -155,7 +155,7 @@ public class WidgetProvider extends AppWidgetProvider {
 
             try {
                 PhotoLabeler labeler = new PhotoLabeler();
-                Bitmap newBackground = labeler.labeledBitmapFor( photo );
+                Bitmap newBackground = labeler.labeledBitmapFor( photo, context );
 
                 WallpaperManager.getInstance(context).setBitmap( newBackground );
             } catch (IOException e) {

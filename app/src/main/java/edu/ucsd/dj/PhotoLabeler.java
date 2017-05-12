@@ -1,11 +1,15 @@
 package edu.ucsd.dj;
 
+import android.app.WallpaperManager;
+import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.location.Address;
+import android.util.DisplayMetrics;
 import android.util.Log;
 
 /**
@@ -33,17 +37,23 @@ public class PhotoLabeler {
      * @param photo
      * @return Bitmap representing the photo with a location label.
      */
-    public Bitmap labeledBitmapFor(Photo photo){
+    public Bitmap labeledBitmapFor(Photo photo, Context context){
 
         Bitmap bitmap = BitmapFactory.decodeFile(photo.getPathname(), options);
         String text = generateLabel(photo);
+        int width = context.getResources().getDisplayMetrics().widthPixels;
+        int height = context.getResources().getDisplayMetrics().heightPixels;
+
+        bitmap = bitmap.createScaledBitmap( bitmap, width, height, false );
         Canvas canvas = new Canvas(bitmap);
 
         //TODO refactor paint class
         Paint paint = new Paint();
-        paint.setColor(Color.BLUE);
-        paint.setTextSize(30);
-        canvas.drawText(text, 200, 200, paint);
+        paint.setColor(Color.WHITE);
+        paint.setTextSize(35);
+        paint.setShadowLayer(6.0f, 0.0f, 0.0f, Color.BLACK);
+        canvas.drawText(text, 40, (height/4) * 3, paint);
+
         return bitmap;
     }
 
