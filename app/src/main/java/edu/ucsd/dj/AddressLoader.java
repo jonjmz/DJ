@@ -17,7 +17,7 @@ import java.util.Locale;
  */
 public class AddressLoader {
 
-    Geocoder coder;
+    private Geocoder coder;
 
     /**
      * Creates an AddressLoader object, taking the current application context, and setting the
@@ -72,5 +72,4 @@ public class AddressLoader {
             e.printStackTrace();
         }
     }
-
 }

@@ -104,6 +104,9 @@ public class WidgetProvider extends AppWidgetProvider {
             try {
 
                 PhotoLabeler labeler = new PhotoLabeler();
+                AddressLoader loader = new AddressLoader(context);
+                loader.loadAddressFor(photo);
+
                 Bitmap newBackground = labeler.labeledBitmapFor( photo );
 
                 WallpaperManager.getInstance(context).setBitmap( newBackground );
@@ -117,6 +120,10 @@ public class WidgetProvider extends AppWidgetProvider {
             Photo photo = PhotoCollection.getInstance().previous();
             try {
                 PhotoLabeler labeler = new PhotoLabeler();
+                // TODO may not need to do this ?
+                AddressLoader loader = new AddressLoader(context);
+                loader.loadAddressFor(photo);
+
                 Bitmap newBackground = labeler.labeledBitmapFor( photo );
 
                 WallpaperManager.getInstance(context).setBitmap( newBackground );
@@ -145,7 +152,6 @@ public class WidgetProvider extends AppWidgetProvider {
             photo.release();
             photo = PhotoCollection.getInstance().next();
             highlightKarma(context, photo);
-
 
             try {
                 PhotoLabeler labeler = new PhotoLabeler();

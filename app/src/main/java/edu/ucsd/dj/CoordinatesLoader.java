@@ -11,7 +11,7 @@ import java.io.IOException;
  * Created by Jake Sutton on 5/9/17.
  */
 public class CoordinatesLoader {
-    ExifInterface exifInterface;
+    private ExifInterface exifInterface;
 
     /**
      * If possible, meaning if the exif data for this photo is non-null,

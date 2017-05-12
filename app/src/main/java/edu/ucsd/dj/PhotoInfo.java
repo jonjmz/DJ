@@ -8,7 +8,6 @@ import java.util.TimeZone;
 /**
  * Created by jonathanjimenez on 5/9/17.
  */
-
 public class PhotoInfo {
     private long dateTaken;                // Stores date image was taken
     private PhotoInfo.TimeOfDay timeOfDay; // Stores the time of day

@@ -5,27 +5,17 @@ import android.app.WallpaperManager;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.drawable.Drawable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Switch;
-import android.widget.TextView;
-
-import java.io.IOException;
-
 
 public class MainActivity extends AppCompatActivity {
 
     private static final int READ_STORAGE_PERMISSION = 123;
     private static final int SET_WALLPAPER_PERMISSION = 69;
-    Settings settings;
     private Switch proximitySwitch;
     private Switch timeOfDaySwitch;
     private Switch recencySwitch;
@@ -62,21 +52,21 @@ public class MainActivity extends AppCompatActivity {
         proximitySwitch = (Switch) findViewById(R.id.proximity);
         timeOfDaySwitch = (Switch) findViewById(R.id.timeOfDay);
         recencySwitch = (Switch) findViewById(R.id.recency);
-//        customAlbumSwitch = (Switch) findViewById(R.id.customAlbum);
+        // customAlbumSwitch = (Switch) findViewById(R.id.customAlbum);
 
         proximitySwitch.setChecked(true); //Default is true.
         timeOfDaySwitch.setChecked(true); //Default is true.
         recencySwitch.setChecked(true); //Default is true.
-//        customAlbumSwitch.setChecked(false); //Default is true.
+        // customAlbumSwitch.setChecked(false); //Default is true.
 
         proximitySwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked)
-                    settings.setConsiderProximity(true);
+                    Settings.setConsiderProximity(true);
                 else
-                    settings.setConsiderProximity(false);
+                    Settings.setConsiderProximity(false);
             }
         });
 
@@ -85,9 +75,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked)
-                    settings.setConsiderTOD(true);
+                    Settings.setConsiderTOD(true);
                 else
-                    settings.setConsiderTOD(false);
+                    Settings.setConsiderTOD(false);
             }
         });
 
@@ -96,9 +86,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked)
-                    settings.setConsiderRecency(true);
+                    Settings.setConsiderRecency(true);
                 else
-                    settings.setConsiderRecency(false);
+                    Settings.setConsiderRecency(false);
             }
         });
 

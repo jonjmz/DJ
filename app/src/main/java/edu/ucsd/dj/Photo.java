@@ -1,8 +1,5 @@
 package edu.ucsd.dj;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-
 import android.support.annotation.NonNull;
 
 import java.io.Serializable;
@@ -11,8 +8,8 @@ import java.util.HashMap;
 /**
  * Created by jonathanjimenez on 5/1/17.
  */
-
 public class Photo implements Comparable, Serializable {
+
     private double score;        // Used to order photos with precalulated scores
     private String pathname;    // Reference to image in album
     private PhotoInfo info; // Store photo Exif data for score calculations
@@ -21,11 +18,9 @@ public class Photo implements Comparable, Serializable {
     private boolean hasKarma;    // Used to keep track of karma
 
     public Photo(String reference, long dateTaken) {
-        // TODO - Log something in here.
         this.info = new PhotoInfo(dateTaken);
         this.pathname = reference;
     }
-
 
     /**
      * Calculates score for this photo at this time/address with these settings.
@@ -117,7 +112,4 @@ public class Photo implements Comparable, Serializable {
         else if (score > ((Photo) o).score) return 1;
         else return 0;
     }
-
-
-
 }
