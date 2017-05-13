@@ -38,7 +38,7 @@ public class AddressLabelStrategyTest {
     }
     @Test
     public void constructorTest() throws Exception {
-        
+
     }
     @Test
     public void generateAddressTest() throws Exception {
