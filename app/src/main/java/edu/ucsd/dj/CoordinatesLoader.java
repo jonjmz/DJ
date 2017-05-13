@@ -5,6 +5,8 @@ import android.util.Log;
 
 import java.io.IOException;
 
+import edu.ucsd.dj.interfaces.Addressable;
+
 /**
  * Responsible for loading location from the file system for this photo.
  *
@@ -17,25 +19,21 @@ public class CoordinatesLoader {
      * If possible, meaning if the exif data for this photo is non-null,
      * sets the photo's latitude and longitude to whatever is saved in the
      * exif data.
-     *
-     * @param photo - the same photo object with exif location data saved.
      */
-    public void loadCoordinatesFor(Photo photo) {
+    public void loadCoordinatesFor(String pathname, Addressable info) {
 
-        Log.i("CoordinatesLoader", "Attempting to load coordinates for " + photo.getPathname());
+        Log.i("CoordinatesLoader", "Attempting to load coordinates for " + pathname);
 
         try {
-            exifInterface = new ExifInterface(photo.getPathname());
+            exifInterface = new ExifInterface(pathname);
         } catch (IOException e) {
             e.printStackTrace();
-            Log.i("CoordinatesLoader", "Error: Opening ExifInterface failed for " +
-                    photo.getPathname());
+            Log.i("CoordinatesLoader", "Error: Opening ExifInterface failed for " + pathname);
 
             return;
         }
 
-        Log.i("CoordinatesLoader", "Success: Opening ExifInterface succeeded for " +
-                photo.getPathname());
+        Log.i("CoordinatesLoader", "Success: Opening ExifInterface succeeded for " + pathname);
 
         // Get the actual location data! Comes as strings...
         String la = exifInterface.getAttribute(ExifInterface.TAG_GPS_LATITUDE);
@@ -44,21 +42,19 @@ public class CoordinatesLoader {
         // If those strings are non-null
         if (la != null && lg != null) {
 
-            Log.i("CoordinatesLoader", "Success: Setting location data for " +
-                    photo.getPathname());
+            Log.i("CoordinatesLoader", "Success: Setting location data for " + pathname);
 
             // Configure the photo object to reflect this data.
-            photo.getInfo().setHasValidCoordinates(true);
-            photo.getInfo().setLatitude(Double.parseDouble(la));
-            photo.getInfo().setLongitude(Double.parseDouble(lg));
+            info.setHasValidCoordinates(true);
+            info.setLatitude(Double.parseDouble(la));
+            info.setLongitude(Double.parseDouble(lg));
         } else {
 
             Log.i("CoordinatesLoader", "Failure: Failed to get location data for " +
-                    photo.getPathname() + ". Setting hasValidCoordinates to false.");
+                    pathname + ". Setting hasValidCoordinates to false.");
 
             // Declare information missing for this photo.
-            photo.getInfo().setHasValidCoordinates(false);
+            info.setHasValidCoordinates(false);
         }
-
     }
 }

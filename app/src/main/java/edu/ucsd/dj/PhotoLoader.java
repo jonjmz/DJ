@@ -79,7 +79,7 @@ public class PhotoLoader extends ContextWrapper {
                             " path_name: " + pathName);
 
                     Photo photo = new Photo(pathName, date);
-                    latLngLoader.loadCoordinatesFor(photo);
+                    latLngLoader.loadCoordinatesFor(pathName, photo.getInfo());
 
                     photo.calculateScore();
                     album.add(photo);

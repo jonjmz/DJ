@@ -110,8 +110,6 @@ public class WidgetProvider extends AppWidgetProvider {
         }
     }
 
-
-
     private void set(Photo photo, Context context) {
         try {
             PhotoLabeler labeler = new PhotoLabeler();
