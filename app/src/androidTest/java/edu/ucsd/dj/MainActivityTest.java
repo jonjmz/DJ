@@ -1,17 +1,15 @@
 package edu.ucsd.dj;
 
-import android.app.Activity;
 import android.support.test.annotation.UiThreadTest;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.view.View;
 import android.widget.Switch;
 
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static android.support.test.InstrumentationRegistry.getInstrumentation;
+import edu.ucsd.dj.activities.MainActivity;
 
 /**
  * Created by jonathanjimenez on 5/9/17.

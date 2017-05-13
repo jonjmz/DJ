@@ -82,7 +82,16 @@ public class PhotoCollection {
         curr++;
 
         // Loop back to start if need be
-        if (curr == album.size()) curr = 0;
+        if (curr == album.size()) {
+
+            for (Photo p : album) {
+                p.calculateScore();
+            }
+
+            Collections.sort( album );
+
+            curr = 0;
+        }
 
         // TODO check for removed from album
         Photo result = album.get(curr);

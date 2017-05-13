@@ -1,16 +1,14 @@
 package edu.ucsd.dj;
 
-import android.location.Address;
-
 import java.util.Calendar;
 import java.util.TimeZone;
 
-import edu.ucsd.dj.interfaces.Addressable;
+import edu.ucsd.dj.interfaces.IAddressable;
 
 /**
  * Created by jonathanjimenez on 5/9/17.
  */
-public class PhotoInfo implements Addressable {
+public class PhotoInfo implements IAddressable {
     private long dateTaken;                // Stores date image was taken
     private PhotoInfo.TimeOfDay timeOfDay; // Stores the time of day
     private boolean hasValidCoordinates;

@@ -1,4 +1,4 @@
-package edu.ucsd.dj;
+package edu.ucsd.dj.activities;
 
 import android.Manifest;
 import android.app.WallpaperManager;
@@ -12,6 +12,10 @@ import android.os.Bundle;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 
+import edu.ucsd.dj.PhotoCollection;
+import edu.ucsd.dj.R;
+import edu.ucsd.dj.Settings;
+
 public class MainActivity extends AppCompatActivity {
 
     private static final int READ_STORAGE_PERMISSION = 123;
@@ -19,7 +23,6 @@ public class MainActivity extends AppCompatActivity {
     private Switch proximitySwitch;
     private Switch timeOfDaySwitch;
     private Switch recencySwitch;
-//    private Switch customAlbumSwitch;
 
     @Override
     protected void onStart() {

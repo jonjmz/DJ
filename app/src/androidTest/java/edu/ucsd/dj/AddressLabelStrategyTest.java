@@ -1,22 +1,19 @@
 package edu.ucsd.dj;
 
-import android.content.Context;
 import android.location.Address;
 import android.support.test.InstrumentationRegistry;
-import android.util.Log;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import edu.ucsd.dj.interfaces.Addressable;
+import edu.ucsd.dj.interfaces.IAddressable;
 
 import static org.junit.Assert.assertEquals;
 
 /**
  * Created by nguyen on 5/13/2017.
  */
-
-public class AddressLoaderTest {
+public class AddressLabelStrategyTest {
     private AddressableTest address1;
     private AddressableTest address2;
     private AddressableTest address3;
@@ -45,7 +42,7 @@ public class AddressLoaderTest {
     }
     @Test
     public void generateAddressTest() throws Exception {
-        AddressLoader loader = new AddressLoader(InstrumentationRegistry.getTargetContext());
+        AddressLabelStrategy loader = new AddressLabelStrategy(InstrumentationRegistry.getTargetContext());
         Address location1 = loader.generateAddress(address1);
         Address location2 = loader.generateAddress(address2);
         Address location3 = loader.generateAddress(address3);
@@ -87,7 +84,7 @@ public class AddressLoaderTest {
 
 
     }
-    private class AddressableTest implements Addressable{
+    private class AddressableTest implements IAddressable {
         private boolean hasValidCoordinates;
         private double latitude;
         private double longitude;

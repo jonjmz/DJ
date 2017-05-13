@@ -1,8 +1,4 @@
-package edu.ucsd.dj;
-
-/**
- * Created by Admin on 5/4/2017.
- */
+package edu.ucsd.dj.activities;
 
 import android.annotation.TargetApi;
 import android.app.PendingIntent;
@@ -14,7 +10,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.location.Address;
 import android.os.Build;
 import android.util.Log;
 import android.widget.RemoteViews;
@@ -24,10 +19,15 @@ import android.widget.Toast;
 
 import java.io.IOException;
 
+import edu.ucsd.dj.AddressLabelStrategy;
+import edu.ucsd.dj.BitmapLabeler;
+import edu.ucsd.dj.Photo;
+import edu.ucsd.dj.PhotoCollection;
+import edu.ucsd.dj.R;
+
 /**
  * Created by Josh on 5/2/2017.
  */
-
 @TargetApi(Build.VERSION_CODES.CUPCAKE)
 public class WidgetProvider extends AppWidgetProvider {
     private static String NEXT = "next";
@@ -40,41 +40,6 @@ public class WidgetProvider extends AppWidgetProvider {
         super.onEnabled(context);
 
         PhotoCollection.getInstance().update( context );
-    }
-
-    private void highlightKarma(Context context, Photo photo, Intent intent) {
-        RemoteViews remoteViews = new RemoteViews( context.getPackageName(), R.layout.simple_widget);
-
-        if (photo.hasKarma()) {
-            remoteViews.setImageViewResource(R.id.heart, R.mipmap.filled);
-        }
-        else if (!photo.hasKarma()){
-            remoteViews.setImageViewResource(R.id.heart, R.mipmap.open);
-        }
-
-        ComponentName thisWidget = new ComponentName( context, WidgetProvider.class );
-        AppWidgetManager.getInstance( context ).updateAppWidget( thisWidget, remoteViews );
-    }
-
-    private void set(Photo photo, Context context) {
-        try {
-            PhotoLabeler labeler = new PhotoLabeler();
-            AddressLoader loader = new AddressLoader(context);
-
-            String label = "";
-            if (photo.getInfo().hasValidCoordinates()) {
-                Address address = loader.generateAddress( photo.getInfo() );
-                label = labeler.generateLabel(address);
-            }
-
-            Bitmap bitmap = BitmapFactory.decodeFile(photo.getPathname());
-            Bitmap newBackground = labeler.label( bitmap, label, context );
-
-            WallpaperManager.getInstance(context).setBitmap( newBackground );
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     @Override
@@ -119,43 +84,60 @@ public class WidgetProvider extends AppWidgetProvider {
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
         Log.i("Testing ", "onReceive: " + intent.getAction());
-
+        Photo photo = PhotoCollection.getInstance().current();
         if (intent.getAction().equals(NEXT)) {
-
-            Photo photo = PhotoCollection.getInstance().next();
-            set(photo, context);
-            highlightKarma(context, photo, intent);
-
+            photo = PhotoCollection.getInstance().next();
         }
         else if (intent.getAction().equals(PREVIOUS)) {
-            Photo photo = PhotoCollection.getInstance().previous();
-            set(photo, context);
-            highlightKarma(context, photo, intent);
-
+            photo = PhotoCollection.getInstance().previous();
         }
         else if (intent.getAction().equals(KARMA)) {
-            Photo photo = PhotoCollection.getInstance().current();
-            if (!photo.hasKarma()){
-                photo.setHasKarma(true);
-                Toast.makeText(context, "Karma given, tap again to remove", Toast.LENGTH_SHORT).show();
-            }
-            else{
-                photo.setHasKarma(false);
-                Toast.makeText(context, "Karma taken", Toast.LENGTH_SHORT).show();
-            }
-            highlightKarma(context, photo, intent);
+            photo.setHasKarma(!photo.hasKarma());
+            String result = "Karma " + (photo.hasKarma() ? "given, tap to remove." : "taken.");
+            Toast.makeText(context, result, Toast.LENGTH_SHORT).show();
+
             Log.i("Testing", "This is action: " + intent.getAction());
         }
         else if (intent.getAction().equals(RELEASE)) {
-
-            Photo photo = PhotoCollection.getInstance().current();
             photo.release();
             photo = PhotoCollection.getInstance().next();
-            set(photo, context);
-            highlightKarma(context, photo, intent);
+
             Log.i("Testing", "This is action: " + intent.getAction());
+        }
+
+        set(photo, context);
+        highlightKarma(context, photo, intent);
+    }
+
+    private void set(Photo photo, Context context) {
+        try {
+            BitmapLabeler labeler = new BitmapLabeler();
+            AddressLabelStrategy addressLabelMaker = new AddressLabelStrategy(context);
+
+            String label = "";
+            if (photo.getInfo().hasValidCoordinates()) {
+                label = addressLabelMaker.getLabel(photo.getInfo());
+            }
+
+            Bitmap bitmap = BitmapFactory.decodeFile(photo.getPathname());
+            Bitmap newBackground = labeler.label( bitmap, label, context );
+
+            WallpaperManager.getInstance(context).setBitmap( newBackground );
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
+    private void highlightKarma(Context context, Photo photo, Intent intent) {
+        RemoteViews remoteViews = new RemoteViews( context.getPackageName(), R.layout.simple_widget);
 
+        if (photo.hasKarma())
+            remoteViews.setImageViewResource(R.id.heart, R.mipmap.filled);
+        else
+            remoteViews.setImageViewResource(R.id.heart, R.mipmap.open);
+
+        ComponentName thisWidget = new ComponentName( context, WidgetProvider.class );
+        AppWidgetManager.getInstance( context ).updateAppWidget( thisWidget, remoteViews );
+    }
 }

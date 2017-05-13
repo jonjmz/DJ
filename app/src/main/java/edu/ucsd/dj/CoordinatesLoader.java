@@ -5,7 +5,7 @@ import android.util.Log;
 
 import java.io.IOException;
 
-import edu.ucsd.dj.interfaces.Addressable;
+import edu.ucsd.dj.interfaces.IAddressable;
 
 /**
  * Responsible for loading location from the file system for this photo.
@@ -20,7 +20,7 @@ public class CoordinatesLoader {
      * sets the photo's latitude and longitude to whatever is saved in the
      * exif data.
      */
-    public void loadCoordinatesFor(String pathname, Addressable info) {
+    public void loadCoordinatesFor(String pathname, IAddressable info) {
 
         Log.i("CoordinatesLoader", "Attempting to load coordinates for " + pathname);
 
