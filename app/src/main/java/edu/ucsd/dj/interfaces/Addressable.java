@@ -5,6 +5,13 @@ package edu.ucsd.dj.interfaces;
  */
 
 public interface Addressable {
+
+    boolean hasValidCoordinates();
+    void setHasValidCoordinates(boolean hvc);
+
     double getLatitude();
     double getLongitude();
+
+    void setLatitude(double lat);
+    void setLongitude(double lng);
 }

@@ -35,7 +35,7 @@ public class AddressLoader {
      *
      * @param info
      */
-    public Address generateAddress(Addressable info ) {
+    public Address generateAddress(Addressable info) {
 
         Log.i("AddressLoader", "Attempting to hit Geocoder for Address data.");
 
