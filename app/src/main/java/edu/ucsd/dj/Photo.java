@@ -1,9 +1,14 @@
 package edu.ucsd.dj;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import java.io.Serializable;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.TimeZone;
 
 /**
  * Created by jonathanjimenez on 5/1/17.
@@ -28,7 +33,7 @@ public class Photo implements Comparable, Serializable {
      * in up to four dimensions
      */
     public void calculateScore() {
-        long  now = System.currentTimeMillis();
+        long  now = new GregorianCalendar().getTimeInMillis();
         double scoreSquared = 0;
         // If considering recency, add distance to photo
         if (Settings.isConsideringRecency()) {
@@ -39,8 +44,9 @@ public class Photo implements Comparable, Serializable {
         }
         // If considering time of day, add distance to photo
         if (Settings.isConsideringTOD()) {
-            if(info.getTimeOfDay() != PhotoInfo.TimeOfDay.getTimeOfDay(now))
+            if(info.getTimeOfDay() != PhotoInfo.TimeOfDay.getCurrent()) {
                 scoreSquared += 1;
+            }
         }
         // If considering generateAddress
         if (Settings.isConsideringProximity()) {

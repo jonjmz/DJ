@@ -12,10 +12,6 @@ import android.os.Bundle;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 
-import java.io.IOException;
-
-import edu.ucsd.dj.AddressLabelStrategy;
-import edu.ucsd.dj.BitmapLabeler;
 import edu.ucsd.dj.DJWallpaperManager;
 import edu.ucsd.dj.Photo;
 import edu.ucsd.dj.PhotoCollection;
@@ -64,10 +60,10 @@ public class MainActivity extends AppCompatActivity {
         recencySwitch = (Switch) findViewById(R.id.recency);
         // customAlbumSwitch = (Switch) findViewById(R.id.customAlbum);
 
-        proximitySwitch.setChecked(true); //Default is true.
-        timeOfDaySwitch.setChecked(true); //Default is true.
-        recencySwitch.setChecked(true); //Default is true.
-        // customAlbumSwitch.setChecked(false); //Default is true.
+        proximitySwitch.setChecked(Settings.isConsideringProximity());
+        timeOfDaySwitch.setChecked(Settings.isConsideringTOD());
+        recencySwitch.setChecked(Settings.isConsideringRecency());
+        // customAlbumSwitch.setChecked(false);
 
         proximitySwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
@@ -77,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
                     Settings.setConsiderProximity(true);
                 else
                     Settings.setConsiderProximity(false);
+                PhotoCollection.getInstance().sort();
             }
         });
 
@@ -88,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
                     Settings.setConsiderTOD(true);
                 else
                     Settings.setConsiderTOD(false);
+                PhotoCollection.getInstance().sort();
             }
         });
 
@@ -99,6 +97,7 @@ public class MainActivity extends AppCompatActivity {
                     Settings.setConsiderRecency(true);
                 else
                     Settings.setConsiderRecency(false);
+                PhotoCollection.getInstance().sort();
             }
         });
 

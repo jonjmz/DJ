@@ -55,6 +55,22 @@ public class PhotoCollection {
     }
 
     /**
+     *  Updates the values of photo, used after changing settings
+     *
+     */
+    public void sort() {
+
+        //TODO optimization problem
+        for(Photo photo: album){
+            photo.calculateScore();
+        }
+
+        Collections.sort(album);
+
+        curr = 0;
+    }
+
+    /**
      * Releases the current photo from the album
      * next() should be called immediately after this method
      */
@@ -83,14 +99,7 @@ public class PhotoCollection {
 
         // Loop back to start if need be
         if (curr == album.size()) {
-
-            for (Photo p : album) {
-                p.calculateScore();
-            }
-
-            Collections.sort( album );
-
-            curr = 0;
+            sort();
         }
 
         // TODO check for removed from album
@@ -129,26 +138,26 @@ public class PhotoCollection {
         return !history.isEmpty();
     }
 
-    /**
-     * Save current album to file using album field as name.
-     *
-     * @param context The current state of the application
-     * @see {@linktourl http://stackoverflow.com/questions/4118751/how-do-i-serialize-an-object-and-save-it-to-a-file-in-android}
-     */
-    public void saveToFile(Context context){
-        try {
-            FileOutputStream fos = context.openFileOutput(album + ".album", Context.MODE_PRIVATE);
-            ObjectOutputStream os = new ObjectOutputStream(fos);
-            os.writeObject(this);
-            os.close();
-            fos.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
 
 //    TODO - Bring me back to life :(
+
+//    /**
+//     * Save current album to file using album field as name.
+//     *
+//     * @param context The current state of the application
+//     * @see {@linktourl http://stackoverflow.com/questions/4118751/how-do-i-serialize-an-object-and-save-it-to-a-file-in-android}
+//     */
+//    public void saveToFile(Context context){
+//        try {
+//            FileOutputStream fos = context.openFileOutput(album + ".album", Context.MODE_PRIVATE);
+//            ObjectOutputStream os = new ObjectOutputStream(fos);
+//            os.writeObject(this);
+//            os.close();
+//            fos.close();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
 //
 //    /**
 //     * Load Album using album field

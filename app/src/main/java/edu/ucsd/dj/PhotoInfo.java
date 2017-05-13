@@ -1,6 +1,10 @@
 package edu.ucsd.dj;
 
+import android.util.Log;
+
 import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.TimeZone;
 
 import edu.ucsd.dj.interfaces.IAddressable;
@@ -40,18 +44,28 @@ public class PhotoInfo implements IAddressable {
 
         static TimeOfDay getTimeOfDay(long miliseconds) {
             Calendar calendar = Calendar.getInstance();
-            calendar.setTimeZone(TimeZone.getTimeZone("PST"));
             calendar.setTimeInMillis(miliseconds);
+            calendar.setTimeZone(TimeZone.getTimeZone("PST"));
             int hour = calendar.get(Calendar.HOUR_OF_DAY);
+            return(todFromHour(hour));
+        }
+        static TimeOfDay getCurrent() {
+            Calendar calendar = Calendar.getInstance();
+            int hour = calendar.get(Calendar.HOUR_OF_DAY);
+            return todFromHour(hour);
+        }
+        static TimeOfDay todFromHour(int hour) {
+            TimeOfDay tod;
             if (hour < 6){
-                return Night;
+                tod = Night;
             } else if (hour < 12){
-                return Morning;
+                tod = Morning;
             } else if (hour < 18){
-                return Afternoon;
+                tod = Afternoon;
             } else {
-                return Evening;
+                tod = Evening;
             }
+            return tod;
         }
     }
 }

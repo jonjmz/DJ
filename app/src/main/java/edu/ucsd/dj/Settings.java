@@ -5,17 +5,10 @@ package edu.ucsd.dj;
  */
 
 public final class Settings {
-    private static boolean considerProximity;
-    private static boolean considerTOD;
-    private static boolean considerRecency;
-    //private static boolean usingCustomAlbum;
-
-    public Settings() {
-        considerProximity = true;
-        considerTOD = true;
-        considerRecency = true;
-        //usingCustomAlbum = false;
-    }
+    private static boolean considerProximity = false;
+    private static boolean considerTOD = true;
+    private static boolean considerRecency = false;
+    //private static boolean usingCustomAlbum = true;
 
     public static boolean isConsideringProximity() { return considerProximity; }
 
