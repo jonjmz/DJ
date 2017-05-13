@@ -5,13 +5,14 @@ import android.location.Address;
 import java.util.Calendar;
 import java.util.TimeZone;
 
+import edu.ucsd.dj.interfaces.Addressable;
+
 /**
  * Created by jonathanjimenez on 5/9/17.
  */
-public class PhotoInfo {
+public class PhotoInfo implements Addressable {
     private long dateTaken;                // Stores date image was taken
     private PhotoInfo.TimeOfDay timeOfDay; // Stores the time of day
-    private Address address;
     private boolean hasValidCoordinates;
     private double latitude;
     private double longitude;
@@ -24,9 +25,6 @@ public class PhotoInfo {
     public long getDateTaken() { return dateTaken; }
 
     public TimeOfDay getTimeOfDay() { return timeOfDay; }
-
-    public Address getAddress() { return address; }
-    public void setAddress(Address loc) { address = loc; }
 
     public boolean hasValidCoordinates() { return hasValidCoordinates; }
     public void setHasValidCoordinates(boolean hasValidCoordinates) {

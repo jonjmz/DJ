@@ -13,6 +13,8 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.location.Address;
 import android.os.Build;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -38,7 +40,7 @@ public class WidgetProvider extends AppWidgetProvider {
     private static String RELEASE = "release";
     private static String KARMA = "karma";
     private RemoteViews rViews;
-    private static int doubleClickCounter = 0;
+
     @Override
     public void onEnabled(Context context) {
         super.onEnabled(context);
@@ -69,8 +71,6 @@ public class WidgetProvider extends AppWidgetProvider {
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         final int count = appWidgetIds.length;
-        //TODO Load from file later
-        //collection.update();
 
         for (int i = 0; i < count; i++) {
             int widgetId = appWidgetIds[i];
@@ -82,8 +82,6 @@ public class WidgetProvider extends AppWidgetProvider {
             Intent intentPrevious = new Intent(context, WidgetProvider.class);
             Intent intentRelease = new Intent(context, WidgetProvider.class);
             Intent intentKarma = new Intent(context, WidgetProvider.class);
-
-            Photo photo = PhotoCollection.getInstance().current();
 
             intentNext.setAction(NEXT);
             intentPrevious.setAction(PREVIOUS);
@@ -114,6 +112,27 @@ public class WidgetProvider extends AppWidgetProvider {
 
 
 
+    private void set(Photo photo, Context context) {
+        try {
+            PhotoLabeler labeler = new PhotoLabeler();
+            AddressLoader loader = new AddressLoader(context);
+
+            String label = "";
+            if (photo.getInfo().hasValidCoordinates()) {
+                Address address = loader.generateAddress( photo.getInfo() );
+                label = labeler.generateLabel(address);
+            }
+
+            Bitmap bitmap = BitmapFactory.decodeFile(photo.getPathname());
+            Bitmap newBackground = labeler.label( bitmap, label, context );
+
+            WallpaperManager.getInstance(context).setBitmap( newBackground );
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
@@ -125,36 +144,15 @@ public class WidgetProvider extends AppWidgetProvider {
         if (intent.getAction().equals(NEXT)) {
 
             Photo photo = PhotoCollection.getInstance().next();
-            try {
+            set(photo, context);
+            highlightKarma(context, photo, intent);
 
-                PhotoLabeler labeler = new PhotoLabeler();
-                AddressLoader loader = new AddressLoader(context);
-                loader.loadAddressFor(photo);
-
-                Bitmap newBackground = labeler.labeledBitmapFor( photo, context );
-
-                WallpaperManager.getInstance(context).setBitmap( newBackground );
-                highlightKarma(context, photo);
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }
         else if (intent.getAction().equals(PREVIOUS)) {
             Photo photo = PhotoCollection.getInstance().previous();
-            try {
-                PhotoLabeler labeler = new PhotoLabeler();
-                // TODO may not need to do this ?
-                AddressLoader loader = new AddressLoader(context);
-                loader.loadAddressFor(photo);
+            set(photo, context);
+            highlightKarma(context, photo, intent);
 
-                Bitmap newBackground = labeler.labeledBitmapFor( photo, context );
-
-                WallpaperManager.getInstance(context).setBitmap( newBackground );
-                highlightKarma(context, photo);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }
         else if (intent.getAction().equals(KARMA)) {
             Photo photo = PhotoCollection.getInstance().current();
@@ -171,30 +169,11 @@ public class WidgetProvider extends AppWidgetProvider {
         }
         else if (intent.getAction().equals(RELEASE)) {
 
-            Photo photo = PhotoCollection.getInstance().next();
-            Toast.makeText(context, "Photo released", Toast.LENGTH_SHORT).show();
+            Photo photo = PhotoCollection.getInstance().current();
             photo.release();
             photo = PhotoCollection.getInstance().next();
-            highlightKarma(context, photo);
-
-            try {
-                PhotoLabeler labeler = new PhotoLabeler();
-                Bitmap newBackground = labeler.labeledBitmapFor( photo, context );
-
-                WallpaperManager.getInstance(context).setBitmap( newBackground );
-            } catch (IOException e) {
-                e.printStackTrace();
-            if (photo.isReleasable()){
-                Toast.makeText(context, "Photo released", Toast.LENGTH_SHORT).show();
-                photo.release();
-                photo = PhotoCollection.getInstance().next();
-                highlightKarma(context, photo, intent);
-                try {
-                    WallpaperManager.getInstance(context).setBitmap( photo.getBitmap() );
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
+            set(photo, context);
+            highlightKarma(context, photo, intent);
             Log.i("Testing", "This is action: " + intent.getAction());
         }
     }

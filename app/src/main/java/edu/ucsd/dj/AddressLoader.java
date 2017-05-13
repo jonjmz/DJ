@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
+import edu.ucsd.dj.interfaces.Addressable;
+
 /**
  * Responsible for loading Human readable location information from the
  * latitude and longitude coordinates saved in a photo object.
@@ -28,29 +30,21 @@ public class AddressLoader {
     }
 
     /**
-     * Uses builtin Geocoder to get an address object corresponding to the location this
+     * Uses builtin Geocoder to get an generateAddress object corresponding to the location this
      * photo's latitude and longitude.
      *
-     * @param photo
+     * @param info
      */
-    public void loadAddressFor( Photo photo ) {
-
-        // Don't do anything if the photo doesn't have valid location information.
-        if (!photo.getInfo().hasValidCoordinates()) {
-
-            Log.i("AddressLoader", "Attempted to load location data from a " +
-                    "photo with invalid coordinates.");
-
-            return;
-        }
+    public Address generateAddress(Addressable info ) {
 
         Log.i("AddressLoader", "Attempting to hit Geocoder for Address data.");
 
         List<Address> addresses;
-        try {
-            addresses = coder.getFromLocation(photo.getInfo().getLatitude(), photo.getInfo().getLongitude(), 1);
+        Address chosenLocation;
 
-            Address chosenLocation;
+        try {
+            addresses = coder.getFromLocation(info.getLatitude(), info.getLongitude(), 1);
+
             if (!addresses.isEmpty()) {
 
                 Log.i("AddressLoader", "Geocoder returned at least one result.");
@@ -60,16 +54,21 @@ public class AddressLoader {
                 Log.i("AddressLoader", "Geocoder returned no results, setting default location.");
 
                 chosenLocation = new Address(Locale.getDefault());
-                chosenLocation.setLatitude(photo.getInfo().getLatitude());
-                chosenLocation.setLongitude(photo.getInfo().getLongitude());
+                chosenLocation.setLatitude(info.getLatitude());
+                chosenLocation.setLongitude(info.getLongitude());
             }
 
-            photo.getInfo().setAddress( chosenLocation );
+
 
         } catch (IOException e) {
 
             Log.i("AddressLoader", "Exception occurred during Geocoder hit.");
             e.printStackTrace();
+
+            // TODO not good to do this here
+            chosenLocation = new Address(Locale.getDefault());
         }
+
+        return chosenLocation;
     }
 }

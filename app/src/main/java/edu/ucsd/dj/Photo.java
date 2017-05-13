@@ -23,7 +23,7 @@ public class Photo implements Comparable, Serializable {
     }
 
     /**
-     * Calculates score for this photo at this time/address with these settings.
+     * Calculates score for this photo at this time/generateAddress with these settings.
      * Used to prepare photo for sorting by photo set. Implemented as distance function
      * in up to four dimensions
      */
@@ -42,7 +42,7 @@ public class Photo implements Comparable, Serializable {
             if(info.getTimeOfDay() != PhotoInfo.TimeOfDay.getTimeOfDay(now))
                 scoreSquared += 1;
         }
-        // If considering address
+        // If considering generateAddress
         if (Settings.isConsideringProximity()) {
             scoreSquared += Math.pow(0, 2);
         }

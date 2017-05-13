@@ -29,7 +29,6 @@ public final class Settings {
 
     //public static boolean isUsingCustomAlbum() { return considerProximity; }
 
-
     public static void setConsiderProximity(boolean considerProximity) {
         Settings.considerProximity = considerProximity;
     }
