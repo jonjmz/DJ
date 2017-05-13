@@ -17,11 +17,6 @@ import android.graphics.BitmapFactory;
 import android.location.Address;
 import android.os.Build;
 import android.util.Log;
-import android.view.MotionEvent;
-import android.view.View;
-import android.widget.Button;
-import android.widget.CompoundButton;
-import android.widget.ImageButton;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 
@@ -39,7 +34,6 @@ public class WidgetProvider extends AppWidgetProvider {
     private static String PREVIOUS = "previous";
     private static String RELEASE = "release";
     private static String KARMA = "karma";
-    private RemoteViews rViews;
 
     @Override
     public void onEnabled(Context context) {
@@ -47,25 +41,40 @@ public class WidgetProvider extends AppWidgetProvider {
 
         PhotoCollection.getInstance().update( context );
     }
+
     private void highlightKarma(Context context, Photo photo, Intent intent) {
         RemoteViews remoteViews = new RemoteViews( context.getPackageName(), R.layout.simple_widget);
-//        ImageButton button = (ImageButton) remoteViews.getLayoutId()
+
         if (photo.hasKarma()) {
-            Toast.makeText(context, "++++++++++", Toast.LENGTH_SHORT).show();
             remoteViews.setImageViewResource(R.id.heart, R.mipmap.filled);
         }
         else if (!photo.hasKarma()){
-            Toast.makeText(context, "----------", Toast.LENGTH_SHORT).show();
             remoteViews.setImageViewResource(R.id.heart, R.mipmap.open);
         }
-        int appWidgetId = intent.getIntExtra("appWidgetId", -1);
-        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
-        appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
 
-//        ComponentName cn = new ComponentName(context, WidgetProvider.class);
-//        onUpdate(context, AppWidgetManager.getInstance(context), appWidgetIds);
+        ComponentName thisWidget = new ComponentName( context, WidgetProvider.class );
+        AppWidgetManager.getInstance( context ).updateAppWidget( thisWidget, remoteViews );
+    }
 
-        Toast.makeText(context, "leaving highlight checker", Toast.LENGTH_SHORT).show();
+    private void set(Photo photo, Context context) {
+        try {
+            PhotoLabeler labeler = new PhotoLabeler();
+            AddressLoader loader = new AddressLoader(context);
+
+            String label = "";
+            if (photo.getInfo().hasValidCoordinates()) {
+                Address address = loader.generateAddress( photo.getInfo() );
+                label = labeler.generateLabel(address);
+            }
+
+            Bitmap bitmap = BitmapFactory.decodeFile(photo.getPathname());
+            Bitmap newBackground = labeler.label( bitmap, label, context );
+
+            WallpaperManager.getInstance(context).setBitmap( newBackground );
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -97,37 +106,12 @@ public class WidgetProvider extends AppWidgetProvider {
             PendingIntent pendingIntentKarma = PendingIntent.getBroadcast(context,
                     3, intentKarma, PendingIntent.FLAG_UPDATE_CURRENT);
 
-            remoteViews.setImageViewResource(R.id.heart, R.mipmap.open);
-
             remoteViews.setOnClickPendingIntent(R.id.left, pendingIntentPrevious);
             remoteViews.setOnClickPendingIntent(R.id.trash, pendingIntentRelease);
             remoteViews.setOnClickPendingIntent(R.id.heart, pendingIntentKarma);
             remoteViews.setOnClickPendingIntent(R.id.right, pendingIntentNext);
-//            Photo photo = PhotoCollection.getInstance().current();
-//            highlightKarma(context, photo);
 
             appWidgetManager.updateAppWidget(widgetId, remoteViews);
-        }
-    }
-
-    private void set(Photo photo, Context context) {
-        try {
-            PhotoLabeler labeler = new PhotoLabeler();
-            AddressLoader loader = new AddressLoader(context);
-
-            String label = "";
-            if (photo.getInfo().hasValidCoordinates()) {
-                Address address = loader.generateAddress( photo.getInfo() );
-                label = labeler.generateLabel(address);
-            }
-
-            Bitmap bitmap = BitmapFactory.decodeFile(photo.getPathname());
-            Bitmap newBackground = labeler.label( bitmap, label, context );
-
-            WallpaperManager.getInstance(context).setBitmap( newBackground );
-
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 
@@ -135,9 +119,6 @@ public class WidgetProvider extends AppWidgetProvider {
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
         Log.i("Testing ", "onReceive: " + intent.getAction());
-
-//        ComponentName thisAppWidget = new ComponentName(context.getPackageName(), WidgetProvider.class.getName());
-//        int[] appWidgetIds = WidgetProvider.getAppWidgetIds(thisAppWidget);
 
         if (intent.getAction().equals(NEXT)) {
 
