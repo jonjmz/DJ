@@ -12,6 +12,12 @@ import android.os.Bundle;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 
+import java.io.IOException;
+
+import edu.ucsd.dj.AddressLabelStrategy;
+import edu.ucsd.dj.BitmapLabeler;
+import edu.ucsd.dj.DJWallpaperManager;
+import edu.ucsd.dj.Photo;
 import edu.ucsd.dj.PhotoCollection;
 import edu.ucsd.dj.R;
 import edu.ucsd.dj.Settings;
@@ -28,10 +34,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        if(PhotoCollection.getInstance().next() == null){
-            //TODO refactor later
+        Photo photo = PhotoCollection.getInstance().next();
+        if(photo == null){
             try {
-
                 Bitmap defaultPhoto = BitmapFactory.decodeResource(getResources(),
                         R.drawable.dejaphotodefault);
 
@@ -39,6 +44,8 @@ public class MainActivity extends AppCompatActivity {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        } else {
+            DJWallpaperManager.getInstance().set(photo, getApplicationContext());
         }
     }
 

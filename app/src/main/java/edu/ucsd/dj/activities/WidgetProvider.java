@@ -2,25 +2,17 @@ package edu.ucsd.dj.activities;
 
 import android.annotation.TargetApi;
 import android.app.PendingIntent;
-import android.app.WallpaperManager;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 
-
-
-import java.io.IOException;
-
-import edu.ucsd.dj.AddressLabelStrategy;
-import edu.ucsd.dj.BitmapLabeler;
+import edu.ucsd.dj.DJWallpaperManager;
 import edu.ucsd.dj.Photo;
 import edu.ucsd.dj.PhotoCollection;
 import edu.ucsd.dj.R;
@@ -105,28 +97,8 @@ public class WidgetProvider extends AppWidgetProvider {
             Log.i("Testing", "This is action: " + intent.getAction());
         }
 
-        set(photo, context);
+        DJWallpaperManager.getInstance().set(photo, context);
         highlightKarma(context, photo, intent);
-    }
-
-    private void set(Photo photo, Context context) {
-        try {
-            BitmapLabeler labeler = new BitmapLabeler();
-            AddressLabelStrategy addressLabelMaker = new AddressLabelStrategy(context);
-
-            String label = "";
-            if (photo.getInfo().hasValidCoordinates()) {
-                label = addressLabelMaker.getLabel(photo.getInfo());
-            }
-
-            Bitmap bitmap = BitmapFactory.decodeFile(photo.getPathname());
-            Bitmap newBackground = labeler.label( bitmap, label, context );
-
-            WallpaperManager.getInstance(context).setBitmap( newBackground );
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     private void highlightKarma(Context context, Photo photo, Intent intent) {
