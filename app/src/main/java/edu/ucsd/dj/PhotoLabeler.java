@@ -14,7 +14,7 @@ import android.location.Address;
  * Created by Jake Sutton on 5/9/17.
  */
 public class PhotoLabeler {
-    BitmapFactory.Options options;
+    private BitmapFactory.Options options;
 
     /**
      * Constructor, configures options so that bitmaps returned by this class'
