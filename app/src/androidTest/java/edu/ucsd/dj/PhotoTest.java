@@ -24,19 +24,10 @@ public class PhotoTest {
     }
 
     @Test
-    public void testDefaultConstructor() throws Exception {
-        Photo a = new Photo();
-        assertEquals(a.isKarmable(), false);
-        assertEquals(a.isReleasable(), false);
-    }
-
-    @Test
     public void testConstructor() throws Exception {
         Photo a = new Photo("reference", 420);
         assertEquals(a.getPathname(), "reference");
         assertEquals(a.getInfo().getDateTaken(), 420);
-        assertEquals(a.isReleasable(), true);
-        assertEquals(a.isKarmable(), true);
     }
 
     @Test

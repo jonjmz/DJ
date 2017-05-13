@@ -1,11 +1,6 @@
 package edu.ucsd.dj;
 
 import android.content.Context;
-import android.database.Cursor;
-import android.net.Uri;
-import android.provider.MediaStore;
-import android.util.Log;
-
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -13,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Deque;
 import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Created by jakesutton on 5/6/17.
@@ -20,7 +16,7 @@ import java.util.LinkedList;
 public class PhotoCollection {
 
     //Collection of photos queried from the gallery
-    private ArrayList<Photo> album;
+    private List<Photo> album;
     //A queue to handle previous feature, keeping track of your browsing history
     private Deque<Photo> history;
     //Current pointer to the image that's being set as the wallpaper
@@ -48,6 +44,7 @@ public class PhotoCollection {
         PhotoLoader loader = new PhotoLoader(context);
         ArrayList<Photo> newAlbum = loader.getPhotos();
 
+        //TODO optimization problem
         for(Photo photo: newAlbum){
             if(!album.contains(photo)) {
                 album.add( photo );
@@ -55,7 +52,6 @@ public class PhotoCollection {
         }
 
         Collections.sort(album);
-
     }
 
     /**

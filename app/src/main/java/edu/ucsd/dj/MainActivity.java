@@ -3,27 +3,41 @@ package edu.ucsd.dj;
 import android.Manifest;
 import android.app.WallpaperManager;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Switch;
-import android.widget.TextView;
-
-import java.io.IOException;
-
 
 public class MainActivity extends AppCompatActivity {
 
     private static final int READ_STORAGE_PERMISSION = 123;
     private static final int SET_WALLPAPER_PERMISSION = 69;
-    Settings settings;
     private Switch proximitySwitch;
     private Switch timeOfDaySwitch;
     private Switch recencySwitch;
 //    private Switch customAlbumSwitch;
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        if(PhotoCollection.getInstance().next() == null){
+            //TODO refactor later
+            try {
+
+                Bitmap defaultPhoto = BitmapFactory.decodeResource(getResources(),
+                        R.drawable.dejaphotodefault);
+
+                WallpaperManager.getInstance(this).setBitmap( defaultPhoto);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,34 +47,26 @@ public class MainActivity extends AppCompatActivity {
         askPermission(Manifest.permission.SET_WALLPAPER, SET_WALLPAPER_PERMISSION);
 
         PhotoCollection.getInstance().update(getApplicationContext());
-        Photo photo = PhotoCollection.getInstance().next();
-
         // some kind of location class, adds overlay, returns bitmap
-
-        try {
-            WallpaperManager.getInstance(MainActivity.this).setBitmap( photo.getBitmap() );
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
         proximitySwitch = (Switch) findViewById(R.id.proximity);
         timeOfDaySwitch = (Switch) findViewById(R.id.timeOfDay);
         recencySwitch = (Switch) findViewById(R.id.recency);
-//        customAlbumSwitch = (Switch) findViewById(R.id.customAlbum);
+        // customAlbumSwitch = (Switch) findViewById(R.id.customAlbum);
 
         proximitySwitch.setChecked(true); //Default is true.
         timeOfDaySwitch.setChecked(true); //Default is true.
         recencySwitch.setChecked(true); //Default is true.
-//        customAlbumSwitch.setChecked(false); //Default is true.
+        // customAlbumSwitch.setChecked(false); //Default is true.
 
         proximitySwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked)
-                    settings.setConsiderProximity(true);
+                    Settings.setConsiderProximity(true);
                 else
-                    settings.setConsiderProximity(false);
+                    Settings.setConsiderProximity(false);
             }
         });
 
@@ -69,9 +75,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked)
-                    settings.setConsiderTOD(true);
+                    Settings.setConsiderTOD(true);
                 else
-                    settings.setConsiderTOD(false);
+                    Settings.setConsiderTOD(false);
             }
         });
 
@@ -80,9 +86,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked)
-                    settings.setConsiderRecency(true);
+                    Settings.setConsiderRecency(true);
                 else
-                    settings.setConsiderRecency(false);
+                    Settings.setConsiderRecency(false);
             }
         });
 

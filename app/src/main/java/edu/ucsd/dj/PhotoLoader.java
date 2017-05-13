@@ -7,6 +7,10 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.util.Log;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -44,50 +48,45 @@ public class PhotoLoader extends ContextWrapper {
                     sortOrder        // Ordering
             );
             ArrayList<Photo> album = new ArrayList<>();
+
             //Checking if the cursor is valid
             if(cur == null){
                 //Cursor is null, meaning there is an error that needs to be resolved
                 Log.d("NullPointerException", "Cursor is null");
-                return null;
-            }
-            //If there is no photo in the gallery, perform adding a default photo into the album
-            else if(cur.getCount() < 1){
-                album.add(new Photo());
+                return album;
+            } else if(cur.getCount() < 1){
+                // there is no photo in the gallery, perform adding a default photo into the album
+
+                //TODO handle a null/0 count photocollection
+
                 return album;
             }
             else {
                 Log.i("DeviceImageManager", " query count=" + cur.getCount());
+
                 cur.moveToFirst();
                 long date;
                 String pathName;
-                int dateColumn = cur.getColumnIndexOrThrow(
-                        MediaStore.Images.Media.DATE_TAKEN);
+                int dateColumn = cur.getColumnIndexOrThrow(MediaStore.Images.Media.DATE_TAKEN);
                 int index = cur.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
 
+                CoordinatesLoader latLngLoader = new CoordinatesLoader();
                 do {
-                    // Get the field values
                     date = cur.getLong(dateColumn);
                     pathName = cur.getString(index);
 
-                    // Do something with the values.
                     Log.i("ListingImages", "  date_taken: " + date +
                             " path_name: " + pathName);
 
                     Photo photo = new Photo(pathName, date);
-                    CoordinatesLoader latLngLoader = new CoordinatesLoader();
-                    AddressLoader addressLoader = new AddressLoader(this.getBaseContext());
-                    PhotoLabeler labeler = new PhotoLabeler();
                     latLngLoader.loadCoordinatesFor(photo);
-                    if (photo.getInfo().hasValidCoordinates()) {
-                        addressLoader.loadAddressFor(photo);
-                    }
 
                     photo.calculateScore();
                     album.add(photo);
 
-
                 } while (cur.moveToNext());
             }
+
             return album;
         }
         catch(Exception e){
@@ -95,4 +94,5 @@ public class PhotoLoader extends ContextWrapper {
         }
         return null;
     }
+
 }
