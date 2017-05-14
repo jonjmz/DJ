@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     protected void onStart() {
         super.onStart();
         mGoogleApiClient.connect();
-        Photo photo = PhotoCollection.getInstance().next();
+        Photo photo = PhotoCollection.getInstance().current();
         if(photo == null){
             try {
                 Bitmap defaultPhoto = BitmapFactory.decodeResource(getResources(),

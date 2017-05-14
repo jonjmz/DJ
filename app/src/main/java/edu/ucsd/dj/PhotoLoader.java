@@ -40,14 +40,15 @@ public class PhotoLoader extends ContextWrapper {
     //TODO Do some customizable query methods to optimize later
 
     public ArrayList<Photo> getPhotos(){
+        ArrayList<Photo> album = new ArrayList<>();
         try {
-            Cursor cur = getContentResolver().query(images,
+            Cursor cur = getContentResolver().query(
+                    images,
                     projection, // Which columns to return
                     selectionClause,       // Which rows to return (all rows)
                     selectionArgs,       // Selection arguments (none)
                     sortOrder        // Ordering
             );
-            ArrayList<Photo> album = new ArrayList<>();
 
             //Checking if the cursor is valid
             if(cur == null){
@@ -85,13 +86,11 @@ public class PhotoLoader extends ContextWrapper {
 
                 } while (cur.moveToNext());
             }
-
-            return album;
         }
         catch(Exception e){
             Log.d("Cursor exception", e.getMessage());
         }
-        return null;
+        return album;
     }
 
 }

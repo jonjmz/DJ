@@ -37,26 +37,19 @@ public class CoordinatesLoader {
 
         // Get the actual location data! Comes as strings...
         String la = exifInterface.getAttribute(ExifInterface.TAG_GPS_LATITUDE);
+        String laRef = exifInterface.getAttribute((ExifInterface.TAG_GPS_LATITUDE_REF));
         String lg = exifInterface.getAttribute(ExifInterface.TAG_GPS_LONGITUDE);
+        String lgRef = exifInterface.getAttribute((ExifInterface.TAG_GPS_LONGITUDE_REF));
 
         // If those strings are non-null
         if (la != null && lg != null) {
 
             Log.i("CoordinatesLoader", "Success: Setting location data for " + pathname);
+            info.setLatitude(format(la, laRef));
+            info.setLongitude(format(lg, lgRef));
 
             // Configure the photo object to reflect this data.
             info.setHasValidCoordinates(true);
-
-            if(exifInterface.getAttribute((ExifInterface.TAG_GPS_LATITUDE_REF)).equals("N")){
-                info.setLatitude(Double.parseDouble(la));
-            } else {
-                info.setLatitude(0 - Double.parseDouble(la));
-            }
-            if(exifInterface.getAttribute((ExifInterface.TAG_GPS_LONGITUDE_REF)).equals("E")){
-                info.setLongitude(Double.parseDouble(lg));
-            } else {
-                info.setLongitude(0 - Double.parseDouble(lg));
-            }
         } else {
 
             Log.i("CoordinatesLoader", "Failure: Failed to get location data for " +
@@ -66,4 +59,30 @@ public class CoordinatesLoader {
             info.setHasValidCoordinates(false);
         }
     }
+    static double format(String location, String hemisphere){
+        Double value;
+        // Using DMS
+        if (location.contains("/")){
+            String[] bytes = location.split(",");
+            String[] dBytes = bytes[0].split("/");
+            String[] mBytes = bytes[1].split("/");
+            String[] sBytes = bytes[2].split("/");
+            double degrees = Integer.parseInt(dBytes[0]) / Integer.parseInt(dBytes[1]);
+            double minutes = Integer.parseInt(mBytes[0]) / Integer.parseInt(mBytes[1]);
+            double seconds = Integer.parseInt(sBytes[0]) / Integer.parseInt(sBytes[1]);
+
+            value = degrees + minutes / 60 + seconds / 60 / 60;
+        }
+        // Using decimal
+        else {
+            value = Double.parseDouble(location);
+        }
+        // Fix sign based on hemisphere
+        if(hemisphere.equals("N") || hemisphere.equals("E")){
+            return value;
+        } else {
+            return 0 - value;
+        }
+    }
+
 }
