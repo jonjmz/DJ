@@ -81,7 +81,11 @@ public class WidgetProvider extends AppWidgetProvider {
             photo = PhotoCollection.getInstance().next();
         }
         else if (intent.getAction().equals(PREVIOUS)) {
-            photo = PhotoCollection.getInstance().previous();
+            if (PhotoCollection.getInstance().hasHistory()){
+                photo = PhotoCollection.getInstance().previous();
+            } else {
+                photo = PhotoCollection.getInstance().current();
+            }
         }
         else if (intent.getAction().equals(KARMA)) {
             photo.setHasKarma(!photo.hasKarma());

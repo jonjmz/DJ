@@ -18,11 +18,13 @@ import edu.ucsd.dj.interfaces.IRating;
  */
 public class PhotoCollection {
 
-    //Collection of photos queried from the gallery
+    // Collection of photos queried from the gallery
     private List<Photo> album;
-    //A queue to handle previous feature, keeping track of your browsing history
+    // A queue to handle previous feature, keeping track of your browsing history
     private Deque<Photo> history;
-    //Current pointer to the image that's being set as the wallpaper
+    // Collection of photos queried from the gallery, but not shown
+    private List<Photo> releasedList;
+    // Current pointer to the image that's being set as the wallpaper
     private int curr;
 
     private static final PhotoCollection ourInstance = new PhotoCollection();
@@ -33,6 +35,7 @@ public class PhotoCollection {
 
     protected PhotoCollection() {
         album = new ArrayList<Photo>();
+        releasedList = new ArrayList<Photo>();
         history = new LinkedList<Photo>();
         curr = 0;
     }
@@ -49,7 +52,7 @@ public class PhotoCollection {
 
         //TODO optimization problem
         for(Photo photo: newAlbum){
-            if(!album.contains(photo)) {
+            if(!album.contains(photo) && !releasedList.contains(photo)) {
                 album.add( photo );
             }
         }
@@ -80,7 +83,10 @@ public class PhotoCollection {
      * next() should be called immediately after this method
      */
     public void release() {
+        releasedList.add(album.remove(curr));
+        // TODO have photo not track it's status
         album.get(curr).release();
+
     }
 
     /**
@@ -91,45 +97,49 @@ public class PhotoCollection {
      * @return A photo object from the album data structure
      */
     public Photo next() {
-
-        // TODO return the special image
-        if (album.size() < 1) return null;
-
-        // Add to history if it is not released
-        if(!album.get(curr).isReleased()){
-            history.addFirst(album.get(curr));
+        // Add to history
+        history.addFirst(album.get(curr));
+        switchPhoto();
+        if(album.size() < 1){
+            // TODO default photo
+            return null;
+        } else {
+            return album.get(curr);
         }
+    }
 
+    /**
+     * Return the next photo from the current list
+     * If there is no image, return the stock image
+     * Increases the current pointer to the next image
+     * If a photo is blacklisted, it will not be returned
+     * @return A photo object from the album data structure
+     */
+    private void switchPhoto() {
         curr++;
-
         // Loop back to start if need be
         if (curr == album.size()) {
             sort();
         }
-
-        // TODO check for removed from album
-        Photo result = album.get(curr);
-        return result;
     }
 
-    /*
-     * Returns the current photo
+    /**
+     * @return The current photo object from the album
      */
     public Photo current() {
         Photo result = album.get(curr);
         return result;
     }
 
+    public boolean hasHistory(){
+        return history.size() > 0;
+    }
     /**
      * Return the previous photo from user's history
      *
      * @return A photo object from the history data structure
      */
     public Photo previous() {
-
-        --curr;
-        if (curr < 0) curr += album.size();
-
         return history.removeFirst();
     }
 
