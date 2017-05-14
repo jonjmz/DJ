@@ -33,30 +33,32 @@ public class Photo implements Comparable, Serializable {
      * in up to four dimensions
      */
     public void calculateScore() {
-        long  now = new GregorianCalendar().getTimeInMillis();
-        double scoreSquared = 0;
+        score = 0;
         // If considering recency, add distance to photo
         if (Settings.isConsideringRecency()) {
             // Get current time to compare with.
+            long  now = new GregorianCalendar().getTimeInMillis();
             // Calculates the ratio of the actual age over the possible age.
             double ratio = (now - info.getDateTaken()) / (double)now;
-            scoreSquared += Math.pow(ratio, 2);
+            score += Math.pow(ratio, 2);
         }
         // If considering time of day, add distance to photo
         if (Settings.isConsideringTOD()) {
             if(info.getTimeOfDay() != PhotoInfo.TimeOfDay.getCurrent()) {
-                scoreSquared += 1;
+                score += 1;
             }
         }
-        // If considering generateAddress
+        // If considering location
         if (Settings.isConsideringProximity()) {
-            scoreSquared += Math.pow(0, 2);
+            if(this.info.hasValidCoordinates()){
+                // TODO Get distance ans consider in calculation
+            } else {
+                // Don't reword or punish for lack of location
+                score += 0.5;
+            }
         }
         // We always consider karma
-        if (!hasKarma) scoreSquared += 1;
-
-        // Score Calculations Here
-        score = Math.sqrt(scoreSquared);
+        if (!hasKarma) score += 1;
     }
 
     public PhotoInfo getInfo() { return info; }
