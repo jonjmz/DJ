@@ -71,7 +71,7 @@ public class CoordinatesLoader {
             double minutes = Integer.parseInt(mBytes[0]) / Integer.parseInt(mBytes[1]);
             double seconds = Integer.parseInt(sBytes[0]) / Integer.parseInt(sBytes[1]);
 
-            value = degrees + minutes / 60 + seconds / 60 / 60;
+            value = degrees + minutes / 60 + seconds / (60 * 60);
         }
         // Using decimal
         else {

@@ -84,9 +84,6 @@ public class PhotoCollection {
      */
     public void release() {
         releasedList.add(album.remove(curr));
-        // TODO have photo not track it's status
-        album.get(curr).release();
-
     }
 
     /**

@@ -95,7 +95,7 @@ public class WidgetProvider extends AppWidgetProvider {
             Log.i("Testing", "This is action: " + intent.getAction());
         }
         else if (intent.getAction().equals(RELEASE)) {
-            photo.release();
+            PhotoCollection.getInstance().release();
             photo = PhotoCollection.getInstance().next();
 
             Log.i("Testing", "This is action: " + intent.getAction());

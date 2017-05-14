@@ -3,14 +3,9 @@ package edu.ucsd.dj;
 import android.location.Location;
 import android.location.LocationManager;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import java.io.Serializable;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
-import java.util.TimeZone;
 
 /**
  * Created by jonathanjimenez on 5/1/17.
@@ -21,7 +16,6 @@ public class Photo implements Comparable, Serializable {
     private String pathname;    // Reference to image in album
     private PhotoInfo info; // Store photo Exif data for score calculations
 
-    private boolean released;    // Check if it is released
     private boolean hasKarma;    // Used to keep track of karma
 
     public Photo(String reference, long dateTaken) {
@@ -45,10 +39,6 @@ public class Photo implements Comparable, Serializable {
     public boolean hasKarma() { return hasKarma; }
 
     public void setHasKarma(boolean karma) { this.hasKarma = karma; }
-
-    public boolean isReleased() { return released; }
-
-    public void release() { released = true; }
 
 
     /**
