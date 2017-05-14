@@ -76,33 +76,39 @@ public class WidgetProvider extends AppWidgetProvider {
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
         Log.i("Testing ", "onReceive: " + intent.getAction());
-        Photo photo = PhotoCollection.getInstance().current();
-        if (intent.getAction().equals(NEXT)) {
-            photo = PhotoCollection.getInstance().next();
-        }
-        else if (intent.getAction().equals(PREVIOUS)) {
-            if (PhotoCollection.getInstance().hasHistory()){
-                photo = PhotoCollection.getInstance().previous();
-            } else {
-                photo = PhotoCollection.getInstance().current();
+        PhotoCollection collection = PhotoCollection.getInstance();
+
+        if (!collection.isEmpty()) {
+            Photo photo = collection.current();
+            if (intent.getAction().equals(NEXT)) {
+                photo = PhotoCollection.getInstance().next();
             }
-        }
-        else if (intent.getAction().equals(KARMA)) {
-            photo.setHasKarma(!photo.hasKarma());
-            String result = "Karma " + (photo.hasKarma() ? "given, tap to remove." : "taken.");
-            Toast.makeText(context, result, Toast.LENGTH_SHORT).show();
+            else if (intent.getAction().equals(PREVIOUS)) {
+                if (collection.hasHistory()){
+                    photo = collection.previous();
+                } else {
+                    photo = collection.current();
+                }
+            }
+            else if (intent.getAction().equals(KARMA)) {
+                photo.setHasKarma(!photo.hasKarma());
+                String result = "Karma " + (photo.hasKarma() ? "given, tap to remove." : "taken.");
+                Toast.makeText(context, result, Toast.LENGTH_SHORT).show();
 
-            Log.i("Testing", "This is action: " + intent.getAction());
-        }
-        else if (intent.getAction().equals(RELEASE)) {
-            PhotoCollection.getInstance().release();
-            photo = PhotoCollection.getInstance().current();
+                Log.i("Testing", "This is action: " + intent.getAction());
+            }
+            else if (intent.getAction().equals(RELEASE)) {
+                collection.release();
+                photo = collection.current();
 
-            Log.i("Testing", "This is action: " + intent.getAction());
+                Log.i("Testing", "This is action: " + intent.getAction());
+            }
+
+            DJWallpaper.getInstance().set(photo, context);
+            highlightKarma(context, photo, intent);
         }
 
-        DJWallpaper.getInstance().set(photo, context);
-        highlightKarma(context, photo, intent);
+
     }
 
     private void highlightKarma(Context context, Photo photo, Intent intent) {
