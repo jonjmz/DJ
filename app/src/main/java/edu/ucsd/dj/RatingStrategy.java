@@ -61,8 +61,6 @@ public class RatingStrategy implements IRating {
 
     private float calculateDistance(double latitude, double longitude){
         float distance[] = new float[1];
-        Log.i(getClass().toString(), "Latitude: " + currentLocation.getLatitude() );
-        Log.i(getClass().toString(), "Longitude: " + currentLocation.getLatitude());
 
         Location.distanceBetween(currentLocation.getLatitude(),
                 currentLocation.getLongitude(), latitude, longitude,
@@ -74,5 +72,8 @@ public class RatingStrategy implements IRating {
             currentLocation = location;
         else
             currentLocation = new Location("");
+        Log.i(getClass().toString(), "Latitude: " + currentLocation.getLatitude() );
+        Log.i(getClass().toString(), "Longitude: " + currentLocation.getLatitude());
+
     }
 }

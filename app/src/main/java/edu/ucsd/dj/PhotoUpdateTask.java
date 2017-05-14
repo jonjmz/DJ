@@ -10,6 +10,9 @@ public class PhotoUpdateTask extends TimerTask {
 
     @Override
     public void run() {
-        PhotoCollection.getInstance().update();
+        PhotoCollection collection = PhotoCollection.getInstance();
+        collection.update();
+
+        DJWallpaper.getInstance().set( collection.current() );
     }
 }

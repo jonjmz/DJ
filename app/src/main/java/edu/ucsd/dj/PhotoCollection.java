@@ -1,9 +1,9 @@
 package edu.ucsd.dj;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Deque;
-import java.util.LinkedList;
 import java.util.List;
 
 import edu.ucsd.dj.interfaces.IRating;
@@ -15,8 +15,6 @@ public class PhotoCollection {
 
     // Collection of photos queried from the gallery
     private List<Photo> album;
-    // A queue to handle previous feature, keeping track of your browsing history
-    private Deque<Photo> history;
     // Collection of photos queried from the gallery, but not shown
     private List<Photo> releasedList;
     // Current pointer to the image that's being set as the wallpaper
@@ -31,7 +29,6 @@ public class PhotoCollection {
     protected PhotoCollection() {
         album = new ArrayList<Photo>();
         releasedList = new ArrayList<Photo>();
-        history = new LinkedList<Photo>();
         curr = 0;
     }
 
@@ -60,6 +57,7 @@ public class PhotoCollection {
      *
      */
     public void sort() {
+        Log.i(this.getClass().toString(), "Running sort()");
         IRating rating = new RatingStrategy(Settings.isConsideringRecency(),
                 Settings.isConsideringTOD(),
                 Settings.isConsideringProximity());
@@ -93,8 +91,6 @@ public class PhotoCollection {
      * @return A photo object from the album data structure
      */
     public Photo next() {
-        // Add to history
-        history.addFirst(album.get(curr));
         switchPhoto();
         if(album.size() < 1){
             return null;
@@ -125,9 +121,6 @@ public class PhotoCollection {
         return album.get(curr);
     }
 
-    public boolean hasHistory(){
-        return !history.isEmpty();
-    }
     /**
      * Return the previous photo from user's history
      *
@@ -135,7 +128,8 @@ public class PhotoCollection {
      */
     public Photo previous() {
         curr--;
-        return history.removeFirst();
+        if (curr < 0) curr = album.size() - 1;
+        return album.get( curr );
     }
 
     /**
