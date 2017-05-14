@@ -2,34 +2,58 @@ package edu.ucsd.dj.activities;
 
 import android.Manifest;
 import android.app.WallpaperManager;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Location;
+import android.location.LocationManager;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.media.MediaBrowserCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+
 import edu.ucsd.dj.DJWallpaperManager;
 import edu.ucsd.dj.Photo;
 import edu.ucsd.dj.PhotoCollection;
 import edu.ucsd.dj.R;
+import edu.ucsd.dj.RatingStrategy;
 import edu.ucsd.dj.Settings;
+import edu.ucsd.dj.interfaces.IRating;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks
+    , GoogleApiClient.OnConnectionFailedListener, LocationListener{
 
     private static final int READ_STORAGE_PERMISSION = 123;
     private static final int SET_WALLPAPER_PERMISSION = 69;
+    private static final int ACCESS_FINE_PERMISSION = 420;
+//    private static final int ACCESS_COARSE_PERMISSION = 2420;
+
+    private static final int UPDATE_INTERVAL = 30000;
+    private static final int FASTEST_INTERVAL = 10000;
+
     private Switch proximitySwitch;
     private Switch timeOfDaySwitch;
     private Switch recencySwitch;
 
+    private GoogleApiClient mGoogleApiClient;
+    private LocationRequest mLocationRequest;
+
     @Override
     protected void onStart() {
         super.onStart();
-
+        mGoogleApiClient.connect();
         Photo photo = PhotoCollection.getInstance().next();
         if(photo == null){
             try {
@@ -46,14 +70,40 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onStop() {
+        super.onStop();
+        mGoogleApiClient.disconnect();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.content_main);
         askPermission(Manifest.permission.READ_EXTERNAL_STORAGE, READ_STORAGE_PERMISSION);
         askPermission(Manifest.permission.SET_WALLPAPER, SET_WALLPAPER_PERMISSION);
+        askPermission(Manifest.permission.ACCESS_FINE_LOCATION, ACCESS_FINE_PERMISSION);
+        //askPermission(Manifest.permission.ACCESS_COARSE_LOCATION, ACCESS_COARSE_PERMISSION);
 
+
+        //Creating an instance of google play
         PhotoCollection.getInstance().update(getApplicationContext());
         // some kind of location class, adds overlay, returns bitmap
+
+    // Create an instance of GoogleAPIClient.
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .addApi(LocationServices.API)
+                    .build();
+
+        mLocationRequest = new LocationRequest();
+        // Use high accuracy
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        // Set the update interval to 5 seconds
+        mLocationRequest.setInterval(UPDATE_INTERVAL);
+        // Set the fastest update interval to 1 second
+        mLocationRequest.setFastestInterval(FASTEST_INTERVAL);
+
 
         proximitySwitch = (Switch) findViewById(R.id.proximity);
         timeOfDaySwitch = (Switch) findViewById(R.id.timeOfDay);
@@ -100,6 +150,7 @@ public class MainActivity extends AppCompatActivity {
                 PhotoCollection.getInstance().sort();
             }
         });
+
 
         /*
         customAlbumSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -182,6 +233,56 @@ public class MainActivity extends AppCompatActivity {
             // other 'case' lines to check for other
             // permissions this app might request
         }
+    }
+
+    @Override
+    public void onConnected(Bundle connectionHint) {
+        //TODO SET THIS TO PERIODIC later
+
+        try{
+            Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
+                    mGoogleApiClient);
+            if (mLastLocation == null)
+                startLocationUpdates();
+
+            else
+                setLocation(mLastLocation);
+        }
+        catch(SecurityException e){
+            e.printStackTrace();
+        }
+    }
+
+    protected void startLocationUpdates() {
+        try{
+            LocationServices.FusedLocationApi.requestLocationUpdates(
+                    mGoogleApiClient, mLocationRequest, this);
+        }
+        catch(SecurityException e){
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
+    @Override
+    public void onLocationChanged(Location location) {
+        LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
+        //Using Location here
+        setLocation(location);
+    }
+    public void setLocation(Location location){
+        IRating rating = new RatingStrategy(Settings.isConsideringRecency(),
+                Settings.isConsideringTOD(), Settings.isConsideringProximity());
+        rating.setCurrentLocation(location);
+
     }
 
 }

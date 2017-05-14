@@ -1,5 +1,7 @@
 package edu.ucsd.dj;
 
+import android.location.Location;
+import android.location.LocationManager;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -32,41 +34,14 @@ public class Photo implements Comparable, Serializable {
      * Used to prepare photo for sorting by photo set. Implemented as distance function
      * in up to four dimensions
      */
-    public void calculateScore() {
-        score = 0;
-        // If considering recency, add distance to photo
-        if (Settings.isConsideringRecency()) {
-            // Get current time to compare with.
-            long  now = new GregorianCalendar().getTimeInMillis();
-            // Calculates the ratio of the actual age over the possible age.
-            double ratio = (now - info.getDateTaken()) / (double)now;
-            score += Math.pow(ratio, 2);
-        }
-        // If considering time of day, add distance to photo
-        if (Settings.isConsideringTOD()) {
-            if(info.getTimeOfDay() != PhotoInfo.TimeOfDay.getCurrent()) {
-                score += 1;
-            }
-        }
-        // If considering location
-        if (Settings.isConsideringProximity()) {
-            if(this.info.hasValidCoordinates()){
-                // TODO Get distance ans consider in calculation
-            } else {
-                // Don't reword or punish for lack of location
-                score += 0.5;
-            }
-        }
-        // We always consider karma
-        if (!hasKarma) score += 1;
-    }
+
 
     public PhotoInfo getInfo() { return info; }
 
     public String getPathname(){ return pathname; }
 
     public double getScore(){ return score; }
-
+    public void setScore(double score) { this.score = score; }
     public boolean hasKarma() { return hasKarma; }
 
     public void setHasKarma(boolean karma) { this.hasKarma = karma; }

@@ -9,6 +9,9 @@ import java.util.Collections;
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
+
+import edu.ucsd.dj.interfaces.IRating;
 
 /**
  * Created by jakesutton on 5/6/17.
@@ -59,10 +62,12 @@ public class PhotoCollection {
      *
      */
     public void sort() {
-
+        IRating rating = new RatingStrategy(Settings.isConsideringRecency(), Settings.isConsideringTOD(),
+                Settings.isConsideringProximity());
         //TODO optimization problem
         for(Photo photo: album){
-            photo.calculateScore();
+            photo.setScore(rating.rate(photo.getInfo(), photo.hasKarma()));
+            //photo.calculateScore();
         }
 
         Collections.sort(album);

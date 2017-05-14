@@ -81,7 +81,6 @@ public class PhotoLoader extends ContextWrapper {
                     Photo photo = new Photo(pathName, date);
                     latLngLoader.loadCoordinatesFor(pathName, photo.getInfo());
 
-                    photo.calculateScore();
                     album.add(photo);
 
                 } while (cur.moveToNext());
