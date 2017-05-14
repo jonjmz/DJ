@@ -11,7 +11,7 @@ public final class Settings {
     private static boolean considerTOD = true;
     private static boolean considerRecency = true;
 
-    private static Timer timer = new Timer();
+    private static Timer timer;
 
     private static int refreshRate = 60;
 
@@ -43,7 +43,10 @@ public final class Settings {
 
     public static void setRefreshRateMinutes(int refreshRate) {
         Settings.refreshRate = refreshRate;
+    }
 
+    public static void initTimer(){
+        timer = new Timer();
         timer.schedule(new PhotoUpdateTask(), 0, getRefreshRateMillis());
     }
 }

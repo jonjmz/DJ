@@ -13,9 +13,11 @@ import android.widget.RemoteViews;
 import android.widget.Toast;
 
 import edu.ucsd.dj.DJWallpaper;
+import edu.ucsd.dj.LocationProvider;
 import edu.ucsd.dj.Photo;
 import edu.ucsd.dj.PhotoCollection;
 import edu.ucsd.dj.R;
+import edu.ucsd.dj.Settings;
 
 /**
  * Created by Josh on 5/2/2017.
@@ -24,14 +26,29 @@ import edu.ucsd.dj.R;
 public class WidgetProvider extends AppWidgetProvider {
     private static String NEXT = "next";
     private static String PREVIOUS = "previous";
+    private LocationProvider locationProvider;
+    @Override
+    public void onRestored(Context context, int[] oldWidgetIds, int[] newWidgetIds) {
+        super.onRestored(context, oldWidgetIds, newWidgetIds);
+    }
+
+    @Override
+    public void onDisabled(Context context) {
+        super.onDisabled(context);
+        if(locationProvider != null)
+            locationProvider.disconnect();
+    }
+
     private static String RELEASE = "release";
     private static String KARMA = "karma";
 
     @Override
     public void onEnabled(Context context) {
         super.onEnabled(context);
-
-        PhotoCollection.getInstance().update();
+        locationProvider = new LocationProvider();
+        locationProvider.setLocation(null);
+        locationProvider.connect();
+        Settings.initTimer();
     }
 
     @Override
@@ -69,6 +86,7 @@ public class WidgetProvider extends AppWidgetProvider {
             remoteViews.setOnClickPendingIntent(R.id.right, pendingIntentNext);
 
             appWidgetManager.updateAppWidget(widgetId, remoteViews);
+
         }
     }
 

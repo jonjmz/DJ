@@ -25,28 +25,28 @@ import edu.ucsd.dj.RatingStrategy;
 import edu.ucsd.dj.Settings;
 import edu.ucsd.dj.interfaces.IRating;
 
-public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks
-    , GoogleApiClient.OnConnectionFailedListener, LocationListener{
-
+//public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks
+//    , GoogleApiClient.OnConnectionFailedListener, LocationListener{
+public class MainActivity extends AppCompatActivity{
     private static final int READ_STORAGE_PERMISSION = 123;
     private static final int SET_WALLPAPER_PERMISSION = 69;
     private static final int ACCESS_FINE_PERMISSION = 420;
 
-    private static final int UPDATE_INTERVAL = 30000;
-    private static final int FASTEST_INTERVAL = 10000;
+//    private static final int UPDATE_INTERVAL = 30000;
+//    private static final int FASTEST_INTERVAL = 10000;
 
     private Switch proximitySwitch;
     private Switch timeOfDaySwitch;
     private Switch recencySwitch;
     private SeekBar refreshRateBar;
 
-    private GoogleApiClient mGoogleApiClient;
-    private LocationRequest mLocationRequest;
+//    private GoogleApiClient mGoogleApiClient;
+//    private LocationRequest mLocationRequest;
 
     @Override
     protected void onStart() {
         super.onStart();
-        mGoogleApiClient.connect();
+        //mGoogleApiClient.connect();
         PhotoCollection collection = PhotoCollection.getInstance();
 
         if (collection.isEmpty()) {
@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     @Override
     protected void onStop() {
         super.onStop();
-        mGoogleApiClient.disconnect();
+        //mGoogleApiClient.disconnect();
     }
 
     @Override
@@ -77,19 +77,19 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         // some kind of location class, adds overlay, returns bitmap
 
     // Create an instance of GoogleAPIClient.
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                    .addConnectionCallbacks(this)
-                    .addOnConnectionFailedListener(this)
-                    .addApi(LocationServices.API)
-                    .build();
-
-        mLocationRequest = new LocationRequest();
-        // Use high accuracy
-        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        // Set the update interval to 5 seconds
-        mLocationRequest.setInterval(UPDATE_INTERVAL);
-        // Set the fastest update interval to 1 second
-        mLocationRequest.setFastestInterval(FASTEST_INTERVAL);
+//        mGoogleApiClient = new GoogleApiClient.Builder(this)
+//                    .addConnectionCallbacks(this)
+//                    .addOnConnectionFailedListener(this)
+//                    .addApi(LocationServices.API)
+//                    .build();
+//
+//        mLocationRequest = new LocationRequest();
+//        // Use high accuracy
+//        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+//        // Set the update interval to 5 seconds
+//        mLocationRequest.setInterval(UPDATE_INTERVAL);
+//        // Set the fastest update interval to 1 second
+//        mLocationRequest.setFastestInterval(FASTEST_INTERVAL);
 
 
         proximitySwitch = (Switch) findViewById(R.id.proximity);
@@ -170,8 +170,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         */
         //TODO handle exception better
 
-        setLocation(null);
-        PhotoCollection.getInstance().update();
+        //setLocation(null);
+        //PhotoCollection.getInstance().update();
 
     }
     private void askPermission(String permission, int requestCode){
@@ -244,54 +244,54 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         }
     }
 
-    @Override
-    public void onConnected(Bundle connectionHint) {
-        //TODO SET THIS TO PERIODIC later
-
-        try{
-            Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
-                    mGoogleApiClient);
-            if (mLastLocation == null)
-                startLocationUpdates();
-
-            else
-                setLocation(mLastLocation);
-        }
-        catch(SecurityException e){
-            e.printStackTrace();
-        }
-    }
-
-    protected void startLocationUpdates() {
-        try{
-            LocationServices.FusedLocationApi.requestLocationUpdates(
-                    mGoogleApiClient, mLocationRequest, this);
-        }
-        catch(SecurityException e){
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
-    }
-    @Override
-    public void onLocationChanged(Location location) {
-        LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
-        //Using Location here
-        setLocation(location);
-    }
-    public void setLocation(Location location){
-        IRating rating = new RatingStrategy(Settings.isConsideringRecency(),
-                Settings.isConsideringTOD(), Settings.isConsideringProximity());
-        rating.setCurrentLocation(location);
-
-    }
+//    @Override
+//    public void onConnected(Bundle connectionHint) {
+//        //TODO SET THIS TO PERIODIC later
+//
+//        try{
+//            Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
+//                    mGoogleApiClient);
+//            if (mLastLocation == null)
+//                startLocationUpdates();
+//
+//            else
+//                setLocation(mLastLocation);
+//        }
+//        catch(SecurityException e){
+//            e.printStackTrace();
+//        }
+//    }
+//
+//    protected void startLocationUpdates() {
+//        try{
+//            LocationServices.FusedLocationApi.requestLocationUpdates(
+//                    mGoogleApiClient, mLocationRequest, this);
+//        }
+//        catch(SecurityException e){
+//            e.printStackTrace();
+//        }
+//    }
+//
+//    @Override
+//    public void onConnectionSuspended(int i) {
+//
+//    }
+//
+//    @Override
+//    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+//
+//    }
+//    @Override
+//    public void onLocationChanged(Location location) {
+//        LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
+//        //Using Location here
+//        setLocation(location);
+//    }
+//    public void setLocation(Location location){
+//        IRating rating = new RatingStrategy(Settings.isConsideringRecency(),
+//                Settings.isConsideringTOD(), Settings.isConsideringProximity());
+//        rating.setCurrentLocation(location);
+//
+//    }
 
 }
