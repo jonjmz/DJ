@@ -119,7 +119,6 @@ public class PhotoCollection {
      * @return The current photo object from the album
      */
     public Photo current() {
-        if (curr == 0) return null;
         return album.get(curr);
     }
 
