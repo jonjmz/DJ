@@ -67,8 +67,7 @@ public class PhotoCollectionTest {
     @Test
     public void testNext() throws Exception {
         PhotoCollection collection = PhotoCollection.getInstance();
-        Context appContext = InstrumentationRegistry.getTargetContext().getApplicationContext();
-        collection.update(appContext);
+        collection.update();
         Photo last = collection.current();
         Photo current = collection.next();
         assert(!current.equals(last));
@@ -77,8 +76,7 @@ public class PhotoCollectionTest {
     @Test
     public void testPrevious() throws Exception {
         PhotoCollection collection = PhotoCollection.getInstance();
-        Context appContext = InstrumentationRegistry.getTargetContext().getApplicationContext();
-        collection.update(appContext);
+        collection.update();
         Photo current = collection.current();
         collection.next();
         Photo previous = collection.previous();

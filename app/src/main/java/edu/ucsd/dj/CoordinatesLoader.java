@@ -24,6 +24,8 @@ public class CoordinatesLoader {
 
         Log.i("CoordinatesLoader", "Attempting to load coordinates for " + pathname);
 
+        if (pathname.endsWith(".png") || pathname.endsWith(".gif")) return;
+
         try {
             exifInterface = new ExifInterface(pathname);
         } catch (IOException e) {

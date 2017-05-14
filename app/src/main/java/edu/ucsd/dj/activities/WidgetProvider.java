@@ -31,7 +31,7 @@ public class WidgetProvider extends AppWidgetProvider {
     public void onEnabled(Context context) {
         super.onEnabled(context);
 
-        PhotoCollection.getInstance().update( context );
+        PhotoCollection.getInstance().update();
     }
 
     @Override
@@ -75,20 +75,23 @@ public class WidgetProvider extends AppWidgetProvider {
     @Override
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
+
         Log.i("Testing ", "onReceive: " + intent.getAction());
         PhotoCollection collection = PhotoCollection.getInstance();
 
         if (!collection.isEmpty()) {
             Photo photo = collection.current();
+
             if (intent.getAction().equals(NEXT)) {
-                photo = PhotoCollection.getInstance().next();
+                photo = collection.next();
             }
             else if (intent.getAction().equals(PREVIOUS)) {
-                if (collection.hasHistory()){
+
+                if (collection.hasHistory())
                     photo = collection.previous();
-                } else {
+                else
                     photo = collection.current();
-                }
+
             }
             else if (intent.getAction().equals(KARMA)) {
                 photo.setHasKarma(!photo.hasKarma());
@@ -99,16 +102,21 @@ public class WidgetProvider extends AppWidgetProvider {
             }
             else if (intent.getAction().equals(RELEASE)) {
                 collection.release();
-                photo = collection.current();
+
+                if (!collection.isEmpty())
+                    photo = collection.current();
+                else
+                    photo = null;
 
                 Log.i("Testing", "This is action: " + intent.getAction());
             }
 
-            DJWallpaper.getInstance().set(photo, context);
-            highlightKarma(context, photo, intent);
+            if (photo != null) {
+                highlightKarma(context, photo, intent);
+            }
+
+            DJWallpaper.getInstance().set(photo);
         }
-
-
     }
 
     private void highlightKarma(Context context, Photo photo, Intent intent) {

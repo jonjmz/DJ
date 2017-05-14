@@ -24,9 +24,14 @@ public class DJWallpaper {
         labeler = new BitmapLabeler();
     }
 
-    public void set(Photo photo, Context context) {
+    public void set(Photo photo) {
 
-        if (photo == null) setDefault(context);
+        Context context = DJPhoto.getAppContext();
+
+        if (photo == null) {
+            setDefault();
+            return;
+        }
 
         try {
             labelStrategy = new AddressLabelStrategy(context);
@@ -46,8 +51,10 @@ public class DJWallpaper {
         }
     }
 
-    public void setDefault(Context context) {
+    public void setDefault() {
         try {
+            Context context = DJPhoto.getAppContext();
+
             defaultPhoto = BitmapFactory.decodeResource(context.getResources(),
                     R.drawable.dejaphotodefault);
             WallpaperManager.getInstance(context).setBitmap( defaultPhoto );

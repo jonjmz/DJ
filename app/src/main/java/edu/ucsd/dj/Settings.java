@@ -1,12 +1,19 @@
 package edu.ucsd.dj;
 
+import java.util.Timer;
+
 /**
  * Created by jonathanjimenez on 5/9/17.
  */
 public final class Settings {
+    private static final int MILLIS_PER_MINUTE = 60000;
     private static boolean considerProximity = true;
     private static boolean considerTOD = true;
     private static boolean considerRecency = true;
+
+    private static Timer timer = new Timer();
+
+    private static int refreshRate = 60;
 
     public static boolean isConsideringProximity() { return considerProximity; }
 
@@ -28,5 +35,15 @@ public final class Settings {
 
     public static void setConsiderRecency(boolean considerRecency) {
         Settings.considerRecency = considerRecency;
+    }
+
+    public static long getRefreshRateMillis() {
+        return refreshRate * MILLIS_PER_MINUTE;
+    }
+
+    public static void setRefreshRateMinutes(int refreshRate) {
+        Settings.refreshRate = refreshRate;
+
+        timer.schedule(new PhotoUpdateTask(), 0, getRefreshRateMillis());
     }
 }

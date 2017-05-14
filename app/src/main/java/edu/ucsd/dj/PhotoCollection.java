@@ -1,6 +1,5 @@
 package edu.ucsd.dj;
 
-import android.content.Context;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Deque;
@@ -41,9 +40,9 @@ public class PhotoCollection {
      *  them into the current photo array
      *
      */
-    public void update(Context context) {
+    public void update() {
 
-        PhotoLoader loader = new PhotoLoader(context);
+        PhotoLoader loader = new PhotoLoader();
         ArrayList<Photo> newAlbum = loader.getPhotos();
 
         //TODO optimization problem
@@ -53,7 +52,7 @@ public class PhotoCollection {
             }
         }
 
-        Collections.sort(album);
+        sort();
     }
 
     /**
@@ -79,7 +78,11 @@ public class PhotoCollection {
      * next() should be called immediately after this method
      */
     public void release() {
-        releasedList.add( album.remove(curr) );
+
+        Photo photo = album.remove(curr);
+        if (curr == album.size()) curr--;
+
+        releasedList.add( photo );
     }
 
     /**

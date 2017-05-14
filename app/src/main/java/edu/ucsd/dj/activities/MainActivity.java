@@ -9,12 +9,14 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.CompoundButton;
+import android.widget.SeekBar;
 import android.widget.Switch;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+
 import edu.ucsd.dj.DJWallpaper;
 import edu.ucsd.dj.Photo;
 import edu.ucsd.dj.PhotoCollection;
@@ -29,7 +31,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     private static final int READ_STORAGE_PERMISSION = 123;
     private static final int SET_WALLPAPER_PERMISSION = 69;
     private static final int ACCESS_FINE_PERMISSION = 420;
-//    private static final int ACCESS_COARSE_PERMISSION = 2420;
 
     private static final int UPDATE_INTERVAL = 30000;
     private static final int FASTEST_INTERVAL = 10000;
@@ -37,6 +38,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     private Switch proximitySwitch;
     private Switch timeOfDaySwitch;
     private Switch recencySwitch;
+    private SeekBar refreshRateBar;
 
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
@@ -48,10 +50,10 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         PhotoCollection collection = PhotoCollection.getInstance();
 
         if (collection.isEmpty()) {
-            DJWallpaper.getInstance().setDefault(getApplicationContext());
+            DJWallpaper.getInstance().setDefault();
         } else {
             Photo photo = collection.current();
-            DJWallpaper.getInstance().set(photo, getApplicationContext());
+            DJWallpaper.getInstance().set(photo);
         }
     }
 
@@ -72,7 +74,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
 
         //Creating an instance of google play
-        PhotoCollection.getInstance().update(getApplicationContext());
         // some kind of location class, adds overlay, returns bitmap
 
     // Create an instance of GoogleAPIClient.
@@ -94,6 +95,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         proximitySwitch = (Switch) findViewById(R.id.proximity);
         timeOfDaySwitch = (Switch) findViewById(R.id.timeOfDay);
         recencySwitch = (Switch) findViewById(R.id.recency);
+        refreshRateBar = (SeekBar) findViewById(R.id.refresh);
         // customAlbumSwitch = (Switch) findViewById(R.id.customAlbum);
 
         proximitySwitch.setChecked(Settings.isConsideringProximity());
@@ -137,6 +139,22 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             }
         });
 
+        refreshRateBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                // nothing
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                Settings.setRefreshRateMinutes(1 + seekBar.getProgress());
+            }
+        });
+
 
         /*
         customAlbumSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -150,6 +168,11 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             }
         });
         */
+        //TODO handle exception better
+
+        setLocation(null);
+        PhotoCollection.getInstance().update();
+
     }
     private void askPermission(String permission, int requestCode){
         if (ContextCompat.checkSelfPermission(this,

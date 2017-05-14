@@ -14,7 +14,6 @@ import edu.ucsd.dj.interfaces.IRating;
  * Created by nguyen on 5/13/2017.
  */
 public class RatingStrategy implements IRating {
-    private LocationManager locationManager;
     boolean recency, tod, proximity;
     private static Location currentLocation;
 
