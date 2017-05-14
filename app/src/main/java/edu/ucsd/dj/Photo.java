@@ -1,9 +1,6 @@
 package edu.ucsd.dj;
 
-import android.location.Location;
-import android.location.LocationManager;
 import android.support.annotation.NonNull;
-
 import java.io.Serializable;
 import java.util.HashMap;
 
@@ -13,13 +10,13 @@ import java.util.HashMap;
 public class Photo implements Comparable, Serializable {
 
     private double score;        // Used to order photos with precalulated scores
-    private String pathname;    // Reference to image in album
-    private PhotoInfo info; // Store photo Exif data for score calculations
-
     private boolean hasKarma;    // Used to keep track of karma
 
+    private String pathname;     // Reference to image in album
+    private Event info;          // Store photo Exif data for score calculations
+
     public Photo(String reference, long dateTaken) {
-        this.info = new PhotoInfo(dateTaken);
+        this.info = new Event(dateTaken);
         this.pathname = reference;
     }
 
@@ -28,9 +25,7 @@ public class Photo implements Comparable, Serializable {
      * Used to prepare photo for sorting by photo set. Implemented as distance function
      * in up to four dimensions
      */
-
-
-    public PhotoInfo getInfo() { return info; }
+    public Event getInfo() { return info; }
 
     public String getPathname(){ return pathname; }
 

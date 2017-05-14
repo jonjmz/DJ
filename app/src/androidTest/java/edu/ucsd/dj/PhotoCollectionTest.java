@@ -46,9 +46,10 @@ public class PhotoCollectionTest {
         Settings.setConsiderRecency(false);
         Settings.setConsiderTOD(true);
         collection.sort();
-        PhotoInfo.TimeOfDay tod = PhotoInfo.TimeOfDay.getCurrent();
+        Event.TimeOfDay tod = Event.currentTimeOfDay();
         Log.v("What?", "" + tod);
         Log.v("What?", collection.current().getPathname());
+
         // First photo should be the same time of day
         assertEquals(true, collection.current().getPathname().contains(tod.toString().toLowerCase()));
     }
@@ -98,7 +99,4 @@ public class PhotoCollectionTest {
     public void testSaveToFile() throws Exception {
 
     }
-
-
-
 }

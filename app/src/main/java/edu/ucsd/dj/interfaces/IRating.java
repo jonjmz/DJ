@@ -1,15 +1,13 @@
 package edu.ucsd.dj.interfaces;
 
-import android.content.Context;
 import android.location.Location;
-
-import edu.ucsd.dj.PhotoInfo;
+import edu.ucsd.dj.Event;
 
 /**
  * Created by nguyen on 5/13/2017.
  */
 
 public interface IRating {
-    double rate(PhotoInfo info, boolean karma);
+    double rate(Event info, boolean karma);
     void setCurrentLocation(Location location);
 }

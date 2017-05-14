@@ -13,7 +13,6 @@ import edu.ucsd.dj.interfaces.IRating;
 /**
  * Created by nguyen on 5/13/2017.
  */
-
 public class RatingStrategy implements IRating {
     private LocationManager locationManager;
     boolean recency, tod, proximity;
@@ -31,19 +30,19 @@ public class RatingStrategy implements IRating {
      * in up to four dimensions
      */
     @Override
-    public double rate(PhotoInfo info, boolean karma) {
+    public double rate(Event info, boolean karma) {
         long  now = new GregorianCalendar().getTimeInMillis();
         double scoreSquared = 0;
         // If considering recency, add distance to photo
         if (recency) {
             // Get current time to compare with.
             // Calculates the ratio of the actual age over the possible age.
-            double ratio = (now - info.getDateTaken()) / (double)now;
+            double ratio = (now - info.getDate()) / (double)now;
             scoreSquared += Math.pow(ratio, 2);
         }
         // If considering time of day, add distance to photo
         if (Settings.isConsideringTOD()) {
-            if(info.getTimeOfDay() != PhotoInfo.TimeOfDay.getCurrent()) {
+            if(info.timeOfDay() != info.currentTimeOfDay()) {
                 scoreSquared += 1;
             }
         }

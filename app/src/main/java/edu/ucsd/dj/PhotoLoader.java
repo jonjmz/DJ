@@ -17,7 +17,6 @@ import java.util.Collections;
 /**
  * Created by nguyen on 5/9/2017.
  */
-
 public class PhotoLoader extends ContextWrapper {
     String[] projection;
     String selectionClause;

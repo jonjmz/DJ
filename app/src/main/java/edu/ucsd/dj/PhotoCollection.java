@@ -1,15 +1,11 @@
 package edu.ucsd.dj;
 
 import android.content.Context;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 
 import edu.ucsd.dj.interfaces.IRating;
 
@@ -65,12 +61,12 @@ public class PhotoCollection {
      *
      */
     public void sort() {
-        IRating rating = new RatingStrategy(Settings.isConsideringRecency(), Settings.isConsideringTOD(),
+        IRating rating = new RatingStrategy(Settings.isConsideringRecency(),
+                Settings.isConsideringTOD(),
                 Settings.isConsideringProximity());
         //TODO optimization problem
         for(Photo photo: album){
             photo.setScore(rating.rate(photo.getInfo(), photo.hasKarma()));
-            //photo.calculateScore();
         }
 
         Collections.sort(album);
@@ -83,7 +79,7 @@ public class PhotoCollection {
      * next() should be called immediately after this method
      */
     public void release() {
-        releasedList.add(album.remove(curr));
+        releasedList.add( album.remove(curr) );
     }
 
     /**
@@ -98,7 +94,6 @@ public class PhotoCollection {
         history.addFirst(album.get(curr));
         switchPhoto();
         if(album.size() < 1){
-            // TODO default photo
             return null;
         } else {
             return album.get(curr);
@@ -124,12 +119,12 @@ public class PhotoCollection {
      * @return The current photo object from the album
      */
     public Photo current() {
-        Photo result = album.get(curr);
-        return result;
+        if (curr == 0) return null;
+        return album.get(curr);
     }
 
     public boolean hasHistory(){
-        return history.size() > 0;
+        return !history.isEmpty();
     }
     /**
      * Return the previous photo from user's history
@@ -137,59 +132,15 @@ public class PhotoCollection {
      * @return A photo object from the history data structure
      */
     public Photo previous() {
+        curr--;
         return history.removeFirst();
     }
 
     /**
-     * Checks if there is a previous photo in the history data structure
-     *
-     * @return true if there is a photo in history
-     *         false if there isn't a photo in history
+     * Returns true if this collection is empty.
+     * @return true if collection is empty.
      */
-    public boolean hasPrevious() {
-        return !history.isEmpty();
+    public boolean isEmpty() {
+        return album.isEmpty();
     }
-
-
-//    TODO - Bring me back to life :(
-
-//    /**
-//     * Save current album to file using album field as name.
-//     *
-//     * @param context The current state of the application
-//     * @see {@linktourl http://stackoverflow.com/questions/4118751/how-do-i-serialize-an-object-and-save-it-to-a-file-in-android}
-//     */
-//    public void saveToFile(Context context){
-//        try {
-//            FileOutputStream fos = context.openFileOutput(album + ".album", Context.MODE_PRIVATE);
-//            ObjectOutputStream os = new ObjectOutputStream(fos);
-//            os.writeObject(this);
-//            os.close();
-//            fos.close();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
-//
-//    /**
-//     * Load Album using album field
-//     * @param context Current state of the application
-//     * @param albumName the name of the album that needs to be loaded
-//     * @see {@linktourl http://stackoverflow.com/questions/4118751/how-do-i-serialize-an-object-and-save-it-to-a-file-in-android}
-//     */
-//    public static DJPhotoCollection loadFromFile(Context context, String albumName){
-//        try {
-//            FileInputStream fis = context.openFileInput(albumName + ".album");
-//            ObjectInputStream is = new ObjectInputStream(fis);
-//            DJPhotoCollection tempAlbum = (DJPhotoCollection) is.readObject();
-//            is.close();
-//            fis.close();
-//            Load new photos from album
-//            tempAlbum.update(context);
-//            return tempAlbum;
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        return null;
-//    }
 }

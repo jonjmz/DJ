@@ -27,7 +27,7 @@ public class PhotoTest {
     public void testConstructor() throws Exception {
         Photo a = new Photo("reference", 420);
         assertEquals(a.getPathname(), "reference");
-        assertEquals(a.getInfo().getDateTaken(), 420);
+        assertEquals(a.getInfo().getDate(), 420);
     }
 
     @Test

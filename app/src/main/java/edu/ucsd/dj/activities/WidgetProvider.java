@@ -12,7 +12,7 @@ import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 
-import edu.ucsd.dj.DJWallpaperManager;
+import edu.ucsd.dj.DJWallpaper;
 import edu.ucsd.dj.Photo;
 import edu.ucsd.dj.PhotoCollection;
 import edu.ucsd.dj.R;
@@ -96,12 +96,12 @@ public class WidgetProvider extends AppWidgetProvider {
         }
         else if (intent.getAction().equals(RELEASE)) {
             PhotoCollection.getInstance().release();
-            photo = PhotoCollection.getInstance().next();
+            photo = PhotoCollection.getInstance().current();
 
             Log.i("Testing", "This is action: " + intent.getAction());
         }
 
-        DJWallpaperManager.getInstance().set(photo, context);
+        DJWallpaper.getInstance().set(photo, context);
         highlightKarma(context, photo, intent);
     }
 
