@@ -46,8 +46,17 @@ public class CoordinatesLoader {
 
             // Configure the photo object to reflect this data.
             info.setHasValidCoordinates(true);
-            info.setLatitude(Double.parseDouble(la));
-            info.setLongitude(Double.parseDouble(lg));
+
+            if(exifInterface.getAttribute((ExifInterface.TAG_GPS_LATITUDE_REF)).equals("N")){
+                info.setLatitude(Double.parseDouble(la));
+            } else {
+                info.setLatitude(0 - Double.parseDouble(la));
+            }
+            if(exifInterface.getAttribute((ExifInterface.TAG_GPS_LONGITUDE_REF)).equals("E")){
+                info.setLongitude(Double.parseDouble(lg));
+            } else {
+                info.setLongitude(0 - Double.parseDouble(lg));
+            }
         } else {
 
             Log.i("CoordinatesLoader", "Failure: Failed to get location data for " +
