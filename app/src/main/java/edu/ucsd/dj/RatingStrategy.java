@@ -49,8 +49,9 @@ public class RatingStrategy implements IRating {
         }
         // If considering generateAddress
         if (Settings.isConsideringProximity()) {
-            scoreSquared += Math.pow(calculateDistance(info.getLatitude(),
-                    info.getLongitude()), 2);
+            double distance = calculateDistance(info.getLatitude(), info.getLongitude());
+            // 20000000 aproximitly half the circumference of the earth in meters
+            scoreSquared += Math.pow(distance / 20000000, 2);
         }
         // We always consider karma
         if (!karma) scoreSquared += 1;

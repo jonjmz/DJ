@@ -5,9 +5,9 @@ package edu.ucsd.dj;
  */
 
 public final class Settings {
-    private static boolean considerProximity = false;
+    private static boolean considerProximity = true;
     private static boolean considerTOD = true;
-    private static boolean considerRecency = false;
+    private static boolean considerRecency = true;
     //private static boolean usingCustomAlbum = true;
 
     public static boolean isConsideringProximity() { return considerProximity; }
