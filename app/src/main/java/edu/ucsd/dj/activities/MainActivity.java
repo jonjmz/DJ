@@ -47,14 +47,14 @@ public class MainActivity extends AppCompatActivity{
     protected void onStart() {
         super.onStart();
         //mGoogleApiClient.connect();
-        PhotoCollection collection = PhotoCollection.getInstance();
-
-        if (collection.isEmpty()) {
-            DJWallpaper.getInstance().setDefault();
-        } else {
-            Photo photo = collection.current();
-            DJWallpaper.getInstance().set(photo);
-        }
+//        PhotoCollection collection = PhotoCollection.getInstance();
+//
+//        if (collection.isEmpty()) {
+//            DJWallpaper.getInstance().setDefault();
+//        } else {
+//            Photo photo = collection.current();
+//            DJWallpaper.getInstance().set(photo);
+//        }
     }
 
     @Override
