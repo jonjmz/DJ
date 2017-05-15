@@ -94,7 +94,6 @@ public class WidgetProvider extends AppWidgetProvider {
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
 
-        Log.i("Testing ", "onReceive: " + intent.getAction());
         PhotoCollection collection = PhotoCollection.getInstance();
 
         if (!collection.isEmpty()) {
@@ -102,26 +101,48 @@ public class WidgetProvider extends AppWidgetProvider {
 
             if (intent.getAction().equals(NEXT)) {
                 photo = collection.next();
+
+                Log.i("onReceive: NEXT ", "Photo: [" +
+                        collection.getCurrentIndex() + "/" + (collection.size() - 1) + "]" +
+                        " Score: " + photo.getScore());
             }
             else if (intent.getAction().equals(PREVIOUS)) {
                 photo = collection.previous();
+
+                Log.i("onReceive: PREVIOUS ", "Photo: [" +
+                        collection.getCurrentIndex() + "/" + (collection.size() - 1) + "]"
+                        + " Score: " + photo.getScore());
             }
             else if (intent.getAction().equals(KARMA)) {
                 photo.setHasKarma(!photo.hasKarma());
                 String result = "Karma " + (photo.hasKarma() ? "given, tap to remove." : "taken.");
                 Toast.makeText(context, result, Toast.LENGTH_SHORT).show();
 
-                Log.i("Testing", "This is action: " + intent.getAction());
+                Log.i("onReceive: KARMA ", "Set karma to " + photo.hasKarma() + " for Photo: [" +
+                        collection.getCurrentIndex() + "/" +
+                        (collection.size() - 1) + "]" +
+                        " Score: " + photo.getScore());
             }
             else if (intent.getAction().equals(RELEASE)) {
+
+                Log.i("onReceive: RELEASE ", "Photo: [" +
+                        collection.getCurrentIndex() + "/" +
+                        (collection.size() - 1) + "]" + "will be " +
+                        "released." +
+                        " Score: " + photo.getScore());
+
                 collection.release();
 
-                if (!collection.isEmpty())
-                    photo = collection.current();
-                else
-                    photo = null;
+                if (!collection.isEmpty()) {
 
-                Log.i("Testing", "This is action: " + intent.getAction());
+                    Log.i("onReceive: RELEASE ", "Setting to new current photo.");
+                    photo = collection.current();
+                }
+                else {
+                    Log.i("onReceive: RELEASE ", "After release the album is empty. Should set " +
+                            "default.");
+                    photo = null;
+                }
             }
 
             if (photo != null) {
@@ -133,6 +154,9 @@ public class WidgetProvider extends AppWidgetProvider {
     }
 
     private void highlightKarma(Context context, Photo photo, Intent intent) {
+
+        Log.i("highlightKarma() ", "Updated widget to reflect photo karma.");
+
         RemoteViews remoteViews = new RemoteViews( context.getPackageName(), R.layout.simple_widget);
 
         if (photo.hasKarma())

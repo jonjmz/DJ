@@ -4,6 +4,7 @@ import android.app.WallpaperManager;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 
 import java.io.IOException;
 
@@ -29,6 +30,7 @@ public class DJWallpaper {
         Context context = DJPhoto.getAppContext();
 
         if (photo == null) {
+            Log.i(this.getClass().toString(), "photo passed to set(Photo photo) is null.");
             setDefault();
             return;
         }
@@ -46,6 +48,8 @@ public class DJWallpaper {
 
             WallpaperManager.getInstance(context).setBitmap( newBackground );
 
+            Log.i(this.getClass().toString(), "wallpaper set successfully.");
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -58,7 +62,11 @@ public class DJWallpaper {
             defaultPhoto = BitmapFactory.decodeResource(context.getResources(),
                     R.drawable.dejaphotodefault);
             WallpaperManager.getInstance(context).setBitmap( defaultPhoto );
+
+            Log.i(this.getClass().toString(), "Default wallpaper set.");
         } catch (Exception e) {
+
+            Log.i(this.getClass().toString(), "Error setting default wallpaper.");
             e.printStackTrace();
         }
     }

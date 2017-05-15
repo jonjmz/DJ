@@ -1,5 +1,7 @@
 package edu.ucsd.dj;
 
+import android.util.Log;
+
 import java.util.TimerTask;
 
 /**
@@ -14,5 +16,7 @@ public class PhotoUpdateTask extends TimerTask {
         collection.update();
 
         DJWallpaper.getInstance().set( collection.current() );
+
+        Log.i(this.getClass().toString(), "Periodic update task completed successfully.");
     }
 }

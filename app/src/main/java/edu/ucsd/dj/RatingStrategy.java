@@ -48,7 +48,7 @@ public class RatingStrategy implements IRating {
         // If considering generateAddress
         if (Settings.isConsideringProximity()) {
             double distance = calculateDistance(info.getLatitude(), info.getLongitude());
-            // 20000000 aproximitly half the circumference of the earth in meters
+            // 20000000 approximately half the circumference of the earth in meters
             scoreSquared += Math.pow(distance / 20000000, 2);
         }
         // We always consider karma
@@ -56,7 +56,6 @@ public class RatingStrategy implements IRating {
 
         // Score Calculations Here
         return Math.sqrt(scoreSquared);
-
     }
 
     private float calculateDistance(double latitude, double longitude){
@@ -68,12 +67,17 @@ public class RatingStrategy implements IRating {
         return distance[0];
     }
     public void setCurrentLocation(Location location) {
-        if(location != null)
+
+        if(location != null) {
             currentLocation = location;
-        else
+            Log.i(getClass().toString(), "Setting location: Latitude: "
+                    + currentLocation.getLatitude()
+                    + "Longitude: " + currentLocation.getLatitude());
+        }
+        else {
             currentLocation = new Location("");
-        Log.i(getClass().toString(), "Latitude: " + currentLocation.getLatitude() );
-        Log.i(getClass().toString(), "Longitude: " + currentLocation.getLatitude());
+            Log.i(getClass().toString(), "Setting location to default location.");
+        }
 
     }
 }

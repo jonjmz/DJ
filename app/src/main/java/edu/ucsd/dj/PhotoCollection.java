@@ -57,10 +57,13 @@ public class PhotoCollection {
      *
      */
     public void sort() {
+
         Log.i(this.getClass().toString(), "Running sort()");
+
         IRating rating = new RatingStrategy(Settings.isConsideringRecency(),
                 Settings.isConsideringTOD(),
                 Settings.isConsideringProximity());
+
         //TODO optimization problem
         for(Photo photo: album){
             photo.setScore(rating.rate(photo.getInfo(), photo.hasKarma()));
@@ -108,7 +111,7 @@ public class PhotoCollection {
      */
     private void switchPhoto() {
         curr++;
-        // Loop back to start if need be
+
         if (curr == album.size()) {
             sort();
         }
@@ -119,6 +122,22 @@ public class PhotoCollection {
      */
     public Photo current() {
         return album.get(curr);
+    }
+
+    /**
+     * TODO
+     * @return
+     */
+    public int getCurrentIndex() {
+        return curr;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public int size() {
+        return album.size();
     }
 
     /**

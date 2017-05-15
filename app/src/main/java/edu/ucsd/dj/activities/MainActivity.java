@@ -2,18 +2,15 @@ package edu.ucsd.dj.activities;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
-import android.location.Location;
-import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.CompoundButton;
 import android.widget.SeekBar;
 import android.widget.Switch;
-import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
@@ -21,46 +18,26 @@ import edu.ucsd.dj.DJWallpaper;
 import edu.ucsd.dj.Photo;
 import edu.ucsd.dj.PhotoCollection;
 import edu.ucsd.dj.R;
-import edu.ucsd.dj.RatingStrategy;
 import edu.ucsd.dj.Settings;
-import edu.ucsd.dj.interfaces.IRating;
 
-//public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks
-//    , GoogleApiClient.OnConnectionFailedListener, LocationListener{
 public class MainActivity extends AppCompatActivity{
     private static final int READ_STORAGE_PERMISSION = 123;
     private static final int SET_WALLPAPER_PERMISSION = 69;
     private static final int ACCESS_FINE_PERMISSION = 420;
-
-//    private static final int UPDATE_INTERVAL = 30000;
-//    private static final int FASTEST_INTERVAL = 10000;
 
     private Switch proximitySwitch;
     private Switch timeOfDaySwitch;
     private Switch recencySwitch;
     private SeekBar refreshRateBar;
 
-//    private GoogleApiClient mGoogleApiClient;
-//    private LocationRequest mLocationRequest;
-
     @Override
     protected void onStart() {
         super.onStart();
-        //mGoogleApiClient.connect();
-//        PhotoCollection collection = PhotoCollection.getInstance();
-//
-//        if (collection.isEmpty()) {
-//            DJWallpaper.getInstance().setDefault();
-//        } else {
-//            Photo photo = collection.current();
-//            DJWallpaper.getInstance().set(photo);
-//        }
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        //mGoogleApiClient.disconnect();
     }
 
     @Override
@@ -70,38 +47,15 @@ public class MainActivity extends AppCompatActivity{
         askPermission(Manifest.permission.READ_EXTERNAL_STORAGE, READ_STORAGE_PERMISSION);
         askPermission(Manifest.permission.SET_WALLPAPER, SET_WALLPAPER_PERMISSION);
         askPermission(Manifest.permission.ACCESS_FINE_LOCATION, ACCESS_FINE_PERMISSION);
-        //askPermission(Manifest.permission.ACCESS_COARSE_LOCATION, ACCESS_COARSE_PERMISSION);
-
-
-        //Creating an instance of google play
-        // some kind of location class, adds overlay, returns bitmap
-
-    // Create an instance of GoogleAPIClient.
-//        mGoogleApiClient = new GoogleApiClient.Builder(this)
-//                    .addConnectionCallbacks(this)
-//                    .addOnConnectionFailedListener(this)
-//                    .addApi(LocationServices.API)
-//                    .build();
-//
-//        mLocationRequest = new LocationRequest();
-//        // Use high accuracy
-//        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-//        // Set the update interval to 5 seconds
-//        mLocationRequest.setInterval(UPDATE_INTERVAL);
-//        // Set the fastest update interval to 1 second
-//        mLocationRequest.setFastestInterval(FASTEST_INTERVAL);
-
 
         proximitySwitch = (Switch) findViewById(R.id.proximity);
         timeOfDaySwitch = (Switch) findViewById(R.id.timeOfDay);
         recencySwitch = (Switch) findViewById(R.id.recency);
         refreshRateBar = (SeekBar) findViewById(R.id.refresh);
-        // customAlbumSwitch = (Switch) findViewById(R.id.customAlbum);
 
         proximitySwitch.setChecked(Settings.isConsideringProximity());
         timeOfDaySwitch.setChecked(Settings.isConsideringTOD());
         recencySwitch.setChecked(Settings.isConsideringRecency());
-        // customAlbumSwitch.setChecked(false);
 
         proximitySwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
@@ -155,29 +109,15 @@ public class MainActivity extends AppCompatActivity{
             }
         });
 
-
-        /*
-        customAlbumSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked)
-                    settings.setUsingCustomAlbum(true);
-                else
-                    settings.setUsingCustomAlbum(false);
-            }
-        });
-        */
-        //TODO handle exception better
-
-        //setLocation(null);
-        //PhotoCollection.getInstance().update();
-
+        Log.i(this.getClass().toString() + ":onCreate()", "MainActivity listeners configured.");
     }
     private void askPermission(String permission, int requestCode){
-        if (ContextCompat.checkSelfPermission(this,
-                permission)
-                != PackageManager.PERMISSION_GRANTED) {
+
+        if (ContextCompat.checkSelfPermission(this, permission) !=
+                PackageManager.PERMISSION_GRANTED) {
+
+
+            Log.i(this.getClass().toString(), permission + " granted. Congrats DJ!");
 
             // Should we show an explanation?
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
@@ -243,55 +183,4 @@ public class MainActivity extends AppCompatActivity{
             // permissions this app might request
         }
     }
-
-//    @Override
-//    public void onConnected(Bundle connectionHint) {
-//        //TODO SET THIS TO PERIODIC later
-//
-//        try{
-//            Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
-//                    mGoogleApiClient);
-//            if (mLastLocation == null)
-//                startLocationUpdates();
-//
-//            else
-//                setLocation(mLastLocation);
-//        }
-//        catch(SecurityException e){
-//            e.printStackTrace();
-//        }
-//    }
-//
-//    protected void startLocationUpdates() {
-//        try{
-//            LocationServices.FusedLocationApi.requestLocationUpdates(
-//                    mGoogleApiClient, mLocationRequest, this);
-//        }
-//        catch(SecurityException e){
-//            e.printStackTrace();
-//        }
-//    }
-//
-//    @Override
-//    public void onConnectionSuspended(int i) {
-//
-//    }
-//
-//    @Override
-//    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-//
-//    }
-//    @Override
-//    public void onLocationChanged(Location location) {
-//        LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
-//        //Using Location here
-//        setLocation(location);
-//    }
-//    public void setLocation(Location location){
-//        IRating rating = new RatingStrategy(Settings.isConsideringRecency(),
-//                Settings.isConsideringTOD(), Settings.isConsideringProximity());
-//        rating.setCurrentLocation(location);
-//
-//    }
-
 }
