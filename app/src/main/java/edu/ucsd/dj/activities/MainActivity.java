@@ -13,6 +13,7 @@ import android.widget.Switch;
 
 import edu.ucsd.dj.PhotoCollection;
 import edu.ucsd.dj.R;
+import edu.ucsd.dj.managers.DJWallpaper;
 import edu.ucsd.dj.managers.Settings;
 
 public class MainActivity extends AppCompatActivity{
@@ -60,7 +61,8 @@ public class MainActivity extends AppCompatActivity{
                     Settings.setConsiderProximity(true);
                 else
                     Settings.setConsiderProximity(false);
-                PhotoCollection.getInstance().sort();
+                PhotoCollection.getInstance().update();
+                DJWallpaper.getInstance().set(PhotoCollection.getInstance().current());
             }
         });
 
@@ -72,7 +74,8 @@ public class MainActivity extends AppCompatActivity{
                     Settings.setConsiderTOD(true);
                 else
                     Settings.setConsiderTOD(false);
-                PhotoCollection.getInstance().sort();
+                PhotoCollection.getInstance().update();
+                DJWallpaper.getInstance().set(PhotoCollection.getInstance().current());
             }
         });
 
@@ -84,7 +87,8 @@ public class MainActivity extends AppCompatActivity{
                     Settings.setConsiderRecency(true);
                 else
                     Settings.setConsiderRecency(false);
-                PhotoCollection.getInstance().sort();
+                PhotoCollection.getInstance().update();
+                DJWallpaper.getInstance().set(PhotoCollection.getInstance().current());
             }
         });
 
