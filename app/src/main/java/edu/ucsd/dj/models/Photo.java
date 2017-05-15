@@ -15,8 +15,8 @@ public class Photo implements Comparable, Serializable {
     private String pathname;     // Reference to image in album
     private Event info;          // Store photo Exif data for score calculations
 
-    public Photo(String reference, long dateTaken) {
-        this.info = new Event(dateTaken);
+    public Photo(String reference) {
+        this.info = new Event();
         this.pathname = reference;
     }
 

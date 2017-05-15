@@ -69,19 +69,18 @@ public class PhotoLoader  {
                     cur.moveToFirst();
                     long date;
                     String pathName;
-                    int dateColumn = cur.getColumnIndexOrThrow(MediaStore.Images.Media.DATE_TAKEN);
                     int index = cur.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
 
                     CoordinatesLoader latLngLoader = new CoordinatesLoader();
+                    DateTimeLoader dateLoader = new DateTimeLoader();
                     do {
-                        date = cur.getLong(dateColumn);
                         pathName = cur.getString(index);
 
-                        Log.i("ListingImages", "  date_taken: " + date +
-                                " path_name: " + pathName);
+                        Log.i("ListingImages",  " path_name: " + pathName);
 
-                        Photo photo = new Photo(pathName, date);
+                        Photo photo = new Photo(pathName);
                         latLngLoader.loadCoordinatesFor(pathName, photo.getInfo());
+                        dateLoader.loadDateFor(pathName, photo.getInfo());
 
                         album.add(photo);
 

@@ -35,7 +35,7 @@ public class RatingStrategy implements IRating {
         if (recency) {
             // Get current time to compare with.
             // Calculates the ratio of the actual age over the possible age.
-            double ratio = (now - info.getDate()) / (double)now;
+            double ratio = (now - info.getDateTime()) / (double)now;
             scoreSquared += Math.pow(ratio, 2);
         }
         // If considering time of day, add distance to photo
