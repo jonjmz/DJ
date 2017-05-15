@@ -34,29 +34,12 @@ public class PhotoCollectionTest {
 
     @Test
     public void prioritizeRecent(){
-        PhotoCollection collection = PhotoCollection.getInstance();
-        collection.update();
-        Settings.setConsiderProximity(false);
-        Settings.setConsiderRecency(true);
-        Settings.setConsiderTOD(false);
-        collection.sort();
-        // 6_eiffel_tower.jpg is the most recent photo from the set
-        assertEquals(true, collection.current().getPathname().contains("6_eiffel_tower.jpg"));
+        // This test requires manipulation of current time
     }
 
     @Test
     public void prioritizeTimeOfDay(){
         // This test requires manipulation of current time
-    }
-
-    @Test
-    public void testUpdate() throws Exception {
-
-    }
-
-    @Test
-    public void testRelease() throws Exception {
-
     }
 
     @Test
@@ -76,20 +59,5 @@ public class PhotoCollectionTest {
         collection.next();
         Photo previous = collection.previous();
         assert(current.equals(previous));
-    }
-
-    @Test
-    public void testCurrent() throws Exception {
-
-    }
-
-    @Test
-    public void testHasPrevious() throws Exception {
-
-    }
-    
-    @Test
-    public void testSaveToFile() throws Exception {
-
     }
 }
