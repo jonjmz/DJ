@@ -11,7 +11,7 @@ import edu.ucsd.dj.interfaces.IDateTimeable;
  */
 public class Event implements IAddressable, IDateTimeable {
 
-    enum TimeOfDay{ Night, Morning, Afternoon, Evening}
+    public enum TimeOfDay{ Night, Morning, Afternoon, Evening}
 
     private long date;
     private boolean hasValidCoordinates;

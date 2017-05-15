@@ -5,6 +5,7 @@ import android.support.test.InstrumentationRegistry;
 
 import org.junit.Test;
 
+import edu.ucsd.dj.models.Event;
 import edu.ucsd.dj.models.Photo;
 
 import static org.junit.Assert.assertEquals;
@@ -18,31 +19,17 @@ import static org.junit.Assert.assertTrue;
 
 public class PhotoTest {
     @Test
-    public void useAppContext() throws Exception {
-        // Context of the app under test.
-        Context appContext = InstrumentationRegistry.getTargetContext();
-
-        assertEquals("edu.ucsd.dj", appContext.getPackageName());
-    }
-
-    @Test
     public void testConstructor() throws Exception {
-        Photo a = new Photo("reference", 420);
+        Photo a = new Photo("reference");
         assertEquals(a.getPathname(), "reference");
-        assertEquals(a.getInfo().getDate(), 420);
-    }
-
-    @Test
-    public void testCalculateScore() throws Exception {
-        //TODO need help pls
     }
 
     @Test
     public void testEquals() throws Exception {
-        Photo a = new Photo("reference", 420);
-        Photo b = new Photo("reference", 69);
-        Photo c = new Photo("", 69);
-        Photo d = new Photo("", 322);
+        Photo a = new Photo("reference");
+        Photo b = new Photo("reference");
+        Photo c = new Photo("");
+        Photo d = new Photo("");
         assertTrue(a.equals(b));
         assertTrue(c.equals(d));
         assertFalse(a.equals(c));
@@ -52,10 +39,10 @@ public class PhotoTest {
 
     @Test
     public void testHashCode() throws Exception {
-        Photo a = new Photo("reference", 420);
-        Photo b = new Photo("reference", 69);
-        Photo c = new Photo("", 69);
-        Photo d = new Photo("", 322);
+        Photo a = new Photo("reference");
+        Photo b = new Photo("reference");
+        Photo c = new Photo("");
+        Photo d = new Photo("");
         assertEquals(a.hashCode(), b.hashCode());
         assertEquals(c.hashCode(), d.hashCode());
         assertNotEquals(a.hashCode(), c.hashCode());

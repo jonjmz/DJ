@@ -1,5 +1,7 @@
 package edu.ucsd.dj.managers;
 
+import android.util.Log;
+
 import java.util.Timer;
 
 /**
@@ -50,6 +52,7 @@ public final class Settings {
     }
 
     public static void initTimer(){
+        Log.i("Running timer: ", "timer is being initialized");
         timer = new Timer();
         timer.schedule(new PhotoUpdateTask(), 0, getRefreshRateMillis());
     }
