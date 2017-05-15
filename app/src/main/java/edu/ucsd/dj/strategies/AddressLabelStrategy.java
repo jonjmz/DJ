@@ -1,4 +1,4 @@
-package edu.ucsd.dj;
+package edu.ucsd.dj.strategies;
 
 import android.content.Context;
 import android.location.Address;

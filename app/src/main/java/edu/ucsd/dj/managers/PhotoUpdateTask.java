@@ -1,11 +1,13 @@
-package edu.ucsd.dj;
+package edu.ucsd.dj.managers;
 
 import android.util.Log;
 
 import java.util.TimerTask;
 
+import edu.ucsd.dj.PhotoCollection;
+
 /**
- * Created by jakesutton on 5/14/17.
+ * Created by Jake Sutton on 5/14/17.
  */
 
 public class PhotoUpdateTask extends TimerTask {

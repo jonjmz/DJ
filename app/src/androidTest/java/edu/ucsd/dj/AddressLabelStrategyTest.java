@@ -8,6 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import edu.ucsd.dj.interfaces.IAddressable;
+import edu.ucsd.dj.strategies.AddressLabelStrategy;
 
 import static org.junit.Assert.assertEquals;
 

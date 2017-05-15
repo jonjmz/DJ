@@ -1,14 +1,13 @@
-package edu.ucsd.dj;
+package edu.ucsd.dj.strategies;
 
-import android.content.Context;
 import android.location.Location;
-import android.location.LocationManager;
 import android.util.Log;
 
 import java.util.GregorianCalendar;
 
-import edu.ucsd.dj.interfaces.IAddressable;
 import edu.ucsd.dj.interfaces.IRating;
+import edu.ucsd.dj.managers.Settings;
+import edu.ucsd.dj.models.Event;
 
 /**
  * Created by nguyen on 5/13/2017.

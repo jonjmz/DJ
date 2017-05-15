@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import edu.ucsd.dj.activities.MainActivity;
+import edu.ucsd.dj.managers.Settings;
 
 /**
  * Created by jonathanjimenez on 5/9/17.

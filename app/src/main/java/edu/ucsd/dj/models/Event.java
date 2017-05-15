@@ -1,4 +1,4 @@
-package edu.ucsd.dj;
+package edu.ucsd.dj.models;
 
 import java.util.Calendar;
 import java.util.TimeZone;

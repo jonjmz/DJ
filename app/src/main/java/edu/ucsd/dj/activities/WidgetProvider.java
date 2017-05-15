@@ -12,12 +12,12 @@ import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 
-import edu.ucsd.dj.DJWallpaper;
+import edu.ucsd.dj.managers.DJWallpaper;
 import edu.ucsd.dj.LocationProvider;
-import edu.ucsd.dj.Photo;
+import edu.ucsd.dj.models.Photo;
 import edu.ucsd.dj.PhotoCollection;
 import edu.ucsd.dj.R;
-import edu.ucsd.dj.Settings;
+import edu.ucsd.dj.managers.Settings;
 
 /**
  * Created by Josh on 5/2/2017.
@@ -86,7 +86,6 @@ public class WidgetProvider extends AppWidgetProvider {
             remoteViews.setOnClickPendingIntent(R.id.right, pendingIntentNext);
 
             appWidgetManager.updateAppWidget(widgetId, remoteViews);
-
         }
     }
 

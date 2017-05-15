@@ -3,7 +3,6 @@ package edu.ucsd.dj;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -13,6 +12,10 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
 import edu.ucsd.dj.interfaces.IRating;
+import edu.ucsd.dj.managers.DJPhoto;
+import edu.ucsd.dj.managers.DJWallpaper;
+import edu.ucsd.dj.managers.Settings;
+import edu.ucsd.dj.strategies.RatingStrategy;
 
 /**
  * Created by nguyen on 5/14/2017.
@@ -66,11 +69,10 @@ public class LocationProvider implements GoogleApiClient.ConnectionCallbacks
                     mGoogleApiClient);
             boolean isLocationNull = mLastLocation == null;
             Log.i("Requesting location", "Is it null? The answer is: " + isLocationNull);
-            if (isLocationNull)
-                startLocationUpdates();
+            startLocationUpdates();
 
-            else
-                setCurrentLocation(mLastLocation);
+//            else
+            setCurrentLocation(mLastLocation);
         }
         catch(SecurityException e){
             e.printStackTrace();
@@ -110,6 +112,8 @@ public class LocationProvider implements GoogleApiClient.ConnectionCallbacks
             Log.i("Location changed. ", "New latitude: " + location.getLatitude() + "  New longitude: "
                     + location.getLongitude());
             setCurrentLocation(location);
+            PhotoCollection.getInstance().update();
+            DJWallpaper.getInstance().set(PhotoCollection.getInstance().current());
 
         }
         //LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);

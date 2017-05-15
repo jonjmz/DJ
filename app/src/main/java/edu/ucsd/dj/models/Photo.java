@@ -1,4 +1,4 @@
-package edu.ucsd.dj;
+package edu.ucsd.dj.models;
 
 import android.support.annotation.NonNull;
 import java.io.Serializable;

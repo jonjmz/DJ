@@ -6,6 +6,10 @@ import android.util.Log;
 
 import org.junit.Test;
 
+import edu.ucsd.dj.managers.Settings;
+import edu.ucsd.dj.models.Event;
+import edu.ucsd.dj.models.Photo;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 

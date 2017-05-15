@@ -1,7 +1,7 @@
 package edu.ucsd.dj.interfaces;
 
 import android.location.Location;
-import edu.ucsd.dj.Event;
+import edu.ucsd.dj.models.Event;
 
 /**
  * Created by nguyen on 5/13/2017.

@@ -10,15 +10,10 @@ import android.util.Log;
 import android.widget.CompoundButton;
 import android.widget.SeekBar;
 import android.widget.Switch;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
 
-import edu.ucsd.dj.DJWallpaper;
-import edu.ucsd.dj.Photo;
 import edu.ucsd.dj.PhotoCollection;
 import edu.ucsd.dj.R;
-import edu.ucsd.dj.Settings;
+import edu.ucsd.dj.managers.Settings;
 
 public class MainActivity extends AppCompatActivity{
     private static final int READ_STORAGE_PERMISSION = 123;

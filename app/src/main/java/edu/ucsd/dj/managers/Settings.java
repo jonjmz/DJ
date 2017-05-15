@@ -1,4 +1,4 @@
-package edu.ucsd.dj;
+package edu.ucsd.dj.managers;
 
 import java.util.Timer;
 
@@ -43,6 +43,10 @@ public final class Settings {
 
     public static void setRefreshRateMinutes(int refreshRate) {
         Settings.refreshRate = refreshRate;
+    }
+
+    public static Timer getTimer() {
+        return timer;
     }
 
     public static void initTimer(){

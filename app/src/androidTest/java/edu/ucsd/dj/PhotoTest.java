@@ -5,6 +5,8 @@ import android.support.test.InstrumentationRegistry;
 
 import org.junit.Test;
 
+import edu.ucsd.dj.models.Photo;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;

@@ -1,4 +1,4 @@
-package edu.ucsd.dj;
+package edu.ucsd.dj.managers;
 
 import android.app.WallpaperManager;
 import android.content.Context;
@@ -8,13 +8,18 @@ import android.util.Log;
 
 import java.io.IOException;
 
+import edu.ucsd.dj.strategies.AddressLabelStrategy;
+import edu.ucsd.dj.BitmapLabeler;
+import edu.ucsd.dj.R;
+import edu.ucsd.dj.models.Photo;
+
 /**
  * Created by Jake Sutton on 5/13/17.
  */
 public class DJWallpaper {
     private static final DJWallpaper ourInstance = new DJWallpaper();
     private BitmapLabeler labeler;
-    private  AddressLabelStrategy labelStrategy;
+    private AddressLabelStrategy labelStrategy;
     private Bitmap defaultPhoto;
 
     public static DJWallpaper getInstance() {

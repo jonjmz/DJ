@@ -7,6 +7,9 @@ import java.util.Collections;
 import java.util.List;
 
 import edu.ucsd.dj.interfaces.IRating;
+import edu.ucsd.dj.managers.Settings;
+import edu.ucsd.dj.models.Photo;
+import edu.ucsd.dj.strategies.RatingStrategy;
 
 /**
  * Created by jakesutton on 5/6/17.
