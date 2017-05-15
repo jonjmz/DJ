@@ -15,6 +15,9 @@ import edu.ucsd.dj.PhotoCollection;
 import edu.ucsd.dj.R;
 import edu.ucsd.dj.managers.Settings;
 
+/**
+ * to define the main activity home (settings) page
+ */
 public class MainActivity extends AppCompatActivity{
     private static final int READ_STORAGE_PERMISSION = 123;
     private static final int SET_WALLPAPER_PERMISSION = 69;
@@ -25,16 +28,33 @@ public class MainActivity extends AppCompatActivity{
     private Switch recencySwitch;
     private SeekBar refreshRateBar;
 
+    /**
+     * the method that connects with Google's api and prepares the background
+     * @see https://developers.google.com/android/reference/com/google/android/gms/common/api/GoogleApiClient
+     */
+
     @Override
     protected void onStart() {
         super.onStart();
     }
 
+
+    /**
+     * the method called when the app is to stop; disconnects from Google's api
+     * @see https://developers.google.com/android/reference/com/google/android/gms/common/api/GoogleApiClient
+     */
     @Override
     protected void onStop() {
         super.onStop();
     }
 
+    /**
+     * the method to initialize the activity
+     * called when the activity is starting
+     *
+     * @see https://developer.android.com/reference/android/app/Activity.html#onCreate(android.os.Bundle)
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,7 +73,12 @@ public class MainActivity extends AppCompatActivity{
         recencySwitch.setChecked(Settings.isConsideringRecency());
 
         proximitySwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-
+            /**
+             * method to set Proximity settings for the display of pics
+             * sorts PhotoCollection too
+             * @param buttonView the button that is either checked or not
+             * @param isChecked the boolean value from buttonView
+             */
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked)
