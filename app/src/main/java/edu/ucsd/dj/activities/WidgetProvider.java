@@ -103,14 +103,14 @@ public class WidgetProvider extends AppWidgetProvider {
 
                 Log.i("onReceive: NEXT ", "Photo: [" +
                         collection.getCurrentIndex() + "/" + (collection.size() - 1) + "]" +
-                        " Score: " + photo.getScore());
+                        " Score: " + photo.getScore() + " DateTime: " + photo.getInfo().timeOfDay());
             }
             else if (intent.getAction().equals(PREVIOUS)) {
                 photo = collection.previous();
 
                 Log.i("onReceive: PREVIOUS ", "Photo: [" +
                         collection.getCurrentIndex() + "/" + (collection.size() - 1) + "]"
-                        + " Score: " + photo.getScore());
+                        + " Score: " + photo.getScore() + " DateTime: " + photo.getInfo().timeOfDay());
             }
             else if (intent.getAction().equals(KARMA)) {
                 photo.setHasKarma(!photo.hasKarma());
@@ -120,7 +120,7 @@ public class WidgetProvider extends AppWidgetProvider {
                 Log.i("onReceive: KARMA ", "Set karma to " + photo.hasKarma() + " for Photo: [" +
                         collection.getCurrentIndex() + "/" +
                         (collection.size() - 1) + "]" +
-                        " Score: " + photo.getScore());
+                        " Score: " + photo.getScore() + " DateTime: " + photo.getInfo().timeOfDay());
             }
             else if (intent.getAction().equals(RELEASE)) {
 
@@ -128,7 +128,7 @@ public class WidgetProvider extends AppWidgetProvider {
                         collection.getCurrentIndex() + "/" +
                         (collection.size() - 1) + "]" + "will be " +
                         "released." +
-                        " Score: " + photo.getScore());
+                        " Score: " + photo.getScore() + " DateTime: " + photo.getInfo().timeOfDay());
 
                 collection.release();
 
