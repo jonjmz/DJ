@@ -9,5 +9,7 @@ import edu.ucsd.dj.Event;
 
 public interface IRating {
     double rate(Event info, boolean karma);
+    //TODO Refactor this into IAddressable
     void setCurrentLocation(Location location);
+    Location getCurrentLocation();
 }

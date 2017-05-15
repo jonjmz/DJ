@@ -4,6 +4,7 @@ import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -19,14 +20,16 @@ import edu.ucsd.dj.interfaces.IRating;
 
 public class LocationProvider implements GoogleApiClient.ConnectionCallbacks
         , GoogleApiClient.OnConnectionFailedListener, LocationListener {
-    private static final int UPDATE_INTERVAL = 30000;
-    private static final int FASTEST_INTERVAL = 10000;
+    private static final int UPDATE_INTERVAL = 5000;
+    private static final int FASTEST_INTERVAL = 2000;
+    private static final float MIN_DISTANCE = 152;
 
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
 
     public LocationProvider(){
         // Create an instance of GoogleAPIClient.
+
         mGoogleApiClient = new GoogleApiClient.Builder(DJPhoto.getAppContext())
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
@@ -40,14 +43,18 @@ public class LocationProvider implements GoogleApiClient.ConnectionCallbacks
         mLocationRequest.setInterval(UPDATE_INTERVAL);
         // Set the fastest update interval to 1 second
         mLocationRequest.setFastestInterval(FASTEST_INTERVAL);
+        Log.i("Location update info: ", "Update interval: " + UPDATE_INTERVAL + "Fastest interval: "
+        + FASTEST_INTERVAL);
 
     }
 
     public void connect(){
+        Log.i("Location update info: ", "Enable connection");
         mGoogleApiClient.connect();
     }
     public void disconnect(){
-        mGoogleApiClient.connect();
+        Log.i("Location update info: ", "Disable connection");
+        mGoogleApiClient.disconnect();
     }
 
     @Override
@@ -57,11 +64,13 @@ public class LocationProvider implements GoogleApiClient.ConnectionCallbacks
         try{
             Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
                     mGoogleApiClient);
-            if (mLastLocation == null)
+            boolean isLocationNull = mLastLocation == null;
+            Log.i("Requesting location", "Is it null? The answer is: " + isLocationNull);
+            if (isLocationNull)
                 startLocationUpdates();
 
             else
-                setLocation(mLastLocation);
+                setCurrentLocation(mLastLocation);
         }
         catch(SecurityException e){
             e.printStackTrace();
@@ -69,6 +78,8 @@ public class LocationProvider implements GoogleApiClient.ConnectionCallbacks
     }
 
     protected void startLocationUpdates() {
+
+        Log.i("LocationProvider ", "Requesting location update");
         try{
             LocationServices.FusedLocationApi.requestLocationUpdates(
                     mGoogleApiClient, mLocationRequest, this);
@@ -89,14 +100,29 @@ public class LocationProvider implements GoogleApiClient.ConnectionCallbacks
     }
     @Override
     public void onLocationChanged(Location location) {
-        LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
+        float distance[] = new float[1];
+        Location currentLocation = getCurrentLocation();
+        Location.distanceBetween(currentLocation.getLatitude(),
+                currentLocation.getLongitude(), location.getLatitude(), location.getLongitude(),
+                distance);
+
+        if(distance[0] > MIN_DISTANCE){
+            Log.i("Location changed. ", "New latitude: " + location.getLatitude() + "  New longitude: "
+                    + location.getLongitude());
+            setCurrentLocation(location);
+
+        }
+        //LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
         //Using Location here
-        setLocation(location);
     }
-    public void setLocation(Location location){
+    public void setCurrentLocation(Location location){
         IRating rating = new RatingStrategy(Settings.isConsideringRecency(),
                 Settings.isConsideringTOD(), Settings.isConsideringProximity());
         rating.setCurrentLocation(location);
-
+    }
+    public Location getCurrentLocation(){
+        IRating rating = new RatingStrategy(Settings.isConsideringRecency(),
+                Settings.isConsideringTOD(), Settings.isConsideringProximity());
+        return rating.getCurrentLocation();
     }
 }

@@ -46,7 +46,7 @@ public class WidgetProvider extends AppWidgetProvider {
     public void onEnabled(Context context) {
         super.onEnabled(context);
         locationProvider = new LocationProvider();
-        locationProvider.setLocation(null);
+        locationProvider.setCurrentLocation(null);
         locationProvider.connect();
         Settings.initTimer();
     }

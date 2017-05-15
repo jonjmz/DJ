@@ -80,4 +80,7 @@ public class RatingStrategy implements IRating {
         }
 
     }
+    public Location getCurrentLocation(){
+        return currentLocation;
+    }
 }
