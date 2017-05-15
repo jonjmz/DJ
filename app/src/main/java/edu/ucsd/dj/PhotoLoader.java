@@ -12,6 +12,7 @@ import edu.ucsd.dj.managers.DJPhoto;
 import edu.ucsd.dj.models.Photo;
 
 /**
+ * Load photos from the phone's gallery
  * Created by nguyen on 5/9/2017.
  */
 public class PhotoLoader  {
@@ -21,6 +22,10 @@ public class PhotoLoader  {
     String sortOrder;
     Uri images;
 
+    /**
+     * Default constructor
+     * Initializing params for the query
+     */
     public PhotoLoader() {
         projection = new String[] {
                 MediaStore.Images.Media.DATE_TAKEN,
@@ -34,6 +39,10 @@ public class PhotoLoader  {
 
     //TODO Do some customizable query methods to optimize later
 
+    /**
+     * Get the list of photos in the phone using the current query
+     * @return list of photos in the phone
+     */
     public ArrayList<Photo> getPhotos(){
 
         ArrayList<Photo> album = new ArrayList<>();

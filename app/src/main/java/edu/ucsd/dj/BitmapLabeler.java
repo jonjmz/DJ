@@ -11,6 +11,7 @@ import android.util.Log;
 /**
  * Responsible for providing labels for photos that have valid location data.
  *
+ * Labels photo
  * Created by Jake Sutton on 5/9/17.
  */
 

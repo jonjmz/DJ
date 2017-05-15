@@ -12,6 +12,7 @@ import java.util.Date;
 import edu.ucsd.dj.interfaces.IDateTimeable;
 
 /**
+ * Loads the date and time of a photo using exif standard
  * Created by jonathanjimenez on 5/14/17.
  */
 

@@ -61,6 +61,13 @@ public class CoordinatesLoader {
             info.setHasValidCoordinates(false);
         }
     }
+
+    /**
+     * Includes standard formatting for coordinates
+     * @param location Location of the photo
+     * @param hemisphere The current hemisphere
+     * @return the correct format
+     */
     static double format(String location, String hemisphere){
         Double value;
         // Using DMS

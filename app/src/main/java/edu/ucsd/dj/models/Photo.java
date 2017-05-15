@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 
 /**
+ * Photo class to represent a photo
  * Created by jonathanjimenez on 5/1/17.
  */
 public class Photo implements Comparable, Serializable {
@@ -20,11 +21,6 @@ public class Photo implements Comparable, Serializable {
         this.pathname = reference;
     }
 
-    /**
-     * Calculates score for this photo at this time/generateAddress with these settings.
-     * Used to prepare photo for sorting by photo set. Implemented as distance function
-     * in up to four dimensions
-     */
     public Event getInfo() { return info; }
 
     public String getPathname(){ return pathname; }

@@ -5,6 +5,7 @@ import android.util.Log;
 import java.util.Timer;
 
 /**
+ * Setting class that holds all configurations
  * Created by jonathanjimenez on 5/9/17.
  */
 public final class Settings {
@@ -47,6 +48,9 @@ public final class Settings {
         Settings.refreshRate = refreshRate;
     }
 
+    /**
+     * Initialize a timer to run the update procedure task
+     */
     public static void initTimer(){
         Log.i("Running timer: ", "timer is being initialized");
         timer = new Timer();

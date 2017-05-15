@@ -18,6 +18,8 @@ import edu.ucsd.dj.managers.Settings;
 import edu.ucsd.dj.strategies.RatingStrategy;
 
 /**
+ * Tracks the current location and updates if the distance is significant using
+ * googleAPI
  * Created by nguyen on 5/14/2017.
  */
 
@@ -30,6 +32,9 @@ public class LocationProvider implements GoogleApiClient.ConnectionCallbacks
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
 
+    /**
+     * Default constructor, init Google Api
+     */
     public LocationProvider(){
         // Create an instance of GoogleAPIClient.
 
@@ -51,10 +56,17 @@ public class LocationProvider implements GoogleApiClient.ConnectionCallbacks
 
     }
 
+    /**
+     * Establish connection
+     */
     public void connect(){
         Log.i("Location update info: ", "Enable connection");
         mGoogleApiClient.connect();
     }
+
+    /**
+     * Disable connection
+     */
     public void disconnect(){
         Log.i("Location update info: ", "Disable connection");
         mGoogleApiClient.disconnect();
@@ -79,6 +91,9 @@ public class LocationProvider implements GoogleApiClient.ConnectionCallbacks
         }
     }
 
+    /**
+     * Start the sequence of location updates
+     */
     protected void startLocationUpdates() {
 
         Log.i("LocationProvider ", "Requesting location update");
@@ -100,6 +115,11 @@ public class LocationProvider implements GoogleApiClient.ConnectionCallbacks
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
+
+    /**
+     * Listener for on location changed
+     * @param location the new location
+     */
     @Override
     public void onLocationChanged(Location location) {
         float distance[] = new float[1];

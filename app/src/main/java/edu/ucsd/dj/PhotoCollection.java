@@ -12,6 +12,7 @@ import edu.ucsd.dj.models.Photo;
 import edu.ucsd.dj.strategies.RatingStrategy;
 
 /**
+ * Holds all photos and core functionality of the application
  * Created by jakesutton on 5/6/17.
  */
 public class PhotoCollection {

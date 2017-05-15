@@ -10,6 +10,7 @@ import edu.ucsd.dj.managers.Settings;
 import edu.ucsd.dj.models.Event;
 
 /**
+ * Responsible to assign a rating for each photo using the specified settings and current location
  * Created by nguyen on 5/13/2017.
  */
 public class RatingStrategy implements IRating {
@@ -21,11 +22,14 @@ public class RatingStrategy implements IRating {
         this.tod = tod;
         this.proximity = proximity;
     }
-
     /**
      * Calculates score for this photo at this time/generateAddress with these settings.
      * Used to prepare photo for sorting by photo set. Implemented as distance function
      * in up to four dimensions
+
+     * @param info Information of the photo
+     * @param karma if the photo has karma
+     * @return the score for the photo
      */
     @Override
     public double rate(Event info, boolean karma) {
@@ -57,6 +61,12 @@ public class RatingStrategy implements IRating {
         return Math.sqrt(scoreSquared);
     }
 
+    /**
+     * Calculate the distance between 2 location
+     * @param latitude latitude of the location
+     * @param longitude longitude of the location
+     * @return the distance in meters between 2 location
+     */
     private float calculateDistance(double latitude, double longitude){
         float distance[] = new float[1];
 

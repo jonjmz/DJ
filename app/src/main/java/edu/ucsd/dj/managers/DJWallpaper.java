@@ -14,6 +14,7 @@ import edu.ucsd.dj.R;
 import edu.ucsd.dj.models.Photo;
 
 /**
+ * Wallpaper manager that handles setting the wallpaper for the phone
  * Created by Jake Sutton on 5/13/17.
  */
 public class DJWallpaper {
@@ -30,6 +31,10 @@ public class DJWallpaper {
         labeler = new BitmapLabeler();
     }
 
+    /**
+     * Set a certain photo as the new wallpaper
+     * @param photo The photo to be set as the new wallpaper for the phone
+     */
     public void set(Photo photo) {
 
         Context context = DJPhoto.getAppContext();
@@ -60,6 +65,10 @@ public class DJWallpaper {
         }
     }
 
+    /**
+     * In case there is no photo to be set as the new wallpaper,
+     * a default photo from resources will be set as the new wallpaper
+     */
     public void setDefault() {
         try {
             Context context = DJPhoto.getAppContext();
