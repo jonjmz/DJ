@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.util.Log;
 
 /**
  * Responsible for providing labels for photos that have valid location data.
@@ -34,6 +35,7 @@ public class BitmapLabeler {
      */
     public Bitmap label(Bitmap bitmap, String text, Context context){
 
+        Log.i("Label: ", text);
         if (text.equals("")) return bitmap;
 
         int width = context.getResources().getDisplayMetrics().widthPixels;

@@ -38,8 +38,9 @@ public class PhotoTest {
 
     @Test
     public void testEquals() throws Exception {
-        Photo a = new Photo("reference");
         Photo b = new Photo("reference");
+        Photo c = new Photo("");
+        Photo a = new Photo("reference");
         assertTrue(a.equals(b));
 
     }
@@ -48,7 +49,12 @@ public class PhotoTest {
     public void testHashCode() throws Exception {
         Photo a = new Photo("reference");
         Photo b = new Photo("reference");
+        Photo c = new Photo("");
+        Photo d = new Photo("");
         assertEquals(a.hashCode(), b.hashCode());
+        assertEquals(c.hashCode(), d.hashCode());
+        assertNotEquals(a.hashCode(), c.hashCode());
+        assertNotEquals(b.hashCode(), d.hashCode());
 
     }
 
