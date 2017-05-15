@@ -23,15 +23,31 @@ import edu.ucsd.dj.managers.Settings;
  * Created by Josh on 5/2/2017.
  */
 @TargetApi(Build.VERSION_CODES.CUPCAKE)
+/**
+ * The widget, responsible for handling next, karma, release and previous button calls
+ * @see https://developer.android.com/reference/android/appwidget/AppWidgetProvider.html
+ */
 public class WidgetProvider extends AppWidgetProvider {
     private static String NEXT = "next";
     private static String PREVIOUS = "previous";
     private LocationProvider locationProvider;
+
+    /**
+     * called if an instance of WidgetProvider has been restored from backup
+     * @param context context in which the receiver is running
+     * @param oldWidgetIds array of old widget ids
+     * @param newWidgetIds array of new widget ids
+     */
     @Override
     public void onRestored(Context context, int[] oldWidgetIds, int[] newWidgetIds) {
         super.onRestored(context, oldWidgetIds, newWidgetIds);
     }
 
+    /**
+     * handles widget if last widget deleted
+     * disconnects from google's api
+     * @param context the context in which the receiver is running
+     */
     @Override
     public void onDisabled(Context context) {
         super.onDisabled(context);
@@ -42,6 +58,11 @@ public class WidgetProvider extends AppWidgetProvider {
     private static String RELEASE = "release";
     private static String KARMA = "karma";
 
+    /**
+     * called when WidgetProvider is is instantiated
+     * locationProvider, timer is initialized
+     * @param context context in which the reciever is running
+     */
     @Override
     public void onEnabled(Context context) {
         super.onEnabled(context);
@@ -51,6 +72,13 @@ public class WidgetProvider extends AppWidgetProvider {
         Settings.initTimer();
     }
 
+    /**
+     * handles widget update
+     * sets remoteviews to the buttons and handles each click, changing background as necessary
+     * @param context context in which the reciever is running
+     * @param appWidgetManager an AppWidgetManager object to call the update method on
+     * @param appWidgetIds array for each id of each widget, needed for update
+     */
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         final int count = appWidgetIds.length;
@@ -89,6 +117,11 @@ public class WidgetProvider extends AppWidgetProvider {
         }
     }
 
+    /**
+     * to handle a received intent broadcast
+     * @param context context in which the receiver is running
+     * @param intent the intent being received
+     */
     @Override
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
@@ -145,14 +178,19 @@ public class WidgetProvider extends AppWidgetProvider {
             }
 
             if (photo != null) {
-                highlightKarma(context, photo, intent);
+                highlightKarma(context, photo);
             }
 
             DJWallpaper.getInstance().set(photo);
         }
     }
 
-    private void highlightKarma(Context context, Photo photo, Intent intent) {
+    /**
+     * to handle karma button, sets filled heart if pic has karma, open for none
+     * @param context context in which receiver is running
+     * @param photo photo to be checked for karma
+     */
+    private void highlightKarma(Context context, Photo photo) {
 
         Log.i("highlightKarma() ", "Updated widget to reflect photo karma.");
 

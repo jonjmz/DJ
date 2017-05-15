@@ -36,7 +36,7 @@ public class RatingStrategy implements IRating {
             // Get current time to compare with.
             // Calculates the ratio of the actual age over the possible age.
             double ratio = (now - info.getDateTime()) / (double)now;
-            scoreSquared += Math.pow(ratio, 2);
+            scoreSquared += ratio;
         }
         // If considering time of day, add distance to photo
         if (Settings.isConsideringTOD()) {
@@ -48,7 +48,7 @@ public class RatingStrategy implements IRating {
         if (Settings.isConsideringProximity()) {
             double distance = calculateDistance(info.getLatitude(), info.getLongitude());
             // 20000000 approximately half the circumference of the earth in meters
-            scoreSquared += Math.pow(distance / 20000000, 2);
+            scoreSquared += distance / 20000000;
         }
         // We always consider karma
         if (!karma) scoreSquared += 1;

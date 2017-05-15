@@ -5,7 +5,6 @@ import android.support.test.InstrumentationRegistry;
 
 import org.junit.Test;
 
-import edu.ucsd.dj.models.Event;
 import edu.ucsd.dj.models.Photo;
 
 import static org.junit.Assert.assertEquals;
@@ -19,21 +18,30 @@ import static org.junit.Assert.assertTrue;
 
 public class PhotoTest {
     @Test
+    public void useAppContext() throws Exception {
+        // Context of the app under test.
+        Context appContext = InstrumentationRegistry.getTargetContext();
+
+        assertEquals("edu.ucsd.dj", appContext.getPackageName());
+    }
+
+    @Test
     public void testConstructor() throws Exception {
         Photo a = new Photo("reference");
         assertEquals(a.getPathname(), "reference");
     }
 
     @Test
+    public void testCalculateScore() throws Exception {
+        //TODO need help pls
+    }
+
+    @Test
     public void testEquals() throws Exception {
-        Photo a = new Photo("reference");
         Photo b = new Photo("reference");
         Photo c = new Photo("");
-        Photo d = new Photo("");
+        Photo a = new Photo("reference");
         assertTrue(a.equals(b));
-        assertTrue(c.equals(d));
-        assertFalse(a.equals(c));
-        assertFalse(b.equals(d));
 
     }
 
