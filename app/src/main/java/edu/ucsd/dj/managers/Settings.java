@@ -47,10 +47,6 @@ public final class Settings {
         Settings.refreshRate = refreshRate;
     }
 
-    public static Timer getTimer() {
-        return timer;
-    }
-
     public static void initTimer(){
         Log.i("Running timer: ", "timer is being initialized");
         timer = new Timer();

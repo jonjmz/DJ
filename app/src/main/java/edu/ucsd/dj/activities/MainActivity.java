@@ -137,12 +137,14 @@ public class MainActivity extends AppCompatActivity{
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                Settings.setRefreshRateMinutes(1 + seekBar.getProgress());
+                Settings.setRefreshRateMinutes(20 + seekBar.getProgress());
+                Settings.initTimer();
             }
         });
 
         Log.i(this.getClass().toString() + ":onCreate()", "MainActivity listeners configured.");
     }
+
     private void askPermission(String permission, int requestCode){
 
         if (ContextCompat.checkSelfPermission(this, permission) !=

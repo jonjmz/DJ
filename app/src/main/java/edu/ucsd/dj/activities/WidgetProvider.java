@@ -126,6 +126,13 @@ public class WidgetProvider extends AppWidgetProvider {
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
 
+        if (WidgetProvider.locationProvider == null) {
+            WidgetProvider.locationProvider = new LocationProvider();
+            WidgetProvider.locationProvider.setCurrentLocation(null);
+            WidgetProvider.locationProvider.connect();
+            Settings.initTimer();
+        }
+
         PhotoCollection collection = PhotoCollection.getInstance();
 
         if (!collection.isEmpty()) {
