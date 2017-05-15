@@ -30,7 +30,7 @@ import edu.ucsd.dj.managers.Settings;
 public class WidgetProvider extends AppWidgetProvider {
     private static String NEXT = "next";
     private static String PREVIOUS = "previous";
-    private LocationProvider locationProvider;
+    static LocationProvider locationProvider;
 
     /**
      * called if an instance of WidgetProvider has been restored from backup

@@ -11,6 +11,7 @@ import android.widget.CompoundButton;
 import android.widget.SeekBar;
 import android.widget.Switch;
 
+import edu.ucsd.dj.LocationProvider;
 import edu.ucsd.dj.PhotoCollection;
 import edu.ucsd.dj.R;
 import edu.ucsd.dj.managers.DJWallpaper;
@@ -63,6 +64,13 @@ public class MainActivity extends AppCompatActivity{
         askPermission(Manifest.permission.READ_EXTERNAL_STORAGE, READ_STORAGE_PERMISSION);
         askPermission(Manifest.permission.SET_WALLPAPER, SET_WALLPAPER_PERMISSION);
         askPermission(Manifest.permission.ACCESS_FINE_LOCATION, ACCESS_FINE_PERMISSION);
+
+        if (WidgetProvider.locationProvider == null) {
+            WidgetProvider.locationProvider = new LocationProvider();
+            WidgetProvider.locationProvider.setCurrentLocation(null);
+            WidgetProvider.locationProvider.connect();
+            Settings.initTimer();
+        }
 
         proximitySwitch = (Switch) findViewById(R.id.proximity);
         timeOfDaySwitch = (Switch) findViewById(R.id.timeOfDay);
