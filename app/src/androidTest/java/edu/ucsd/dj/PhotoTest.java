@@ -27,9 +27,8 @@ public class PhotoTest {
 
     @Test
     public void testConstructor() throws Exception {
-        Photo a = new Photo("reference", 420);
+        Photo a = new Photo("reference");
         assertEquals(a.getPathname(), "reference");
-        assertEquals(a.getInfo().getDate(), 420);
     }
 
     @Test
@@ -39,27 +38,17 @@ public class PhotoTest {
 
     @Test
     public void testEquals() throws Exception {
-        Photo a = new Photo("reference", 420);
-        Photo b = new Photo("reference", 69);
-        Photo c = new Photo("", 69);
-        Photo d = new Photo("", 322);
+        Photo a = new Photo("reference");
+        Photo b = new Photo("reference");
         assertTrue(a.equals(b));
-        assertTrue(c.equals(d));
-        assertFalse(a.equals(c));
-        assertFalse(b.equals(d));
 
     }
 
     @Test
     public void testHashCode() throws Exception {
-        Photo a = new Photo("reference", 420);
-        Photo b = new Photo("reference", 69);
-        Photo c = new Photo("", 69);
-        Photo d = new Photo("", 322);
+        Photo a = new Photo("reference");
+        Photo b = new Photo("reference");
         assertEquals(a.hashCode(), b.hashCode());
-        assertEquals(c.hashCode(), d.hashCode());
-        assertNotEquals(a.hashCode(), c.hashCode());
-        assertNotEquals(b.hashCode(), d.hashCode());
 
     }
 
