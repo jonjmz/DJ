@@ -28,9 +28,9 @@ public class MainActivity extends AppCompatActivity{
     private Switch proximitySwitch;
     private Switch timeOfDaySwitch;
     private Switch recencySwitch;
+    private Switch myAlbumSwitch;
+    private Switch friendsAlbumSwitch;
     private SeekBar refreshRateBar;
-    private Switch viewMyAlbum;
-    private Switch viewFriendsAlbum;
 
     /**
      * the method that connects with Google's api and prepares the background
@@ -77,13 +77,15 @@ public class MainActivity extends AppCompatActivity{
         proximitySwitch = (Switch) findViewById(R.id.proximity);
         timeOfDaySwitch = (Switch) findViewById(R.id.timeOfDay);
         recencySwitch = (Switch) findViewById(R.id.recency);
+        myAlbumSwitch = (Switch) findViewById(R.id.myAlbum);
+        friendsAlbumSwitch = (Switch) findViewById(R.id.friendsAlbum);
         refreshRateBar = (SeekBar) findViewById(R.id.refresh);
-        viewMyAlbum = (Switch) findViewById(R.id.recency);
-        viewFriendsAlbum = (Switch) findViewById(R.id.recency);
 
         proximitySwitch.setChecked(Settings.isConsideringProximity());
         timeOfDaySwitch.setChecked(Settings.isConsideringTOD());
         recencySwitch.setChecked(Settings.isConsideringRecency());
+        myAlbumSwitch.setChecked(Settings.isViewingMyAlbum());
+        friendsAlbumSwitch.setChecked(Settings.isViewingFriendsAlbum());
 
         proximitySwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             /**
@@ -129,27 +131,27 @@ public class MainActivity extends AppCompatActivity{
             }
         });
 
-        viewMyAlbum.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        myAlbumSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked)
-                    Settings.setConsiderRecency(true);
+                    Settings.setViewingMyAlbum(true);
                 else
-                    Settings.setConsiderRecency(false);
+                    Settings.setViewingMyAlbum(false);
                 PhotoCollection.getInstance().update();
                 DJWallpaper.getInstance().set(PhotoCollection.getInstance().current());
             }
         });
 
-        viewFriendsAlbum.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        friendsAlbumSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked)
-                    Settings.setConsiderRecency(true);
+                    Settings.setViewingFriendsAlbum(true);
                 else
-                    Settings.setConsiderRecency(false);
+                    Settings.setViewingFriendsAlbum(false);
                 PhotoCollection.getInstance().update();
                 DJWallpaper.getInstance().set(PhotoCollection.getInstance().current());
             }

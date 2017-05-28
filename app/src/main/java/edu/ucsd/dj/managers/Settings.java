@@ -21,7 +21,9 @@ public final class Settings {
 
     private static int refreshRate = 60;
 
-    public static boolean isConsideringProximity() { return considerProximity; }
+    public static boolean isConsideringProximity() {
+        return considerProximity;
+    }
 
     public static boolean isConsideringTOD() {
         return considerTOD;
@@ -51,13 +53,14 @@ public final class Settings {
         Settings.considerRecency = considerRecency;
     }
 
-    public static void setViewingMyPhotos(boolean viewingMyAlbum ) {
+    public static void setViewingMyAlbum (boolean viewingMyAlbum ) {
         Settings.viewingMyAlbum = viewingMyAlbum ;
     }
 
     public static void setViewingFriendsAlbum(boolean viewingFriendsAlbum) {
         Settings.viewingFriendsAlbum = viewingFriendsAlbum;
     }
+
     public static long getRefreshRateMillis() {
         return refreshRate * MILLIS_PER_MINUTE;
     }
