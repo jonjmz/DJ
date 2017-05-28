@@ -13,6 +13,9 @@ public final class Settings {
     private static boolean considerProximity = true;
     private static boolean considerTOD = true;
     private static boolean considerRecency = true;
+    private static boolean viewingMyAlbum  = true;
+    private static boolean viewingFriendsAlbum = true;
+
 
     private static Timer timer;
 
@@ -28,6 +31,14 @@ public final class Settings {
         return considerRecency;
     }
 
+    public static boolean isViewingMyAlbum() {
+        return viewingMyAlbum ;
+    }
+
+    public static boolean isViewingFriendsAlbum() {
+        return viewingFriendsAlbum;
+    }
+
     public static void setConsiderProximity(boolean considerProximity) {
         Settings.considerProximity = considerProximity;
     }
@@ -40,6 +51,13 @@ public final class Settings {
         Settings.considerRecency = considerRecency;
     }
 
+    public static void setViewingMyPhotos(boolean viewingMyAlbum ) {
+        Settings.viewingMyAlbum = viewingMyAlbum ;
+    }
+
+    public static void setViewingFriendsAlbum(boolean viewingFriendsAlbum) {
+        Settings.viewingFriendsAlbum = viewingFriendsAlbum;
+    }
     public static long getRefreshRateMillis() {
         return refreshRate * MILLIS_PER_MINUTE;
     }

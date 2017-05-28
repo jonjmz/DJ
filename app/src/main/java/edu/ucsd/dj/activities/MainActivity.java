@@ -29,6 +29,8 @@ public class MainActivity extends AppCompatActivity{
     private Switch timeOfDaySwitch;
     private Switch recencySwitch;
     private SeekBar refreshRateBar;
+    private Switch viewMyAlbum;
+    private Switch viewFriendsAlbum;
 
     /**
      * the method that connects with Google's api and prepares the background
@@ -76,6 +78,8 @@ public class MainActivity extends AppCompatActivity{
         timeOfDaySwitch = (Switch) findViewById(R.id.timeOfDay);
         recencySwitch = (Switch) findViewById(R.id.recency);
         refreshRateBar = (SeekBar) findViewById(R.id.refresh);
+        viewMyAlbum = (Switch) findViewById(R.id.recency);
+        viewFriendsAlbum = (Switch) findViewById(R.id.recency);
 
         proximitySwitch.setChecked(Settings.isConsideringProximity());
         timeOfDaySwitch.setChecked(Settings.isConsideringTOD());
@@ -113,6 +117,32 @@ public class MainActivity extends AppCompatActivity{
         });
 
         recencySwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked)
+                    Settings.setConsiderRecency(true);
+                else
+                    Settings.setConsiderRecency(false);
+                PhotoCollection.getInstance().update();
+                DJWallpaper.getInstance().set(PhotoCollection.getInstance().current());
+            }
+        });
+
+        viewMyAlbum.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked)
+                    Settings.setConsiderRecency(true);
+                else
+                    Settings.setConsiderRecency(false);
+                PhotoCollection.getInstance().update();
+                DJWallpaper.getInstance().set(PhotoCollection.getInstance().current());
+            }
+        });
+
+        viewFriendsAlbum.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
