@@ -76,17 +76,7 @@
         android:layout_alignLeft="@+id/proximity"
         android:layout_alignStart="@+id/proximity"
         tools:ignore="RtlHardcoded" />
-
-    <Switch
-        android:id="@+id/customAlbum"
-        android:text="Use custom album"
-        android:textSize="17sp"
-        android:layout_width="330dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:layout_below="@+id/recency"
-        android:layout_alignRight="@+id/recency"
-        android:layout_alignEnd="@+id/recency" />
+    
     <Switch
         android:id="@+id/myAlbum"
         android:text="Use my album"
@@ -94,9 +84,10 @@
         android:layout_width="330dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:layout_below="@+id/customAlbum"
+        android:layout_below="@+id/recency"
         android:layout_alignRight="@+id/recency"
         android:layout_alignEnd="@+id/recency" />
+
     <Switch
         android:id="@+id/friendsAlbum"
         android:text="Use friend's album"
