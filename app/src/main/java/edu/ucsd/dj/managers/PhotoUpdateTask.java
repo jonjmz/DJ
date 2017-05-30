@@ -4,7 +4,7 @@ import android.util.Log;
 
 import java.util.TimerTask;
 
-import edu.ucsd.dj.PhotoCollection;
+import edu.ucsd.dj.others.PhotoCollection;
 
 /**
  * Timer based that to update the wallpaper

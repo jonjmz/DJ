@@ -9,7 +9,7 @@ import android.util.Log;
 import java.io.IOException;
 
 import edu.ucsd.dj.strategies.AddressLabelStrategy;
-import edu.ucsd.dj.BitmapLabeler;
+import edu.ucsd.dj.others.BitmapLabeler;
 import edu.ucsd.dj.R;
 import edu.ucsd.dj.models.Photo;
 

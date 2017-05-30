@@ -1,4 +1,4 @@
-package edu.ucsd.dj;
+package edu.ucsd.dj.others;
 
 import android.util.Log;
 

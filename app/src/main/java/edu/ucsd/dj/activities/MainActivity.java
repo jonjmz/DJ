@@ -11,8 +11,8 @@ import android.widget.CompoundButton;
 import android.widget.SeekBar;
 import android.widget.Switch;
 
-import edu.ucsd.dj.LocationProvider;
-import edu.ucsd.dj.PhotoCollection;
+import edu.ucsd.dj.others.LocationService;
+import edu.ucsd.dj.others.PhotoCollection;
 import edu.ucsd.dj.R;
 import edu.ucsd.dj.managers.DJWallpaper;
 import edu.ucsd.dj.managers.Settings;
@@ -67,10 +67,10 @@ public class MainActivity extends AppCompatActivity{
         askPermission(Manifest.permission.SET_WALLPAPER, SET_WALLPAPER_PERMISSION);
         askPermission(Manifest.permission.ACCESS_FINE_LOCATION, ACCESS_FINE_PERMISSION);
 
-        if (WidgetProvider.locationProvider == null) {
-            WidgetProvider.locationProvider = new LocationProvider();
-            WidgetProvider.locationProvider.setCurrentLocation(null);
-            WidgetProvider.locationProvider.connect();
+        if (WidgetProvider.locationService == null) {
+            WidgetProvider.locationService = new LocationService();
+            WidgetProvider.locationService.setCurrentLocation(null);
+            WidgetProvider.locationService.connect();
             Settings.initTimer();
         }
 

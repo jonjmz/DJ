@@ -1,4 +1,4 @@
-package edu.ucsd.dj;
+package edu.ucsd.dj.others;
 
 import android.location.Location;
 import android.os.Bundle;
@@ -11,10 +11,14 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
+import edu.ucsd.dj.interfaces.IAddressable;
+import edu.ucsd.dj.interfaces.ILocationService;
 import edu.ucsd.dj.interfaces.IRating;
+import edu.ucsd.dj.interfaces.LocationTrackerSubject;
 import edu.ucsd.dj.managers.DJPhoto;
 import edu.ucsd.dj.managers.DJWallpaper;
 import edu.ucsd.dj.managers.Settings;
+import edu.ucsd.dj.models.Event;
 import edu.ucsd.dj.strategies.RatingStrategy;
 
 /**
@@ -23,19 +27,22 @@ import edu.ucsd.dj.strategies.RatingStrategy;
  * Created by nguyen on 5/14/2017.
  */
 
-public class LocationProvider implements GoogleApiClient.ConnectionCallbacks
-        , GoogleApiClient.OnConnectionFailedListener, LocationListener {
+public class LocationService implements GoogleApiClient.ConnectionCallbacks
+        , GoogleApiClient.OnConnectionFailedListener, LocationListener, ILocationService,
+        LocationTrackerSubject {
     private static final int UPDATE_INTERVAL = 5000;
     private static final int FASTEST_INTERVAL = 2000;
     private static final float MIN_DISTANCE = 152;
 
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
+    private IAddressable loc;
 
     /**
      * Default constructor, init Google Api
      */
-    public LocationProvider(){
+    public LocationService(){
+
         // Create an instance of GoogleAPIClient.
 
         mGoogleApiClient = new GoogleApiClient.Builder(DJPhoto.getAppContext())
@@ -54,6 +61,10 @@ public class LocationProvider implements GoogleApiClient.ConnectionCallbacks
         Log.i("Location update info: ", "Update interval: " + UPDATE_INTERVAL + "Fastest interval: "
         + FASTEST_INTERVAL);
 
+        Location defaultLoc = new Location("");
+        loc = new Event();
+        loc.setLatitude(defaultLoc.getLatitude());
+        loc.setLongitude(defaultLoc.getLongitude());
     }
 
     /**
@@ -74,29 +85,7 @@ public class LocationProvider implements GoogleApiClient.ConnectionCallbacks
 
     @Override
     public void onConnected(Bundle connectionHint) {
-        //TODO SET THIS TO PERIODIC later
 
-        try{
-            Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
-                    mGoogleApiClient);
-            boolean isLocationNull = mLastLocation == null;
-            Log.i("Requesting location", "Is it null? The answer is: " + isLocationNull);
-            startLocationUpdates();
-
-//            else
-            setCurrentLocation(mLastLocation);
-        }
-        catch(SecurityException e){
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * Start the sequence of location updates
-     */
-    protected void startLocationUpdates() {
-
-        Log.i("LocationProvider ", "Requesting location update");
         try{
             LocationServices.FusedLocationApi.requestLocationUpdates(
                     mGoogleApiClient, mLocationRequest, this);
@@ -123,7 +112,7 @@ public class LocationProvider implements GoogleApiClient.ConnectionCallbacks
     @Override
     public void onLocationChanged(Location location) {
         float distance[] = new float[1];
-        Location currentLocation = getCurrentLocation();
+        Location currentLocation = new Location(loc.getLatitude(), loc.getLongitude());
         Location.distanceBetween(currentLocation.getLatitude(),
                 currentLocation.getLongitude(), location.getLatitude(), location.getLongitude(),
                 distance);
@@ -139,14 +128,13 @@ public class LocationProvider implements GoogleApiClient.ConnectionCallbacks
         //LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
         //Using Location here
     }
-    public void setCurrentLocation(Location location){
-        IRating rating = new RatingStrategy(Settings.isConsideringRecency(),
-                Settings.isConsideringTOD(), Settings.isConsideringProximity());
-        rating.setCurrentLocation(location);
+    public IAddressable getCurrentLocation(){
+        return loc;
     }
-    public Location getCurrentLocation(){
-        IRating rating = new RatingStrategy(Settings.isConsideringRecency(),
-                Settings.isConsideringTOD(), Settings.isConsideringProximity());
-        return rating.getCurrentLocation();
+
+    @Override
+    public void updateCurrentLocation() {
+
     }
+
 }
