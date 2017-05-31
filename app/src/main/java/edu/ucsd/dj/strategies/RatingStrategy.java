@@ -5,6 +5,7 @@ import android.util.Log;
 
 import java.util.GregorianCalendar;
 
+import edu.ucsd.dj.interfaces.IAddressable;
 import edu.ucsd.dj.interfaces.IRating;
 import edu.ucsd.dj.managers.Settings;
 import edu.ucsd.dj.models.Event;
@@ -15,7 +16,7 @@ import edu.ucsd.dj.models.Event;
  */
 public class RatingStrategy implements IRating {
     boolean recency, tod, proximity;
-    private static Location currentLocation;
+    private IAddressable currentLocation;
 
     public RatingStrategy(boolean recency, boolean tod, boolean proximity){
         this.recency = recency;
@@ -75,21 +76,13 @@ public class RatingStrategy implements IRating {
                 distance);
         return distance[0];
     }
-    public void setCurrentLocation(Location location) {
-
-        if(location != null) {
-            currentLocation = location;
-            Log.i(getClass().toString(), "Setting location: Latitude: "
-                    + currentLocation.getLatitude()
-                    + "Longitude: " + currentLocation.getLatitude());
-        }
-        else {
-            currentLocation = new Location("");
-            Log.i(getClass().toString(), "Setting location to default location.");
-        }
-
+    public void setCurrentLocation(IAddressable location) {
+        currentLocation = location;
+        Log.i(getClass().toString(), "Setting location: Latitude: " + currentLocation.getLatitude()
+                + "Longitude: " + currentLocation.getLatitude());
     }
-    public Location getCurrentLocation(){
-        return currentLocation;
-    }
+
+//    public Location getCurrentLocation(){
+//        return currentLocation;
+//    }
 }

@@ -1,5 +1,6 @@
 package edu.ucsd.dj.others;
 
+import android.app.Service;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -11,15 +12,13 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
+import java.util.ArrayList;
+
 import edu.ucsd.dj.interfaces.IAddressable;
-import edu.ucsd.dj.interfaces.ILocationService;
-import edu.ucsd.dj.interfaces.IRating;
+import edu.ucsd.dj.interfaces.LocationTrackerObserver;
 import edu.ucsd.dj.interfaces.LocationTrackerSubject;
 import edu.ucsd.dj.managers.DJPhoto;
-import edu.ucsd.dj.managers.DJWallpaper;
-import edu.ucsd.dj.managers.Settings;
 import edu.ucsd.dj.models.Event;
-import edu.ucsd.dj.strategies.RatingStrategy;
 
 /**
  * Tracks the current location and updates if the distance is significant using
@@ -27,9 +26,9 @@ import edu.ucsd.dj.strategies.RatingStrategy;
  * Created by nguyen on 5/14/2017.
  */
 
-public class LocationService implements GoogleApiClient.ConnectionCallbacks
-        , GoogleApiClient.OnConnectionFailedListener, LocationListener, ILocationService,
-        LocationTrackerSubject {
+public class LocationService extends Service implements GoogleApiClient.ConnectionCallbacks
+        , GoogleApiClient.OnConnectionFailedListener, LocationListener,
+        LocationTrackerSubject{
     private static final int UPDATE_INTERVAL = 5000;
     private static final int FASTEST_INTERVAL = 2000;
     private static final float MIN_DISTANCE = 152;
@@ -37,6 +36,18 @@ public class LocationService implements GoogleApiClient.ConnectionCallbacks
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
     private IAddressable loc;
+
+    private ArrayList<LocationTrackerObserver> obs;
+
+    @Override
+    public void addObserver(LocationTrackerObserver o) {
+        obs.add(o);
+    }
+
+    @Override
+    public void removeObserver(LocationTrackerObserver o) {
+        obs.remove(o);
+    }
 
     /**
      * Default constructor, init Google Api
@@ -54,13 +65,14 @@ public class LocationService implements GoogleApiClient.ConnectionCallbacks
         mLocationRequest = new LocationRequest();
         // Use high accuracy
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        // Set the update interval to 5 seconds
+        // Set the interval to 5 seconds
         mLocationRequest.setInterval(UPDATE_INTERVAL);
-        // Set the fastest update interval to 1 second
+        // Set the fastest updateLocation interval to 1 second
         mLocationRequest.setFastestInterval(FASTEST_INTERVAL);
-        Log.i("Location update info: ", "Update interval: " + UPDATE_INTERVAL + "Fastest interval: "
-        + FASTEST_INTERVAL);
+        //Log.i("Location info: ", "Update interval: " + UPDATE_INTERVAL + "Fastest interval: "
+        //+ FASTEST_INTERVAL);
 
+        //TODO make a different adapter for location for better encapsulation
         Location defaultLoc = new Location("");
         loc = new Event();
         loc.setLatitude(defaultLoc.getLatitude());
@@ -71,7 +83,7 @@ public class LocationService implements GoogleApiClient.ConnectionCallbacks
      * Establish connection
      */
     public void connect(){
-        Log.i("Location update info: ", "Enable connection");
+        //Log.i("Location info: ", "Enable connection");
         mGoogleApiClient.connect();
     }
 
@@ -79,7 +91,7 @@ public class LocationService implements GoogleApiClient.ConnectionCallbacks
      * Disable connection
      */
     public void disconnect(){
-        Log.i("Location update info: ", "Disable connection");
+        Log.i("Location info: ", "Disable connection");
         mGoogleApiClient.disconnect();
     }
 
@@ -111,30 +123,34 @@ public class LocationService implements GoogleApiClient.ConnectionCallbacks
      */
     @Override
     public void onLocationChanged(Location location) {
+
         float distance[] = new float[1];
-        Location currentLocation = new Location(loc.getLatitude(), loc.getLongitude());
-        Location.distanceBetween(currentLocation.getLatitude(),
-                currentLocation.getLongitude(), location.getLatitude(), location.getLongitude(),
+        double lon = location.getLongitude();
+        double lat = location.getLatitude();
+
+        //Function to calculate distance between 2 coordinates
+        Location.distanceBetween(loc.getLatitude(),
+                loc.getLongitude(), lon, lat,
                 distance);
 
         if(distance[0] > MIN_DISTANCE){
-            Log.i("Location changed. ", "New latitude: " + location.getLatitude() + "  New longitude: "
-                    + location.getLongitude());
-            setCurrentLocation(location);
-            PhotoCollection.getInstance().update();
-            DJWallpaper.getInstance().set(PhotoCollection.getInstance().current());
+            Log.i("Location changed. ", "New latitude: " + lat + "  New longitude: "
+                    + lon);
+            loc.setLongitude(lon);
+            loc.setLatitude(lat);
+            updateCurrentLocation();
+            //PhotoCollection.getInstance().updateLocation();
+            //DJWallpaper.getInstance().set(PhotoCollection.getInstance().current());
 
         }
         //LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
         //Using Location here
     }
-    public IAddressable getCurrentLocation(){
-        return loc;
-    }
-
     @Override
     public void updateCurrentLocation() {
-
+        for(LocationTrackerObserver o: obs){
+            o.updateLocation(loc);
+        }
     }
 
 }

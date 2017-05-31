@@ -7,7 +7,7 @@ import java.util.TimerTask;
 import edu.ucsd.dj.others.PhotoCollection;
 
 /**
- * Timer based that to update the wallpaper
+ * Timer based that to updateLocation the wallpaper
  * Created by Jake Sutton on 5/14/17.
  */
 
@@ -20,10 +20,10 @@ public class PhotoUpdateTask extends TimerTask {
     @Override
     public void run() {
         PhotoCollection collection = PhotoCollection.getInstance();
-        collection.update();
+        collection.updateLocation();
 
         DJWallpaper.getInstance().set( collection.current() );
 
-        Log.i(this.getClass().toString(), "Periodic update task completed successfully.");
+        Log.i(this.getClass().toString(), "Periodic updateLocation task completed successfully.");
     }
 }

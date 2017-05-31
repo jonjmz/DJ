@@ -70,7 +70,7 @@ public final class Settings {
     }
 
     /**
-     * Initialize a timer to run the update procedure task
+     * Initialize a timer to run the updateLocation procedure task
      */
     public static void initTimer(){
         Log.i("Running timer: ", "timer is being initialized");

@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity{
                     Settings.setConsiderProximity(true);
                 else
                     Settings.setConsiderProximity(false);
-                PhotoCollection.getInstance().update();
+                PhotoCollection.getInstance().updateLocation();
                 DJWallpaper.getInstance().set(PhotoCollection.getInstance().current());
             }
         });
@@ -113,7 +113,7 @@ public class MainActivity extends AppCompatActivity{
                     Settings.setConsiderTOD(true);
                 else
                     Settings.setConsiderTOD(false);
-                PhotoCollection.getInstance().update();
+                PhotoCollection.getInstance().updateLocation();
                 DJWallpaper.getInstance().set(PhotoCollection.getInstance().current());
             }
         });
@@ -126,7 +126,7 @@ public class MainActivity extends AppCompatActivity{
                     Settings.setConsiderRecency(true);
                 else
                     Settings.setConsiderRecency(false);
-                PhotoCollection.getInstance().update();
+                PhotoCollection.getInstance().updateLocation();
                 DJWallpaper.getInstance().set(PhotoCollection.getInstance().current());
             }
         });
@@ -139,7 +139,7 @@ public class MainActivity extends AppCompatActivity{
                     Settings.setViewingMyAlbum(true);
                 else
                     Settings.setViewingMyAlbum(false);
-                PhotoCollection.getInstance().update();
+                PhotoCollection.getInstance().updateLocation();
                 DJWallpaper.getInstance().set(PhotoCollection.getInstance().current());
             }
         });
@@ -152,7 +152,7 @@ public class MainActivity extends AppCompatActivity{
                     Settings.setViewingFriendsAlbum(true);
                 else
                     Settings.setViewingFriendsAlbum(false);
-                PhotoCollection.getInstance().update();
+                PhotoCollection.getInstance().updateLocation();
                 DJWallpaper.getInstance().set(PhotoCollection.getInstance().current());
             }
         });

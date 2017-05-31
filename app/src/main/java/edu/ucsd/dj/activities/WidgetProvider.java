@@ -73,11 +73,11 @@ public class WidgetProvider extends AppWidgetProvider {
     }
 
     /**
-     * handles widget update
+     * handles widget updateLocation
      * sets remoteviews to the buttons and handles each click, changing background as necessary
      * @param context context in which the reciever is running
-     * @param appWidgetManager an AppWidgetManager object to call the update method on
-     * @param appWidgetIds array for each id of each widget, needed for update
+     * @param appWidgetManager an AppWidgetManager object to call the updateLocation method on
+     * @param appWidgetIds array for each id of each widget, needed for updateLocation
      */
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {

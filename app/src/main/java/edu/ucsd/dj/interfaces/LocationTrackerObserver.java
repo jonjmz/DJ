@@ -5,6 +5,5 @@ package edu.ucsd.dj.interfaces;
  */
 
 public interface LocationTrackerObserver {
-    public void update();
-
+     void updateLocation(IAddressable loc);
 }

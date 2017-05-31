@@ -6,7 +6,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import edu.ucsd.dj.interfaces.IAddressable;
 import edu.ucsd.dj.interfaces.IRating;
+import edu.ucsd.dj.interfaces.LocationTrackerObserver;
+import edu.ucsd.dj.interfaces.LocationTrackerSubject;
 import edu.ucsd.dj.managers.Settings;
 import edu.ucsd.dj.models.Photo;
 import edu.ucsd.dj.strategies.RatingStrategy;
@@ -15,7 +18,7 @@ import edu.ucsd.dj.strategies.RatingStrategy;
  * Holds all photos and core functionality of the application
  * Created by jakesutton on 5/6/17.
  */
-public class PhotoCollection {
+public class PhotoCollection implements LocationTrackerObserver{
 
     // Collection of photos queried from the gallery
     private List<Photo> album;
@@ -23,6 +26,7 @@ public class PhotoCollection {
     private List<Photo> releasedList;
     // Current pointer to the image that's being set as the wallpaper
     private int curr;
+    private IRating rating;
 
     private static final PhotoCollection ourInstance = new PhotoCollection();
 
@@ -30,10 +34,19 @@ public class PhotoCollection {
         return ourInstance;
     }
 
-    protected PhotoCollection() {
-        album = new ArrayList<Photo>();
-        releasedList = new ArrayList<Photo>();
+    public PhotoCollection() {
+        album = new ArrayList<>();
+        releasedList = new ArrayList<>();
         curr = 0;
+        rating = new RatingStrategy(Settings.isConsideringRecency(),
+                Settings.isConsideringTOD(),
+                Settings.isConsideringProximity());
+    }
+
+    @Override
+    public void updateLocation(IAddressable loc) {
+        rating.setCurrentLocation(loc);
+        sort();
     }
 
     /**
@@ -63,10 +76,6 @@ public class PhotoCollection {
     public void sort() {
 
         Log.i(this.getClass().toString(), "Running sort()");
-
-        IRating rating = new RatingStrategy(Settings.isConsideringRecency(),
-                Settings.isConsideringTOD(),
-                Settings.isConsideringProximity());
 
         //TODO optimization problem
         for(Photo photo: album){

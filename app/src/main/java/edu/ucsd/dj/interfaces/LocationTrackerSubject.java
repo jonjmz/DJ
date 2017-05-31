@@ -6,4 +6,7 @@ package edu.ucsd.dj.interfaces;
 
 public interface LocationTrackerSubject {
     void updateCurrentLocation();
+    void addObserver(LocationTrackerObserver o);
+    void removeObserver(LocationTrackerObserver o);
+
 }
