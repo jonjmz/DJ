@@ -175,7 +175,7 @@ public class MainActivity extends AppCompatActivity{
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 Settings.setRefreshRateMinutes(20 + seekBar.getProgress());
-                Settings.initTimer();
+                //Settings.initTimer();
             }
         });
 

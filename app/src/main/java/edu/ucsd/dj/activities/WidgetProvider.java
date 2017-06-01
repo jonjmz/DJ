@@ -69,7 +69,7 @@ public class WidgetProvider extends AppWidgetProvider {
         super.onEnabled(context);
         locationTrackerSubject = new LocationService();
         locationTrackerSubject.addObserver(PhotoCollection.getInstance());
-        Settings.initTimer();
+        //Settings.initTimer();
 
     }
 
