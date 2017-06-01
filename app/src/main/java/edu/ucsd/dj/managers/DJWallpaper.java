@@ -8,6 +8,8 @@ import android.util.Log;
 
 import java.io.IOException;
 
+import edu.ucsd.dj.interfaces.ICollectionObserver;
+import edu.ucsd.dj.others.PhotoCollection;
 import edu.ucsd.dj.strategies.AddressLabelStrategy;
 import edu.ucsd.dj.others.BitmapLabeler;
 import edu.ucsd.dj.R;
@@ -17,7 +19,7 @@ import edu.ucsd.dj.models.Photo;
  * Wallpaper manager that handles setting the wallpaper for the phone
  * Created by Jake Sutton on 5/13/17.
  */
-public class DJWallpaper {
+public class DJWallpaper implements ICollectionObserver{
     private static final DJWallpaper ourInstance = new DJWallpaper();
     private BitmapLabeler labeler;
     private AddressLabelStrategy labelStrategy;
@@ -83,5 +85,15 @@ public class DJWallpaper {
             Log.i(this.getClass().toString(), "Error setting default wallpaper.");
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void update() {
+
+        PhotoCollection collection = PhotoCollection.getInstance();
+        if (collection.isEmpty())
+            this.setDefault();
+        else
+            this.set( PhotoCollection.getInstance().current() );
     }
 }

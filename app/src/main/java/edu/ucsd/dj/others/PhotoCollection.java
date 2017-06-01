@@ -4,13 +4,14 @@ import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 import edu.ucsd.dj.interfaces.IAddressable;
+import edu.ucsd.dj.interfaces.ICollectionObserver;
+import edu.ucsd.dj.interfaces.ICollectionSubject;
 import edu.ucsd.dj.interfaces.IRating;
 import edu.ucsd.dj.interfaces.LocationTrackerObserver;
-import edu.ucsd.dj.interfaces.LocationTrackerSubject;
-import edu.ucsd.dj.managers.DJWallpaper;
 import edu.ucsd.dj.managers.Settings;
 import edu.ucsd.dj.models.Photo;
 import edu.ucsd.dj.strategies.RatingStrategy;
@@ -19,15 +20,17 @@ import edu.ucsd.dj.strategies.RatingStrategy;
  * Holds all photos and core functionality of the application
  * Created by jakesutton on 5/6/17.
  */
-public class PhotoCollection implements LocationTrackerObserver{
+public class PhotoCollection implements ICollectionSubject, LocationTrackerObserver{
 
     // Collection of photos queried from the gallery
     private List<Photo> album;
     // Collection of photos queried from the gallery, but not shown
     private List<Photo> releasedList;
+
+    private List<ICollectionObserver> observers;
+
     // Current pointer to the image that's being set as the wallpaper
     private int curr;
-
 
     private IRating rating;
 
@@ -40,6 +43,7 @@ public class PhotoCollection implements LocationTrackerObserver{
     public PhotoCollection() {
         album = new ArrayList<>();
         releasedList = new ArrayList<>();
+        observers = new LinkedList<ICollectionObserver>();
         curr = 0;
         rating = new RatingStrategy(Settings.isConsideringRecency(),
                 Settings.isConsideringTOD(),
@@ -69,7 +73,7 @@ public class PhotoCollection implements LocationTrackerObserver{
             }
         }
 
-        sort();
+        sort(); // this notifies the observers
     }
 
     /**
@@ -89,6 +93,7 @@ public class PhotoCollection implements LocationTrackerObserver{
 
         curr = 0;
 
+        notifyObservers();
     }
 
     /**
@@ -101,6 +106,8 @@ public class PhotoCollection implements LocationTrackerObserver{
         if (curr == album.size()) curr--;
 
         releasedList.add( photo );
+
+        notifyObservers();
     }
 
     /**
@@ -112,6 +119,7 @@ public class PhotoCollection implements LocationTrackerObserver{
      */
     public Photo next() {
         switchPhoto();
+        notifyObservers();
         if(album.size() < 1){
             return null;
         } else {
@@ -165,6 +173,9 @@ public class PhotoCollection implements LocationTrackerObserver{
     public Photo previous() {
         curr--;
         if (curr < 0) curr = album.size() - 1;
+
+        notifyObservers();
+
         return album.get( curr );
     }
 
@@ -176,12 +187,31 @@ public class PhotoCollection implements LocationTrackerObserver{
         return album.isEmpty();
     }
 
-    public void setRatingStrategy(IRating rating){ this.rating = rating;}
+    public void setRatingStrategy(IRating rating){
+        this.rating = rating;
+        sort();
+    }
 
     public IRating getRatingStrategy() {
         return rating;
     }
 
+    @Override
+    public void notifyObservers() {
+        for (ICollectionObserver o : observers) {
+            o.update();
+        }
+    }
+
+    @Override
+    public void addObserver(ICollectionObserver o) {
+        observers.add(o);
+    }
+
+    @Override
+    public void removeObserver(ICollectionObserver o) {
+        observers.add(o);
+    }
 }
 
 

@@ -22,8 +22,6 @@ public class PhotoUpdateTask extends TimerTask {
         PhotoCollection collection = PhotoCollection.getInstance();
         collection.update();
 
-        DJWallpaper.getInstance().set( collection.current() );
-
         Log.i(this.getClass().toString(), "Periodic updateLocation task completed successfully.");
     }
 }

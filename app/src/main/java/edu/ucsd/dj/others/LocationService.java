@@ -142,15 +142,7 @@ public class LocationService implements GoogleApiClient.ConnectionCallbacks
             loc.setLongitude(lon);
             loc.setLatitude(lat);
             updateCurrentLocation();
-            //PhotoCollection.getInstance().updateLocation();
-            //DJWallpaper.getInstance().set(PhotoCollection.getInstance().current());
-            //TODO REFACTOR this later
-            DJWallpaper.getInstance().set(PhotoCollection.getInstance().current());
-
-
         }
-        //LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
-        //Using Location here
     }
     @Override
     public void updateCurrentLocation() {

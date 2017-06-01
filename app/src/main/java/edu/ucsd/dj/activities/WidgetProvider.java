@@ -189,8 +189,6 @@ public class WidgetProvider extends AppWidgetProvider {
             if (photo != null) {
                 highlightKarma(context, photo);
             }
-
-            DJWallpaper.getInstance().set(photo);
         }
     }
 

@@ -61,6 +61,7 @@ public class MainActivity extends AppCompatActivity{
 //            Settings.initTimer();
 //        }
 
+        PhotoCollection.getInstance().addObserver(DJWallpaper.getInstance());
         PhotoCollection.getInstance().update();
 
         proximitySwitch = (Switch) findViewById(R.id.proximity);
@@ -89,12 +90,13 @@ public class MainActivity extends AppCompatActivity{
                     Settings.setConsiderProximity(true);
                 else
                     Settings.setConsiderProximity(false);
+
+
                 IRating newRating = createRating(Settings.isConsideringRecency(),
                         Settings.isConsideringTOD(),
                         Settings.isConsideringProximity());
-                PhotoCollection.getInstance().setRatingStrategy(newRating);
 
-                DJWallpaper.getInstance().set(PhotoCollection.getInstance().current());
+                PhotoCollection.getInstance().setRatingStrategy(newRating);
             }
         });
 
@@ -106,11 +108,12 @@ public class MainActivity extends AppCompatActivity{
                     Settings.setConsiderTOD(true);
                 else
                     Settings.setConsiderTOD(false);
+
                 IRating newRating = createRating(Settings.isConsideringRecency(),
                         Settings.isConsideringTOD(),
                         Settings.isConsideringProximity());
+
                 PhotoCollection.getInstance().setRatingStrategy(newRating);
-                DJWallpaper.getInstance().set(PhotoCollection.getInstance().current());
             }
         });
 
@@ -122,11 +125,12 @@ public class MainActivity extends AppCompatActivity{
                     Settings.setConsiderRecency(true);
                 else
                     Settings.setConsiderRecency(false);
+
                 IRating newRating = createRating(Settings.isConsideringRecency(),
                         Settings.isConsideringTOD(),
                         Settings.isConsideringProximity());
+
                 PhotoCollection.getInstance().setRatingStrategy(newRating);
-                DJWallpaper.getInstance().set(PhotoCollection.getInstance().current());
             }
         });
 
@@ -138,11 +142,12 @@ public class MainActivity extends AppCompatActivity{
                     Settings.setViewingMyAlbum(true);
                 else
                     Settings.setViewingMyAlbum(false);
+
                 IRating newRating = createRating(Settings.isConsideringRecency(),
                         Settings.isConsideringTOD(),
                         Settings.isConsideringProximity());
+
                 PhotoCollection.getInstance().setRatingStrategy(newRating);
-                DJWallpaper.getInstance().set(PhotoCollection.getInstance().current());
             }
         });
 
@@ -154,11 +159,12 @@ public class MainActivity extends AppCompatActivity{
                     Settings.setViewingFriendsAlbum(true);
                 else
                     Settings.setViewingFriendsAlbum(false);
+
                 IRating newRating = createRating(Settings.isConsideringRecency(),
                         Settings.isConsideringTOD(),
                         Settings.isConsideringProximity());
+
                 PhotoCollection.getInstance().setRatingStrategy(newRating);
-                DJWallpaper.getInstance().set(PhotoCollection.getInstance().current());
             }
         });
 
