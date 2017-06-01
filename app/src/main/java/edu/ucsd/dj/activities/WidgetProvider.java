@@ -12,6 +12,7 @@ import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 
+import edu.ucsd.dj.interfaces.LocationTrackerSubject;
 import edu.ucsd.dj.managers.DJWallpaper;
 import edu.ucsd.dj.others.LocationService;
 import edu.ucsd.dj.models.Photo;
@@ -30,7 +31,7 @@ import edu.ucsd.dj.managers.Settings;
 public class WidgetProvider extends AppWidgetProvider {
     private static String NEXT = "next";
     private static String PREVIOUS = "previous";
-    static LocationService locationService;
+    private LocationTrackerSubject locationTrackerSubject;
 
     /**
      * called if an instance of WidgetProvider has been restored from backup
@@ -51,8 +52,8 @@ public class WidgetProvider extends AppWidgetProvider {
     @Override
     public void onDisabled(Context context) {
         super.onDisabled(context);
-        if(locationService != null)
-            locationService.disconnect();
+//        if(locationService != null)
+//            locationService.disconnect();
     }
 
     private static String RELEASE = "release";
@@ -66,10 +67,10 @@ public class WidgetProvider extends AppWidgetProvider {
     @Override
     public void onEnabled(Context context) {
         super.onEnabled(context);
-        locationService = new LocationService();
-        locationService.setCurrentLocation(null);
-        locationService.connect();
+        locationTrackerSubject = new LocationService();
+        locationTrackerSubject.addObserver(PhotoCollection.getInstance());
         Settings.initTimer();
+
     }
 
     /**
@@ -126,12 +127,13 @@ public class WidgetProvider extends AppWidgetProvider {
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
 
-        if (WidgetProvider.locationService == null) {
-            WidgetProvider.locationService = new LocationService();
-            WidgetProvider.locationService.setCurrentLocation(null);
-            WidgetProvider.locationService.connect();
-            Settings.initTimer();
-        }
+//        if (WidgetProvider.locationService == null) {
+//            WidgetProvider.locationService = new LocationService();
+//            WidgetProvider.locationService.setCurrentLocation(null);
+//            WidgetProvider.locationService.connect();
+//            Settings.initTimer();
+//        }
+        //Settings.initTimer();
 
         PhotoCollection collection = PhotoCollection.getInstance();
 

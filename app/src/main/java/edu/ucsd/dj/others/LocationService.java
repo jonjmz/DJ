@@ -18,6 +18,7 @@ import edu.ucsd.dj.interfaces.IAddressable;
 import edu.ucsd.dj.interfaces.LocationTrackerObserver;
 import edu.ucsd.dj.interfaces.LocationTrackerSubject;
 import edu.ucsd.dj.managers.DJPhoto;
+import edu.ucsd.dj.managers.DJWallpaper;
 import edu.ucsd.dj.models.Event;
 
 /**
@@ -26,7 +27,7 @@ import edu.ucsd.dj.models.Event;
  * Created by nguyen on 5/14/2017.
  */
 
-public class LocationService extends Service implements GoogleApiClient.ConnectionCallbacks
+public class LocationService implements GoogleApiClient.ConnectionCallbacks
         , GoogleApiClient.OnConnectionFailedListener, LocationListener,
         LocationTrackerSubject{
     private static final int UPDATE_INTERVAL = 5000;
@@ -77,6 +78,8 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
         loc = new Event();
         loc.setLatitude(defaultLoc.getLatitude());
         loc.setLongitude(defaultLoc.getLongitude());
+        connect();
+        obs = new ArrayList<>();
     }
 
     /**
@@ -141,6 +144,9 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
             updateCurrentLocation();
             //PhotoCollection.getInstance().updateLocation();
             //DJWallpaper.getInstance().set(PhotoCollection.getInstance().current());
+            //TODO REFACTOR this later
+            DJWallpaper.getInstance().set(PhotoCollection.getInstance().current());
+
 
         }
         //LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);

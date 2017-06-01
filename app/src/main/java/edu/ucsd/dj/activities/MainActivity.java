@@ -11,11 +11,14 @@ import android.widget.CompoundButton;
 import android.widget.SeekBar;
 import android.widget.Switch;
 
+import edu.ucsd.dj.interfaces.IRating;
+import edu.ucsd.dj.interfaces.LocationTrackerSubject;
 import edu.ucsd.dj.others.LocationService;
 import edu.ucsd.dj.others.PhotoCollection;
 import edu.ucsd.dj.R;
 import edu.ucsd.dj.managers.DJWallpaper;
 import edu.ucsd.dj.managers.Settings;
+import edu.ucsd.dj.strategies.RatingStrategy;
 
 /**
  * to define the main activity home (settings) page
@@ -32,33 +35,17 @@ public class MainActivity extends AppCompatActivity{
     private Switch friendsAlbumSwitch;
     private SeekBar refreshRateBar;
 
-    /**
-     * the method that connects with Google's api and prepares the background
-     * @see https://developers.google.com/android/reference/com/google/android/gms/common/api/GoogleApiClient
-     */
-
     @Override
     protected void onStart() {
         super.onStart();
     }
 
 
-    /**
-     * the method called when the app is to stop; disconnects from Google's api
-     * @see https://developers.google.com/android/reference/com/google/android/gms/common/api/GoogleApiClient
-     */
     @Override
     protected void onStop() {
         super.onStop();
     }
 
-    /**
-     * the method to initialize the activity
-     * called when the activity is starting
-     *
-     * @see https://developer.android.com/reference/android/app/Activity.html#onCreate(android.os.Bundle)
-     * @param savedInstanceState
-     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,12 +54,14 @@ public class MainActivity extends AppCompatActivity{
         askPermission(Manifest.permission.SET_WALLPAPER, SET_WALLPAPER_PERMISSION);
         askPermission(Manifest.permission.ACCESS_FINE_LOCATION, ACCESS_FINE_PERMISSION);
 
-        if (WidgetProvider.locationService == null) {
-            WidgetProvider.locationService = new LocationService();
-            WidgetProvider.locationService.setCurrentLocation(null);
-            WidgetProvider.locationService.connect();
-            Settings.initTimer();
-        }
+//        if (WidgetProvider.locationService == null) {
+//            WidgetProvider.locationService = new LocationService();
+//            WidgetProvider.locationService.setCurrentLocation(null);
+//            WidgetProvider.locationService.connect();
+//            Settings.initTimer();
+//        }
+
+        PhotoCollection.getInstance().update();
 
         proximitySwitch = (Switch) findViewById(R.id.proximity);
         timeOfDaySwitch = (Switch) findViewById(R.id.timeOfDay);
@@ -100,7 +89,11 @@ public class MainActivity extends AppCompatActivity{
                     Settings.setConsiderProximity(true);
                 else
                     Settings.setConsiderProximity(false);
-                PhotoCollection.getInstance().updateLocation();
+                IRating newRating = createRating(Settings.isConsideringRecency(),
+                        Settings.isConsideringTOD(),
+                        Settings.isConsideringProximity());
+                PhotoCollection.getInstance().setRatingStrategy(newRating);
+
                 DJWallpaper.getInstance().set(PhotoCollection.getInstance().current());
             }
         });
@@ -113,7 +106,10 @@ public class MainActivity extends AppCompatActivity{
                     Settings.setConsiderTOD(true);
                 else
                     Settings.setConsiderTOD(false);
-                PhotoCollection.getInstance().updateLocation();
+                IRating newRating = createRating(Settings.isConsideringRecency(),
+                        Settings.isConsideringTOD(),
+                        Settings.isConsideringProximity());
+                PhotoCollection.getInstance().setRatingStrategy(newRating);
                 DJWallpaper.getInstance().set(PhotoCollection.getInstance().current());
             }
         });
@@ -126,7 +122,10 @@ public class MainActivity extends AppCompatActivity{
                     Settings.setConsiderRecency(true);
                 else
                     Settings.setConsiderRecency(false);
-                PhotoCollection.getInstance().updateLocation();
+                IRating newRating = createRating(Settings.isConsideringRecency(),
+                        Settings.isConsideringTOD(),
+                        Settings.isConsideringProximity());
+                PhotoCollection.getInstance().setRatingStrategy(newRating);
                 DJWallpaper.getInstance().set(PhotoCollection.getInstance().current());
             }
         });
@@ -139,7 +138,10 @@ public class MainActivity extends AppCompatActivity{
                     Settings.setViewingMyAlbum(true);
                 else
                     Settings.setViewingMyAlbum(false);
-                PhotoCollection.getInstance().updateLocation();
+                IRating newRating = createRating(Settings.isConsideringRecency(),
+                        Settings.isConsideringTOD(),
+                        Settings.isConsideringProximity());
+                PhotoCollection.getInstance().setRatingStrategy(newRating);
                 DJWallpaper.getInstance().set(PhotoCollection.getInstance().current());
             }
         });
@@ -152,7 +154,10 @@ public class MainActivity extends AppCompatActivity{
                     Settings.setViewingFriendsAlbum(true);
                 else
                     Settings.setViewingFriendsAlbum(false);
-                PhotoCollection.getInstance().updateLocation();
+                IRating newRating = createRating(Settings.isConsideringRecency(),
+                        Settings.isConsideringTOD(),
+                        Settings.isConsideringProximity());
+                PhotoCollection.getInstance().setRatingStrategy(newRating);
                 DJWallpaper.getInstance().set(PhotoCollection.getInstance().current());
             }
         });
@@ -248,5 +253,9 @@ public class MainActivity extends AppCompatActivity{
             // other 'case' lines to check for other
             // permissions this app might request
         }
+    }
+
+    private static IRating createRating(boolean recency, boolean tod, boolean proximity){
+        return new RatingStrategy(recency, tod, proximity);
     }
 }

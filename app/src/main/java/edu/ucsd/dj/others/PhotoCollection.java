@@ -10,6 +10,7 @@ import edu.ucsd.dj.interfaces.IAddressable;
 import edu.ucsd.dj.interfaces.IRating;
 import edu.ucsd.dj.interfaces.LocationTrackerObserver;
 import edu.ucsd.dj.interfaces.LocationTrackerSubject;
+import edu.ucsd.dj.managers.DJWallpaper;
 import edu.ucsd.dj.managers.Settings;
 import edu.ucsd.dj.models.Photo;
 import edu.ucsd.dj.strategies.RatingStrategy;
@@ -26,6 +27,8 @@ public class PhotoCollection implements LocationTrackerObserver{
     private List<Photo> releasedList;
     // Current pointer to the image that's being set as the wallpaper
     private int curr;
+
+
     private IRating rating;
 
     private static final PhotoCollection ourInstance = new PhotoCollection();
@@ -85,6 +88,7 @@ public class PhotoCollection implements LocationTrackerObserver{
         Collections.sort(album);
 
         curr = 0;
+
     }
 
     /**
@@ -171,4 +175,13 @@ public class PhotoCollection implements LocationTrackerObserver{
     public boolean isEmpty() {
         return album.isEmpty();
     }
+
+    public void setRatingStrategy(IRating rating){ this.rating = rating;}
+
+    public IRating getRatingStrategy() {
+        return rating;
+    }
+
 }
+
+

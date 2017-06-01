@@ -15,13 +15,18 @@ import edu.ucsd.dj.models.Event;
  * Created by nguyen on 5/13/2017.
  */
 public class RatingStrategy implements IRating {
-    boolean recency, tod, proximity;
+    boolean recency;
+    boolean tod;
+    boolean proximity;
     private IAddressable currentLocation;
-
+    private final double DEFAULT_LATITUDE = 0, DEFAULT_LONGTIUDE = 0;
     public RatingStrategy(boolean recency, boolean tod, boolean proximity){
         this.recency = recency;
         this.tod = tod;
         this.proximity = proximity;
+        currentLocation = new Event();
+        currentLocation.setLatitude(DEFAULT_LATITUDE);
+        currentLocation.setLongitude(DEFAULT_LONGTIUDE);
     }
     /**
      * Calculates score for this photo at this time/generateAddress with these settings.
@@ -76,6 +81,7 @@ public class RatingStrategy implements IRating {
                 distance);
         return distance[0];
     }
+
     public void setCurrentLocation(IAddressable location) {
         currentLocation = location;
         Log.i(getClass().toString(), "Setting location: Latitude: " + currentLocation.getLatitude()
