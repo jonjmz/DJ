@@ -11,8 +11,7 @@ import edu.ucsd.dj.interfaces.IAddressable;
 import edu.ucsd.dj.interfaces.ICollectionObserver;
 import edu.ucsd.dj.interfaces.ICollectionSubject;
 import edu.ucsd.dj.interfaces.IRating;
-import edu.ucsd.dj.interfaces.LocationTrackerObserver;
-import edu.ucsd.dj.managers.Settings;
+import edu.ucsd.dj.interfaces.ILocationTrackerObserver;
 import edu.ucsd.dj.models.Photo;
 import edu.ucsd.dj.strategies.RatingStrategy;
 
@@ -20,7 +19,7 @@ import edu.ucsd.dj.strategies.RatingStrategy;
  * Holds all photos and core functionality of the application
  * Created by Jake Sutton on 5/6/17.
  */
-public class PhotoCollection implements ICollectionSubject, LocationTrackerObserver {
+public class PhotoCollection implements ICollectionSubject, ILocationTrackerObserver {
 
     // Current pointer to the image that's being set as the wallpaper
     private int curr;
@@ -45,10 +44,6 @@ public class PhotoCollection implements ICollectionSubject, LocationTrackerObser
         album = new ArrayList<>();
         releasedList = new ArrayList<>();
         observers = new LinkedList<>();
-        rating = new RatingStrategy(
-                Settings.getInstance().isConsideringRecency(),
-                Settings.getInstance().isConsideringTOD(),
-                Settings.getInstance().isConsideringProximity());
     }
 
     @Override
@@ -186,9 +181,14 @@ public class PhotoCollection implements ICollectionSubject, LocationTrackerObser
         return album.isEmpty();
     }
 
-    public IRating getRatingStrategy() {
+    public IRating getRating() {
         return rating;
     }
+
+    public void setRatingStrategy(IRating rating) {
+        this.rating = rating;
+    }
+
 
     @Override
     public void notifyObservers() {

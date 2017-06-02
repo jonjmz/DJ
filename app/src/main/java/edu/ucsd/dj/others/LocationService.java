@@ -1,6 +1,5 @@
 package edu.ucsd.dj.others;
 
-import android.app.Service;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -15,10 +14,9 @@ import com.google.android.gms.location.LocationServices;
 import java.util.ArrayList;
 
 import edu.ucsd.dj.interfaces.IAddressable;
-import edu.ucsd.dj.interfaces.LocationTrackerObserver;
+import edu.ucsd.dj.interfaces.ILocationTrackerObserver;
 import edu.ucsd.dj.interfaces.LocationTrackerSubject;
 import edu.ucsd.dj.managers.DJPhoto;
-import edu.ucsd.dj.managers.DJWallpaper;
 import edu.ucsd.dj.models.Event;
 
 /**
@@ -38,15 +36,15 @@ public class LocationService implements GoogleApiClient.ConnectionCallbacks
     private LocationRequest mLocationRequest;
     private IAddressable loc;
 
-    private ArrayList<LocationTrackerObserver> obs;
+    private ArrayList<ILocationTrackerObserver> obs;
 
     @Override
-    public void addObserver(LocationTrackerObserver o) {
+    public void addObserver(ILocationTrackerObserver o) {
         obs.add(o);
     }
 
     @Override
-    public void removeObserver(LocationTrackerObserver o) {
+    public void removeObserver(ILocationTrackerObserver o) {
         obs.remove(o);
     }
 
@@ -146,7 +144,7 @@ public class LocationService implements GoogleApiClient.ConnectionCallbacks
     }
     @Override
     public void updateCurrentLocation() {
-        for(LocationTrackerObserver o: obs){
+        for(ILocationTrackerObserver o: obs){
             o.updateLocation(loc);
         }
     }

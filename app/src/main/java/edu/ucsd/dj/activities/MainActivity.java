@@ -16,6 +16,7 @@ import edu.ucsd.dj.others.PhotoCollection;
 import edu.ucsd.dj.R;
 import edu.ucsd.dj.managers.DJWallpaper;
 import edu.ucsd.dj.managers.Settings;
+import edu.ucsd.dj.strategies.RatingStrategy;
 
 /**
  * Main activity. The 'Settings' page.
@@ -51,11 +52,16 @@ public class MainActivity extends AppCompatActivity{
         askPermission(Manifest.permission.SET_WALLPAPER, SET_WALLPAPER_PERMISSION);
         askPermission(Manifest.permission.ACCESS_FINE_LOCATION, ACCESS_FINE_PERMISSION);
 
+        IRating rating = new RatingStrategy(
+                Settings.getInstance().isConsideringRecency(),
+                Settings.getInstance().isConsideringTOD(),
+                Settings.getInstance().isConsideringProximity());
+
         PhotoCollection collection = PhotoCollection.getInstance();
         collection.addObserver( DJWallpaper.getInstance() );
+        collection.setRatingStrategy( rating );
         collection.update();
 
-        IRating rating = collection.getRatingStrategy();
         Settings.getInstance().addObserver( rating );
 
         proximitySwitch = (Switch) findViewById(R.id.proximity);
