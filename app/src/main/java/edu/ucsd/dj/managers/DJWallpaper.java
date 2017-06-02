@@ -19,7 +19,7 @@ import edu.ucsd.dj.models.Photo;
  * Wallpaper manager that handles setting the wallpaper for the phone
  * Created by Jake Sutton on 5/13/17.
  */
-public class DJWallpaper implements ICollectionObserver{
+public class DJWallpaper implements ICollectionObserver {
     private static final DJWallpaper ourInstance = new DJWallpaper();
     private BitmapLabeler labeler;
     private AddressLabelStrategy labelStrategy;

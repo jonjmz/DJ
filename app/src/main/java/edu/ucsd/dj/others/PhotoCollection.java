@@ -18,19 +18,19 @@ import edu.ucsd.dj.strategies.RatingStrategy;
 
 /**
  * Holds all photos and core functionality of the application
- * Created by jakesutton on 5/6/17.
+ * Created by Jake Sutton on 5/6/17.
  */
-public class PhotoCollection implements ICollectionSubject, LocationTrackerObserver{
+public class PhotoCollection implements ICollectionSubject, LocationTrackerObserver {
+
+    // Current pointer to the image that's being set as the wallpaper
+    private int curr;
 
     // Collection of photos queried from the gallery
     private List<Photo> album;
     // Collection of photos queried from the gallery, but not shown
     private List<Photo> releasedList;
-
+    // Objects observing the photo collection
     private List<ICollectionObserver> observers;
-
-    // Current pointer to the image that's being set as the wallpaper
-    private int curr;
 
     private IRating rating;
 
@@ -41,13 +41,14 @@ public class PhotoCollection implements ICollectionSubject, LocationTrackerObser
     }
 
     public PhotoCollection() {
+        curr = 0;
         album = new ArrayList<>();
         releasedList = new ArrayList<>();
-        observers = new LinkedList<ICollectionObserver>();
-        curr = 0;
-        rating = new RatingStrategy(Settings.isConsideringRecency(),
-                Settings.isConsideringTOD(),
-                Settings.isConsideringProximity());
+        observers = new LinkedList<>();
+        rating = new RatingStrategy(
+                Settings.getInstance().isConsideringRecency(),
+                Settings.getInstance().isConsideringTOD(),
+                Settings.getInstance().isConsideringProximity());
     }
 
     @Override
@@ -78,13 +79,11 @@ public class PhotoCollection implements ICollectionSubject, LocationTrackerObser
 
     /**
      *  Updates the values of photo, used after changing settings
-     *
      */
     public void sort() {
 
         Log.i(this.getClass().toString(), "Running sort()");
 
-        //TODO optimization problem
         for(Photo photo: album){
             photo.setScore(rating.rate(photo.getInfo(), photo.hasKarma()));
         }
@@ -187,11 +186,6 @@ public class PhotoCollection implements ICollectionSubject, LocationTrackerObser
         return album.isEmpty();
     }
 
-    public void setRatingStrategy(IRating rating){
-        this.rating = rating;
-        sort();
-    }
-
     public IRating getRatingStrategy() {
         return rating;
     }
@@ -210,7 +204,7 @@ public class PhotoCollection implements ICollectionSubject, LocationTrackerObser
 
     @Override
     public void removeObserver(ICollectionObserver o) {
-        observers.add(o);
+        observers.remove(o);
     }
 }
 

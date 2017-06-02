@@ -9,6 +9,7 @@ import edu.ucsd.dj.interfaces.IAddressable;
 import edu.ucsd.dj.interfaces.IRating;
 import edu.ucsd.dj.managers.Settings;
 import edu.ucsd.dj.models.Event;
+import edu.ucsd.dj.others.PhotoCollection;
 
 /**
  * Responsible to assign a rating for each photo using the specified settings and current location
@@ -20,6 +21,7 @@ public class RatingStrategy implements IRating {
     boolean proximity;
     private IAddressable currentLocation;
     private final double DEFAULT_LATITUDE = 0, DEFAULT_LONGTIUDE = 0;
+
     public RatingStrategy(boolean recency, boolean tod, boolean proximity){
         this.recency = recency;
         this.tod = tod;
@@ -28,6 +30,7 @@ public class RatingStrategy implements IRating {
         currentLocation.setLatitude(DEFAULT_LATITUDE);
         currentLocation.setLongitude(DEFAULT_LONGTIUDE);
     }
+
     /**
      * Calculates score for this photo at this time/generateAddress with these settings.
      * Used to prepare photo for sorting by photo set. Implemented as distance function
@@ -49,13 +52,13 @@ public class RatingStrategy implements IRating {
             scoreSquared += ratio;
         }
         // If considering time of day, add distance to photo
-        if (Settings.isConsideringTOD()) {
+        if (Settings.getInstance().isConsideringTOD()) {
             if(info.timeOfDay() != info.currentTimeOfDay()) {
                 scoreSquared += 1;
             }
         }
         // If considering generateAddress
-        if (Settings.isConsideringProximity()) {
+        if (Settings.getInstance().isConsideringProximity()) {
             double distance = calculateDistance(info.getLatitude(), info.getLongitude());
             // 20000000 approximately half the circumference of the earth in meters
             scoreSquared += distance / 20000000;
@@ -88,7 +91,12 @@ public class RatingStrategy implements IRating {
                 + "Longitude: " + currentLocation.getLatitude());
     }
 
-//    public Location getCurrentLocation(){
-//        return currentLocation;
-//    }
+    @Override
+    public void update() {
+        this.recency = Settings.getInstance().isConsideringRecency();
+        this.tod = Settings.getInstance().isConsideringTOD();
+        this.proximity = Settings.getInstance().isConsideringProximity();
+
+        PhotoCollection.getInstance().sort();
+    }
 }

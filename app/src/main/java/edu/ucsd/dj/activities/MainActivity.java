@@ -12,16 +12,13 @@ import android.widget.SeekBar;
 import android.widget.Switch;
 
 import edu.ucsd.dj.interfaces.IRating;
-import edu.ucsd.dj.interfaces.LocationTrackerSubject;
-import edu.ucsd.dj.others.LocationService;
 import edu.ucsd.dj.others.PhotoCollection;
 import edu.ucsd.dj.R;
 import edu.ucsd.dj.managers.DJWallpaper;
 import edu.ucsd.dj.managers.Settings;
-import edu.ucsd.dj.strategies.RatingStrategy;
 
 /**
- * to define the main activity home (settings) page
+ * Main activity. The 'Settings' page.
  */
 public class MainActivity extends AppCompatActivity{
     private static final int READ_STORAGE_PERMISSION = 123;
@@ -54,15 +51,12 @@ public class MainActivity extends AppCompatActivity{
         askPermission(Manifest.permission.SET_WALLPAPER, SET_WALLPAPER_PERMISSION);
         askPermission(Manifest.permission.ACCESS_FINE_LOCATION, ACCESS_FINE_PERMISSION);
 
-//        if (WidgetProvider.locationService == null) {
-//            WidgetProvider.locationService = new LocationService();
-//            WidgetProvider.locationService.setCurrentLocation(null);
-//            WidgetProvider.locationService.connect();
-//            Settings.initTimer();
-//        }
+        PhotoCollection collection = PhotoCollection.getInstance();
+        collection.addObserver( DJWallpaper.getInstance() );
+        collection.update();
 
-        PhotoCollection.getInstance().addObserver(DJWallpaper.getInstance());
-        PhotoCollection.getInstance().update();
+        IRating rating = collection.getRatingStrategy();
+        Settings.getInstance().addObserver( rating );
 
         proximitySwitch = (Switch) findViewById(R.id.proximity);
         timeOfDaySwitch = (Switch) findViewById(R.id.timeOfDay);
@@ -71,11 +65,11 @@ public class MainActivity extends AppCompatActivity{
         friendsAlbumSwitch = (Switch) findViewById(R.id.friendsAlbum);
         refreshRateBar = (SeekBar) findViewById(R.id.refresh);
 
-        proximitySwitch.setChecked(Settings.isConsideringProximity());
-        timeOfDaySwitch.setChecked(Settings.isConsideringTOD());
-        recencySwitch.setChecked(Settings.isConsideringRecency());
-        myAlbumSwitch.setChecked(Settings.isViewingMyAlbum());
-        friendsAlbumSwitch.setChecked(Settings.isViewingFriendsAlbum());
+        proximitySwitch.setChecked(Settings.getInstance().isConsideringProximity());
+        timeOfDaySwitch.setChecked(Settings.getInstance().isConsideringTOD());
+        recencySwitch.setChecked(Settings.getInstance().isConsideringRecency());
+        myAlbumSwitch.setChecked(Settings.getInstance().isViewingMyAlbum());
+        friendsAlbumSwitch.setChecked(Settings.getInstance().isViewingFriendsAlbum());
 
         proximitySwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             /**
@@ -86,17 +80,7 @@ public class MainActivity extends AppCompatActivity{
              */
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked)
-                    Settings.setConsiderProximity(true);
-                else
-                    Settings.setConsiderProximity(false);
-
-
-                IRating newRating = createRating(Settings.isConsideringRecency(),
-                        Settings.isConsideringTOD(),
-                        Settings.isConsideringProximity());
-
-                PhotoCollection.getInstance().setRatingStrategy(newRating);
+                Settings.getInstance().setConsiderProximity(isChecked);
             }
         });
 
@@ -104,16 +88,7 @@ public class MainActivity extends AppCompatActivity{
 
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked)
-                    Settings.setConsiderTOD(true);
-                else
-                    Settings.setConsiderTOD(false);
-
-                IRating newRating = createRating(Settings.isConsideringRecency(),
-                        Settings.isConsideringTOD(),
-                        Settings.isConsideringProximity());
-
-                PhotoCollection.getInstance().setRatingStrategy(newRating);
+                Settings.getInstance().setConsiderTOD(isChecked);
             }
         });
 
@@ -121,16 +96,7 @@ public class MainActivity extends AppCompatActivity{
 
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked)
-                    Settings.setConsiderRecency(true);
-                else
-                    Settings.setConsiderRecency(false);
-
-                IRating newRating = createRating(Settings.isConsideringRecency(),
-                        Settings.isConsideringTOD(),
-                        Settings.isConsideringProximity());
-
-                PhotoCollection.getInstance().setRatingStrategy(newRating);
+                Settings.getInstance().setConsiderRecency(isChecked);
             }
         });
 
@@ -138,16 +104,7 @@ public class MainActivity extends AppCompatActivity{
 
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked)
-                    Settings.setViewingMyAlbum(true);
-                else
-                    Settings.setViewingMyAlbum(false);
-
-                IRating newRating = createRating(Settings.isConsideringRecency(),
-                        Settings.isConsideringTOD(),
-                        Settings.isConsideringProximity());
-
-                PhotoCollection.getInstance().setRatingStrategy(newRating);
+                Settings.getInstance().setViewingMyAlbum(isChecked);
             }
         });
 
@@ -155,16 +112,7 @@ public class MainActivity extends AppCompatActivity{
 
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked)
-                    Settings.setViewingFriendsAlbum(true);
-                else
-                    Settings.setViewingFriendsAlbum(false);
-
-                IRating newRating = createRating(Settings.isConsideringRecency(),
-                        Settings.isConsideringTOD(),
-                        Settings.isConsideringProximity());
-
-                PhotoCollection.getInstance().setRatingStrategy(newRating);
+                Settings.getInstance().setViewingFriendsAlbum(isChecked);
             }
         });
 
@@ -175,13 +123,12 @@ public class MainActivity extends AppCompatActivity{
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-                // nothing
+
             }
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                Settings.setRefreshRateMinutes(20 + seekBar.getProgress());
-                //Settings.initTimer();
+                Settings.getInstance().setRefreshRateMinutes(20 + seekBar.getProgress());
             }
         });
 
@@ -259,9 +206,5 @@ public class MainActivity extends AppCompatActivity{
             // other 'case' lines to check for other
             // permissions this app might request
         }
-    }
-
-    private static IRating createRating(boolean recency, boolean tod, boolean proximity){
-        return new RatingStrategy(recency, tod, proximity);
     }
 }
