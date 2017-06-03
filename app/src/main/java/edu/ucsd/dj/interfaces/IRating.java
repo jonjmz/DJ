@@ -7,9 +7,10 @@ import edu.ucsd.dj.models.Event;
  * Created by nguyen on 5/13/2017.
  */
 
-public interface IRating {
+public interface IRating extends ISettingsObserver {
     double rate(Event info, boolean karma);
-    //TODO Refactor this into IAddressable
-    void setCurrentLocation(Location location);
-    Location getCurrentLocation();
+    void setCurrentLocation(IAddressable location);
+
+    @Override
+    void update();
 }

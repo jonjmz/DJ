@@ -12,10 +12,11 @@ import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 
+import edu.ucsd.dj.interfaces.LocationTrackerSubject;
 import edu.ucsd.dj.managers.DJWallpaper;
-import edu.ucsd.dj.LocationProvider;
+import edu.ucsd.dj.others.LocationService;
 import edu.ucsd.dj.models.Photo;
-import edu.ucsd.dj.PhotoCollection;
+import edu.ucsd.dj.others.PhotoCollection;
 import edu.ucsd.dj.R;
 import edu.ucsd.dj.managers.Settings;
 
@@ -30,7 +31,7 @@ import edu.ucsd.dj.managers.Settings;
 public class WidgetProvider extends AppWidgetProvider {
     private static String NEXT = "next";
     private static String PREVIOUS = "previous";
-    static LocationProvider locationProvider;
+    private LocationTrackerSubject locationTrackerSubject;
 
     /**
      * called if an instance of WidgetProvider has been restored from backup
@@ -51,8 +52,8 @@ public class WidgetProvider extends AppWidgetProvider {
     @Override
     public void onDisabled(Context context) {
         super.onDisabled(context);
-        if(locationProvider != null)
-            locationProvider.disconnect();
+//        if(locationService != null)
+//            locationService.disconnect();
     }
 
     private static String RELEASE = "release";
@@ -60,24 +61,24 @@ public class WidgetProvider extends AppWidgetProvider {
 
     /**
      * called when WidgetProvider is is instantiated
-     * locationProvider, timer is initialized
+     * locationService, timer is initialized
      * @param context context in which the reciever is running
      */
     @Override
     public void onEnabled(Context context) {
         super.onEnabled(context);
-        locationProvider = new LocationProvider();
-        locationProvider.setCurrentLocation(null);
-        locationProvider.connect();
-        Settings.initTimer();
+        locationTrackerSubject = new LocationService();
+        locationTrackerSubject.addObserver(PhotoCollection.getInstance());
+        //Settings.initTimer();
+
     }
 
     /**
-     * handles widget update
+     * handles widget updateLocation
      * sets remoteviews to the buttons and handles each click, changing background as necessary
      * @param context context in which the reciever is running
-     * @param appWidgetManager an AppWidgetManager object to call the update method on
-     * @param appWidgetIds array for each id of each widget, needed for update
+     * @param appWidgetManager an AppWidgetManager object to call the updateLocation method on
+     * @param appWidgetIds array for each id of each widget, needed for updateLocation
      */
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
@@ -126,12 +127,13 @@ public class WidgetProvider extends AppWidgetProvider {
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
 
-        if (WidgetProvider.locationProvider == null) {
-            WidgetProvider.locationProvider = new LocationProvider();
-            WidgetProvider.locationProvider.setCurrentLocation(null);
-            WidgetProvider.locationProvider.connect();
-            Settings.initTimer();
-        }
+//        if (WidgetProvider.locationService == null) {
+//            WidgetProvider.locationService = new LocationService();
+//            WidgetProvider.locationService.setCurrentLocation(null);
+//            WidgetProvider.locationService.connect();
+//            Settings.initTimer();
+//        }
+        //Settings.initTimer();
 
         PhotoCollection collection = PhotoCollection.getInstance();
 
@@ -187,8 +189,6 @@ public class WidgetProvider extends AppWidgetProvider {
             if (photo != null) {
                 highlightKarma(context, photo);
             }
-
-            DJWallpaper.getInstance().set(photo);
         }
     }
 

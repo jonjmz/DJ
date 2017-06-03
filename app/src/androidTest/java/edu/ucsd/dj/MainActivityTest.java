@@ -37,7 +37,7 @@ public class MainActivityTest {
         assert(currentValue != s.isChecked());
 
         // It should match the current setting
-        assert(currentValue == Settings.isConsideringRecency());
+        assert(currentValue == Settings.getInstance().isConsideringRecency());
     }
 
     @Test
@@ -46,7 +46,7 @@ public class MainActivityTest {
         Switch s = (Switch) rule.getActivity().findViewById(R.id.proximity); // Get toggle by id
 
         // It should match the current setting
-        assert(s.isChecked() == Settings.isConsideringProximity());
+        assert(s.isChecked() == Settings.getInstance().isConsideringProximity());
 
         // Flip the toggle
         boolean currentValue = s.isChecked();
@@ -56,7 +56,7 @@ public class MainActivityTest {
         assert(currentValue != s.isChecked());
 
         // It should match the current setting
-        assert(currentValue == Settings.isConsideringProximity());
+        assert(currentValue == Settings.getInstance().isConsideringProximity());
     }
 
     @Test
@@ -65,7 +65,7 @@ public class MainActivityTest {
         Switch s = (Switch) rule.getActivity().findViewById(R.id.timeOfDay); // Get toggle by id
 
         // It should match the current setting
-        assert(s.isChecked() == Settings.isConsideringTOD());
+        assert(s.isChecked() == Settings.getInstance().isConsideringTOD());
 
         // Flip the toggle
         boolean currentValue = s.isChecked();
@@ -75,6 +75,6 @@ public class MainActivityTest {
         assert(currentValue != s.isChecked());
 
         // It should match the current setting
-        assert(currentValue == Settings.isConsideringTOD());
+        assert(currentValue == Settings.getInstance().isConsideringTOD());
     }
 }
