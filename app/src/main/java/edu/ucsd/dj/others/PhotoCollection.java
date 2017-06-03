@@ -1,28 +1,37 @@
-package edu.ucsd.dj;
+package edu.ucsd.dj.others;
 
 import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
+import edu.ucsd.dj.interfaces.IAddressable;
+import edu.ucsd.dj.interfaces.ICollectionObserver;
+import edu.ucsd.dj.interfaces.ICollectionSubject;
 import edu.ucsd.dj.interfaces.IRating;
-import edu.ucsd.dj.managers.Settings;
+import edu.ucsd.dj.interfaces.ILocationTrackerObserver;
 import edu.ucsd.dj.models.Photo;
 import edu.ucsd.dj.strategies.RatingStrategy;
 
 /**
  * Holds all photos and core functionality of the application
- * Created by jakesutton on 5/6/17.
+ * Created by Jake Sutton on 5/6/17.
  */
-public class PhotoCollection {
+public class PhotoCollection implements ICollectionSubject, ILocationTrackerObserver {
+
+    // Current pointer to the image that's being set as the wallpaper
+    private int curr;
 
     // Collection of photos queried from the gallery
     private List<Photo> album;
     // Collection of photos queried from the gallery, but not shown
     private List<Photo> releasedList;
-    // Current pointer to the image that's being set as the wallpaper
-    private int curr;
+    // Objects observing the photo collection
+    private List<ICollectionObserver> observers;
+
+    private IRating rating;
 
     private static final PhotoCollection ourInstance = new PhotoCollection();
 
@@ -30,10 +39,17 @@ public class PhotoCollection {
         return ourInstance;
     }
 
-    protected PhotoCollection() {
-        album = new ArrayList<Photo>();
-        releasedList = new ArrayList<Photo>();
+    public PhotoCollection() {
         curr = 0;
+        album = new ArrayList<>();
+        releasedList = new ArrayList<>();
+        observers = new LinkedList<>();
+    }
+
+    @Override
+    public void updateLocation(IAddressable loc) {
+        rating.setCurrentLocation(loc);
+        sort();
     }
 
     /**
@@ -53,22 +69,16 @@ public class PhotoCollection {
             }
         }
 
-        sort();
+        sort(); // this notifies the observers
     }
 
     /**
      *  Updates the values of photo, used after changing settings
-     *
      */
     public void sort() {
 
         Log.i(this.getClass().toString(), "Running sort()");
 
-        IRating rating = new RatingStrategy(Settings.isConsideringRecency(),
-                Settings.isConsideringTOD(),
-                Settings.isConsideringProximity());
-
-        //TODO optimization problem
         for(Photo photo: album){
             photo.setScore(rating.rate(photo.getInfo(), photo.hasKarma()));
         }
@@ -76,6 +86,8 @@ public class PhotoCollection {
         Collections.sort(album);
 
         curr = 0;
+
+        notifyObservers();
     }
 
     /**
@@ -88,6 +100,8 @@ public class PhotoCollection {
         if (curr == album.size()) curr--;
 
         releasedList.add( photo );
+
+        notifyObservers();
     }
 
     /**
@@ -99,6 +113,7 @@ public class PhotoCollection {
      */
     public Photo next() {
         switchPhoto();
+        notifyObservers();
         if(album.size() < 1){
             return null;
         } else {
@@ -152,6 +167,9 @@ public class PhotoCollection {
     public Photo previous() {
         curr--;
         if (curr < 0) curr = album.size() - 1;
+
+        notifyObservers();
+
         return album.get( curr );
     }
 
@@ -162,4 +180,32 @@ public class PhotoCollection {
     public boolean isEmpty() {
         return album.isEmpty();
     }
+
+    public IRating getRating() {
+        return rating;
+    }
+
+    public void setRatingStrategy(IRating rating) {
+        this.rating = rating;
+    }
+
+
+    @Override
+    public void notifyObservers() {
+        for (ICollectionObserver o : observers) {
+            o.update();
+        }
+    }
+
+    @Override
+    public void addObserver(ICollectionObserver o) {
+        observers.add(o);
+    }
+
+    @Override
+    public void removeObserver(ICollectionObserver o) {
+        observers.remove(o);
+    }
 }
+
+

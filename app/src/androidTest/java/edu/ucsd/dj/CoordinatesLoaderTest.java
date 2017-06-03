@@ -2,7 +2,7 @@ package edu.ucsd.dj;
 
 import org.junit.Test;
 
-import edu.ucsd.dj.models.Photo;
+import edu.ucsd.dj.others.CoordinatesLoader;
 
 import static junit.framework.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;

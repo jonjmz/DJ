@@ -11,14 +11,15 @@ import android.widget.CompoundButton;
 import android.widget.SeekBar;
 import android.widget.Switch;
 
-import edu.ucsd.dj.LocationProvider;
-import edu.ucsd.dj.PhotoCollection;
+import edu.ucsd.dj.interfaces.IRating;
+import edu.ucsd.dj.others.PhotoCollection;
 import edu.ucsd.dj.R;
 import edu.ucsd.dj.managers.DJWallpaper;
 import edu.ucsd.dj.managers.Settings;
+import edu.ucsd.dj.strategies.RatingStrategy;
 
 /**
- * to define the main activity home (settings) page
+ * Main activity. The 'Settings' page.
  */
 public class MainActivity extends AppCompatActivity{
     private static final int READ_STORAGE_PERMISSION = 123;
@@ -32,33 +33,17 @@ public class MainActivity extends AppCompatActivity{
     private Switch friendsAlbumSwitch;
     private SeekBar refreshRateBar;
 
-    /**
-     * the method that connects with Google's api and prepares the background
-     * @see https://developers.google.com/android/reference/com/google/android/gms/common/api/GoogleApiClient
-     */
-
     @Override
     protected void onStart() {
         super.onStart();
     }
 
 
-    /**
-     * the method called when the app is to stop; disconnects from Google's api
-     * @see https://developers.google.com/android/reference/com/google/android/gms/common/api/GoogleApiClient
-     */
     @Override
     protected void onStop() {
         super.onStop();
     }
 
-    /**
-     * the method to initialize the activity
-     * called when the activity is starting
-     *
-     * @see https://developer.android.com/reference/android/app/Activity.html#onCreate(android.os.Bundle)
-     * @param savedInstanceState
-     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,12 +52,17 @@ public class MainActivity extends AppCompatActivity{
         askPermission(Manifest.permission.SET_WALLPAPER, SET_WALLPAPER_PERMISSION);
         askPermission(Manifest.permission.ACCESS_FINE_LOCATION, ACCESS_FINE_PERMISSION);
 
-        if (WidgetProvider.locationProvider == null) {
-            WidgetProvider.locationProvider = new LocationProvider();
-            WidgetProvider.locationProvider.setCurrentLocation(null);
-            WidgetProvider.locationProvider.connect();
-            Settings.initTimer();
-        }
+        IRating rating = new RatingStrategy(
+                Settings.getInstance().isConsideringRecency(),
+                Settings.getInstance().isConsideringTOD(),
+                Settings.getInstance().isConsideringProximity());
+
+        PhotoCollection collection = PhotoCollection.getInstance();
+        collection.addObserver( DJWallpaper.getInstance() );
+        collection.setRatingStrategy( rating );
+        collection.update();
+
+        Settings.getInstance().addObserver( rating );
 
         proximitySwitch = (Switch) findViewById(R.id.proximity);
         timeOfDaySwitch = (Switch) findViewById(R.id.timeOfDay);
@@ -81,11 +71,11 @@ public class MainActivity extends AppCompatActivity{
         friendsAlbumSwitch = (Switch) findViewById(R.id.friendsAlbum);
         refreshRateBar = (SeekBar) findViewById(R.id.refresh);
 
-        proximitySwitch.setChecked(Settings.isConsideringProximity());
-        timeOfDaySwitch.setChecked(Settings.isConsideringTOD());
-        recencySwitch.setChecked(Settings.isConsideringRecency());
-        myAlbumSwitch.setChecked(Settings.isViewingMyAlbum());
-        friendsAlbumSwitch.setChecked(Settings.isViewingFriendsAlbum());
+        proximitySwitch.setChecked(Settings.getInstance().isConsideringProximity());
+        timeOfDaySwitch.setChecked(Settings.getInstance().isConsideringTOD());
+        recencySwitch.setChecked(Settings.getInstance().isConsideringRecency());
+        myAlbumSwitch.setChecked(Settings.getInstance().isViewingMyAlbum());
+        friendsAlbumSwitch.setChecked(Settings.getInstance().isViewingFriendsAlbum());
 
         proximitySwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             /**
@@ -96,12 +86,7 @@ public class MainActivity extends AppCompatActivity{
              */
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked)
-                    Settings.setConsiderProximity(true);
-                else
-                    Settings.setConsiderProximity(false);
-                PhotoCollection.getInstance().update();
-                DJWallpaper.getInstance().set(PhotoCollection.getInstance().current());
+                Settings.getInstance().setConsiderProximity(isChecked);
             }
         });
 
@@ -109,12 +94,7 @@ public class MainActivity extends AppCompatActivity{
 
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked)
-                    Settings.setConsiderTOD(true);
-                else
-                    Settings.setConsiderTOD(false);
-                PhotoCollection.getInstance().update();
-                DJWallpaper.getInstance().set(PhotoCollection.getInstance().current());
+                Settings.getInstance().setConsiderTOD(isChecked);
             }
         });
 
@@ -122,12 +102,7 @@ public class MainActivity extends AppCompatActivity{
 
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked)
-                    Settings.setConsiderRecency(true);
-                else
-                    Settings.setConsiderRecency(false);
-                PhotoCollection.getInstance().update();
-                DJWallpaper.getInstance().set(PhotoCollection.getInstance().current());
+                Settings.getInstance().setConsiderRecency(isChecked);
             }
         });
 
@@ -135,12 +110,7 @@ public class MainActivity extends AppCompatActivity{
 
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked)
-                    Settings.setViewingMyAlbum(true);
-                else
-                    Settings.setViewingMyAlbum(false);
-                PhotoCollection.getInstance().update();
-                DJWallpaper.getInstance().set(PhotoCollection.getInstance().current());
+                Settings.getInstance().setViewingMyAlbum(isChecked);
             }
         });
 
@@ -148,12 +118,7 @@ public class MainActivity extends AppCompatActivity{
 
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked)
-                    Settings.setViewingFriendsAlbum(true);
-                else
-                    Settings.setViewingFriendsAlbum(false);
-                PhotoCollection.getInstance().update();
-                DJWallpaper.getInstance().set(PhotoCollection.getInstance().current());
+                Settings.getInstance().setViewingFriendsAlbum(isChecked);
             }
         });
 
@@ -164,13 +129,12 @@ public class MainActivity extends AppCompatActivity{
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-                // nothing
+
             }
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                Settings.setRefreshRateMinutes(20 + seekBar.getProgress());
-                Settings.initTimer();
+                Settings.getInstance().setRefreshRateMinutes(20 + seekBar.getProgress());
             }
         });
 

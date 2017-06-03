@@ -1,5 +1,7 @@
 package edu.ucsd.dj.models;
 
+import android.location.Location;
+
 import java.util.Calendar;
 import java.util.TimeZone;
 
@@ -17,11 +19,12 @@ public class Event implements IAddressable, IDateTimeable {
     private long date;
     private boolean hasValidCoordinates;
     private boolean hasValidDate;
-    private double latitude;
-    private double longitude;
+    private Location loc;
+    //private double latitude;
+    //private double longitude;
 
     public Event() {
-
+        loc = new Location("");
     }
 
     public long getDateTime() { return date; }
@@ -31,10 +34,10 @@ public class Event implements IAddressable, IDateTimeable {
     public void setHasValidCoordinates(boolean hasValidCoordinates) {
         this.hasValidCoordinates = hasValidCoordinates;
     }
-    public double getLatitude() { return latitude; }
-    public void setLatitude(double latitude) { this.latitude = latitude; }
-    public double getLongitude() { return longitude; }
-    public void setLongitude(double longitude) { this.longitude = longitude; }
+    public double getLatitude() { return loc.getLatitude(); }
+    public void setLatitude(double latitude) { loc.setLatitude(latitude); }
+    public double getLongitude() { return loc.getLongitude(); }
+    public void setLongitude(double longitude) { loc.setLongitude(longitude); }
 
     /**
      * Get the currentTimeOfDay using an enum
@@ -56,7 +59,7 @@ public class Event implements IAddressable, IDateTimeable {
     public void setHasValidDate(boolean hvd) {
         this.hasValidDate = hvd;
     }
-
+    //TODO set the datetime into location. Sincel ocation has location.time();
     @Override
     public void setDateTime(long dateTime) {
         this.date = dateTime;
