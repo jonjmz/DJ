@@ -8,8 +8,12 @@ import android.util.Log;
 
 import java.util.ArrayList;
 
+import edu.ucsd.dj.interfaces.IRemotePhotoStore;
+import edu.ucsd.dj.interfaces.IUser;
 import edu.ucsd.dj.managers.DJPhoto;
+import edu.ucsd.dj.models.FirebaseDB;
 import edu.ucsd.dj.models.Photo;
+import edu.ucsd.dj.models.TestUser;
 
 /**
  * Load photos from the phone's gallery
@@ -92,7 +96,7 @@ public class PhotoLoader  {
                         dateLoader.loadDateFor(pathName, photo.getInfo());
 
                         album.add(photo);
-
+                        testDB(photo);
                     } while (cur.moveToNext());
                 }
             }
@@ -103,5 +107,12 @@ public class PhotoLoader  {
 
         return album;
     }
+
+    private void testDB(Photo photo){
+        IUser user = new TestUser();
+        FirebaseDB db = new FirebaseDB();
+        db.uploadPhoto(user, photo);
+    }
+
 
 }
