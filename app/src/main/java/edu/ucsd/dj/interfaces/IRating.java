@@ -8,7 +8,7 @@ import edu.ucsd.dj.models.Event;
 
 public interface IRating extends ISettingsObserver, IRatingSubject {
 
-    double rate(Event info, boolean karma);
+    double rate(IPhoto photo);
     void setCurrentLocation(IAddressable location);
 
     @Override // From SettingsObserver

@@ -8,6 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import edu.ucsd.dj.interfaces.IAddressable;
+import edu.ucsd.dj.interfaces.IPhoto;
 import edu.ucsd.dj.interfaces.IRating;
 import edu.ucsd.dj.interfaces.IRatingObserver;
 import edu.ucsd.dj.managers.Settings;
@@ -46,12 +47,11 @@ public class RatingStrategy implements IRating {
      * Used to prepare photo for sorting by photo set. Implemented as distance function
      * in up to four dimensions
 
-     * @param info Information of the photo
-     * @param karma if the photo has karma
+     * @param photo The photo
      * @return the score for the photo
      */
     @Override
-    public double rate(Event info, boolean karma) {
+    public double rate(IPhoto photo) {
 
         long  now = new GregorianCalendar().getTimeInMillis();
         double scoreSquared = 0;
@@ -59,26 +59,26 @@ public class RatingStrategy implements IRating {
         if (consideringRecency) {
             // Get current time to compare with.
             // Calculates the ratio of the actual age over the possible age.
-            double ratio = (now - info.getDateTime()) / (double)now;
+            double ratio = (now - photo.getDateTime()) / (double)now;
             scoreSquared += ratio;
         }
 
-        // If considering time of day, add distance to photo
-        if (consideringTOD) {
-            if(info.timeOfDay() != info.currentTimeOfDay()) {
-                scoreSquared += 1;
-            }
-        }
+//        // If considering time of day, add distance to photo
+//        if (consideringTOD) {
+//            if(photo.timeOfDay() != photo.currentTimeOfDay()) {
+//                scoreSquared += 1;
+//            }
+//        }
 
         // If considering generateAddress
         if (consideringProximity) {
-            double distance = calculateDistance(info.getLatitude(), info.getLongitude());
+            double distance = calculateDistance(photo.getLatitude(), photo.getLongitude());
             // 20000000 approximately half the circumference of the earth in meters
             scoreSquared += distance / 20000000;
         }
 
         // We always consider karma
-        if (!karma) scoreSquared += 1;
+        if (!photo.hasKarma()) scoreSquared += 1;
 
         // Score Calculations Here
         return Math.sqrt(scoreSquared);

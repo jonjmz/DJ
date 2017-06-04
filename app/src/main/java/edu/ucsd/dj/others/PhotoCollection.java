@@ -81,7 +81,7 @@ public class PhotoCollection implements ICollectionSubject,
         Log.i(this.getClass().toString(), "Running sort()");
 
         for(Photo photo: album){
-            photo.setScore(rating.rate(photo.getInfo(), photo.hasKarma()));
+            photo.setScore(rating.rate(photo));
         }
 
         Collections.sort(album);
