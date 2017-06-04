@@ -16,6 +16,8 @@ import com.google.firebase.storage.UploadTask;
 import java.io.ByteArrayOutputStream;
 import java.util.List;
 
+import edu.ucsd.dj.interfaces.IAddressable;
+import edu.ucsd.dj.interfaces.IDateTimeable;
 import edu.ucsd.dj.interfaces.IFriendList;
 import edu.ucsd.dj.interfaces.IRemotePhotoStore;
 import edu.ucsd.dj.interfaces.IUser;
@@ -71,15 +73,15 @@ public class FirebaseDB implements IRemotePhotoStore {
             }
         });
 
-        uploadMetadata(user, photo);
+        //uploadMetadata(user, photo);
     }
     private StorageReference buildStoragePath(IUser user, String path){
-        return storageRef.child(USERS + DELIMITER + path);
+        return storageRef.child(path);
     }
     private DatabaseReference buildMetaPath(IUser user, String path){
-        return databaseRef.child(user.getEmail() + DELIMITER + path);
+        return databaseRef.child(user.getEmail());
     }
-    private void uploadMetadata(IUser user, Photo photo){
-        buildMetaPath(user, photo.getPathname()).setValue(photo.getInfo());
+    public void uploadMetadata(IUser user, Photo photo, IAddressable address){
+        buildMetaPath(user, photo.getPathname()).setValue(address);
     }
 }

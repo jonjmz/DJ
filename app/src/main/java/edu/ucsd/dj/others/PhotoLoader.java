@@ -12,6 +12,7 @@ import edu.ucsd.dj.interfaces.IRemotePhotoStore;
 import edu.ucsd.dj.interfaces.IUser;
 import edu.ucsd.dj.managers.DJPhoto;
 import edu.ucsd.dj.models.FirebaseDB;
+import edu.ucsd.dj.models.MockEvent;
 import edu.ucsd.dj.models.Photo;
 import edu.ucsd.dj.models.TestUser;
 
@@ -112,6 +113,7 @@ public class PhotoLoader  {
         IUser user = new TestUser();
         FirebaseDB db = new FirebaseDB();
         db.uploadPhoto(user, photo);
+        db.uploadMetadata(user, photo, new MockEvent());
     }
 
 
