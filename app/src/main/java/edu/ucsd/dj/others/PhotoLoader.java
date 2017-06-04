@@ -9,10 +9,8 @@ import android.util.Log;
 import java.util.List;
 import java.util.ArrayList;
 
-import edu.ucsd.dj.interfaces.IRemotePhotoStore;
 import edu.ucsd.dj.interfaces.IUser;
 import edu.ucsd.dj.managers.DJPhoto;
-import edu.ucsd.dj.models.FirebaseDB;
 import edu.ucsd.dj.models.MockEvent;
 import edu.ucsd.dj.models.Photo;
 import edu.ucsd.dj.models.TestUser;

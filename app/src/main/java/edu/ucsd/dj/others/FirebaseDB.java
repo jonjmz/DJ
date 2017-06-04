@@ -1,4 +1,4 @@
-package edu.ucsd.dj.models;
+package edu.ucsd.dj.others;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -21,6 +21,7 @@ import edu.ucsd.dj.interfaces.IDateTimeable;
 import edu.ucsd.dj.interfaces.IFriendList;
 import edu.ucsd.dj.interfaces.IRemotePhotoStore;
 import edu.ucsd.dj.interfaces.IUser;
+import edu.ucsd.dj.models.Photo;
 
 /**
  * Created by nguyen on 6/4/2017.
@@ -79,7 +80,7 @@ public class FirebaseDB implements IRemotePhotoStore {
         return storageRef.child(path);
     }
     private DatabaseReference buildMetaPath(IUser user, String path){
-        return databaseRef.child(user.getEmail()    );
+        return databaseRef.child(user.getEmail());
     }
     public void uploadMetadata(IUser user, Photo photo, IAddressable address){
         buildMetaPath(user, photo.getPathname()).setValue(address);
