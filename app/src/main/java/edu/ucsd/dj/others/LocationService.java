@@ -15,7 +15,7 @@ import java.util.ArrayList;
 
 import edu.ucsd.dj.interfaces.IAddressable;
 import edu.ucsd.dj.interfaces.ILocationTrackerObserver;
-import edu.ucsd.dj.interfaces.LocationTrackerSubject;
+import edu.ucsd.dj.interfaces.ILocationTrackerSubject;
 import edu.ucsd.dj.managers.DJPhoto;
 import edu.ucsd.dj.models.Event;
 
@@ -27,7 +27,7 @@ import edu.ucsd.dj.models.Event;
 
 public class LocationService implements GoogleApiClient.ConnectionCallbacks
         , GoogleApiClient.OnConnectionFailedListener, LocationListener,
-        LocationTrackerSubject{
+        ILocationTrackerSubject {
     private static final int UPDATE_INTERVAL = 5000;
     private static final int FASTEST_INTERVAL = 2000;
     private static final float MIN_DISTANCE = 152;
