@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.util.Log;
 
+import java.util.List;
 import java.util.ArrayList;
 
 import edu.ucsd.dj.interfaces.IRemotePhotoStore;
@@ -21,15 +22,15 @@ import edu.ucsd.dj.models.TestUser;
  * Created by nguyen on 5/9/2017.
  */
 public class PhotoLoader  {
-    String[] projection;
-    String selectionClause;
-    String[] selectionArgs;
-    String sortOrder;
-    Uri images;
+
+    private String[] projection;
+    private String selectionClause;
+    private String[] selectionArgs;
+    private String sortOrder;
+    private Uri images;
 
     /**
-     * Default constructor
-     * Initializing params for the query
+     * Default constructor. Initializing params for the query.
      */
     public PhotoLoader() {
         projection = new String[] {
@@ -48,9 +49,9 @@ public class PhotoLoader  {
      * Get the list of photos in the phone using the current query
      * @return list of photos in the phone
      */
-    public ArrayList<Photo> getPhotos(){
+    public List<Photo> getPhotos(){
 
-        ArrayList<Photo> album = new ArrayList<>();
+        List<Photo> album = new ArrayList<>();
 
         ContentResolver resolver;
         if (DJPhoto.getAppContext() != null) {
