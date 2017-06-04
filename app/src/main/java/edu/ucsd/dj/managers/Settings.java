@@ -14,12 +14,15 @@ import edu.ucsd.dj.interfaces.ISettingsSubject;
  * Created by jonathanjimenez on 5/9/17.
  */
 public final class Settings implements ISettingsSubject {
+
     private final int MILLIS_PER_MINUTE = 60000;
     private boolean considerProximity = true;
     private boolean considerTOD = true;
     private boolean considerRecency = true;
+
     private boolean viewingMyAlbum  = true;
     private boolean viewingFriendsAlbum = true;
+
     private List<ISettingsObserver> observers;
 
     private static Timer timer;
@@ -33,7 +36,7 @@ public final class Settings implements ISettingsSubject {
     }
 
     private Settings() {
-        observers = new LinkedList<ISettingsObserver>();
+        observers = new LinkedList<>();
     }
 
     public boolean isConsideringProximity() {

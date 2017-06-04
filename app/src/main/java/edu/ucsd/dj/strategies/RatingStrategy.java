@@ -4,31 +4,41 @@ import android.location.Location;
 import android.util.Log;
 
 import java.util.GregorianCalendar;
+import java.util.LinkedList;
+import java.util.List;
 
 import edu.ucsd.dj.interfaces.IAddressable;
 import edu.ucsd.dj.interfaces.IRating;
+import edu.ucsd.dj.interfaces.IRatingObserver;
 import edu.ucsd.dj.managers.Settings;
 import edu.ucsd.dj.models.Event;
-import edu.ucsd.dj.others.PhotoCollection;
 
 /**
- * Responsible to assign a rating for each photo using the specified settings and current location
+ * Responsible to assign a rating for each photo using the
+ * specified settings and current location
  * Created by nguyen on 5/13/2017.
  */
 public class RatingStrategy implements IRating {
-    boolean recency;
-    boolean tod;
-    boolean proximity;
+
+    private final double DEFAULT_LATITUDE = 0, DEFAULT_LONGITUDE = 0;
+
+    private boolean consideringRecency;
+    private boolean consideringTOD;
+    private boolean consideringProximity;
+
     private IAddressable currentLocation;
-    private final double DEFAULT_LATITUDE = 0, DEFAULT_LONGTIUDE = 0;
+    private List<IRatingObserver> observers;
 
     public RatingStrategy(boolean recency, boolean tod, boolean proximity){
-        this.recency = recency;
-        this.tod = tod;
-        this.proximity = proximity;
+        this.consideringRecency = recency;
+        this.consideringTOD = tod;
+        this.consideringProximity = proximity;
+
         currentLocation = new Event();
         currentLocation.setLatitude(DEFAULT_LATITUDE);
-        currentLocation.setLongitude(DEFAULT_LONGTIUDE);
+        currentLocation.setLongitude(DEFAULT_LONGITUDE);
+
+        observers = new LinkedList<>();
     }
 
     /**
@@ -42,27 +52,31 @@ public class RatingStrategy implements IRating {
      */
     @Override
     public double rate(Event info, boolean karma) {
+
         long  now = new GregorianCalendar().getTimeInMillis();
         double scoreSquared = 0;
-        // If considering recency, add distance to photo
-        if (recency) {
+        // If considering consideringRecency, add distance to photo
+        if (consideringRecency) {
             // Get current time to compare with.
             // Calculates the ratio of the actual age over the possible age.
             double ratio = (now - info.getDateTime()) / (double)now;
             scoreSquared += ratio;
         }
+
         // If considering time of day, add distance to photo
-        if (Settings.getInstance().isConsideringTOD()) {
+        if (consideringTOD) {
             if(info.timeOfDay() != info.currentTimeOfDay()) {
                 scoreSquared += 1;
             }
         }
+
         // If considering generateAddress
-        if (Settings.getInstance().isConsideringProximity()) {
+        if (consideringProximity) {
             double distance = calculateDistance(info.getLatitude(), info.getLongitude());
             // 20000000 approximately half the circumference of the earth in meters
             scoreSquared += distance / 20000000;
         }
+
         // We always consider karma
         if (!karma) scoreSquared += 1;
 
@@ -93,10 +107,27 @@ public class RatingStrategy implements IRating {
 
     @Override
     public void update() {
-        this.recency = Settings.getInstance().isConsideringRecency();
-        this.tod = Settings.getInstance().isConsideringTOD();
-        this.proximity = Settings.getInstance().isConsideringProximity();
+        this.consideringRecency = Settings.getInstance().isConsideringRecency();
+        this.consideringTOD = Settings.getInstance().isConsideringTOD();
+        this.consideringProximity = Settings.getInstance().isConsideringProximity();
 
-        PhotoCollection.getInstance().sort();
+        ratingStrategyChanged();
+    }
+
+    @Override
+    public void addObserver(IRatingObserver o) {
+        observers.add(o);
+    }
+
+    @Override
+    public void removeObserver(IRatingObserver o) {
+        observers.remove(o);
+    }
+
+    @Override
+    public void ratingStrategyChanged() {
+        for (IRatingObserver o: observers) {
+            o.updateRatingChange();
+        }
     }
 }

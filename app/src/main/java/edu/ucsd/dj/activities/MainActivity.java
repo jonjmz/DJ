@@ -10,13 +10,14 @@ import android.util.Log;
 import android.widget.CompoundButton;
 import android.widget.SeekBar;
 import android.widget.Switch;
+import edu.ucsd.dj.R;
 
 import edu.ucsd.dj.interfaces.IRating;
+import edu.ucsd.dj.strategies.RatingStrategy;
+
 import edu.ucsd.dj.others.PhotoCollection;
-import edu.ucsd.dj.R;
 import edu.ucsd.dj.managers.DJWallpaper;
 import edu.ucsd.dj.managers.Settings;
-import edu.ucsd.dj.strategies.RatingStrategy;
 
 /**
  * Main activity. The 'Settings' page.
@@ -26,11 +27,13 @@ public class MainActivity extends AppCompatActivity{
     private static final int SET_WALLPAPER_PERMISSION = 69;
     private static final int ACCESS_FINE_PERMISSION = 420;
 
-    private Switch proximitySwitch;
-    private Switch timeOfDaySwitch;
-    private Switch recencySwitch;
-    private Switch myAlbumSwitch;
-    private Switch friendsAlbumSwitch;
+    private Switch
+            proximitySwitch,
+            timeOfDaySwitch,
+            recencySwitch,
+            myAlbumSwitch,
+            friendsAlbumSwitch;
+
     private SeekBar refreshRateBar;
 
     @Override
@@ -57,12 +60,12 @@ public class MainActivity extends AppCompatActivity{
                 Settings.getInstance().isConsideringTOD(),
                 Settings.getInstance().isConsideringProximity());
 
+        Settings.getInstance().addObserver( rating );
+
         PhotoCollection collection = PhotoCollection.getInstance();
         collection.addObserver( DJWallpaper.getInstance() );
         collection.setRatingStrategy( rating );
         collection.update();
-
-        Settings.getInstance().addObserver( rating );
 
         proximitySwitch = (Switch) findViewById(R.id.proximity);
         timeOfDaySwitch = (Switch) findViewById(R.id.timeOfDay);
