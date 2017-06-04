@@ -12,7 +12,7 @@ import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 
-import edu.ucsd.dj.interfaces.LocationTrackerSubject;
+import edu.ucsd.dj.interfaces.ILocationTrackerSubject;
 import edu.ucsd.dj.others.LocationService;
 import edu.ucsd.dj.models.Photo;
 import edu.ucsd.dj.others.PhotoCollection;
@@ -29,7 +29,7 @@ import edu.ucsd.dj.R;
 public class WidgetProvider extends AppWidgetProvider {
     private static String NEXT = "next";
     private static String PREVIOUS = "previous";
-    private LocationTrackerSubject locationTrackerSubject;
+    private ILocationTrackerSubject locationTrackerSubject;
 
     /**
      * called if an instance of WidgetProvider has been restored from backup
