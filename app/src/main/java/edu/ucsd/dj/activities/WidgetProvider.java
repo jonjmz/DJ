@@ -12,7 +12,7 @@ import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 
-import edu.ucsd.dj.interfaces.ILocationTrackerSubject;
+import edu.ucsd.dj.interfaces.observers.ILocationTrackerSubject;
 import edu.ucsd.dj.others.LocationService;
 import edu.ucsd.dj.models.Photo;
 import edu.ucsd.dj.others.PhotoCollection;

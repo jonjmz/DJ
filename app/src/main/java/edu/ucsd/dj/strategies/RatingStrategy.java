@@ -7,10 +7,10 @@ import java.util.GregorianCalendar;
 import java.util.LinkedList;
 import java.util.List;
 
-import edu.ucsd.dj.interfaces.IAddressable;
-import edu.ucsd.dj.interfaces.IPhoto;
+import edu.ucsd.dj.interfaces.models.IAddressable;
+import edu.ucsd.dj.interfaces.models.IPhoto;
 import edu.ucsd.dj.interfaces.IRating;
-import edu.ucsd.dj.interfaces.IRatingObserver;
+import edu.ucsd.dj.interfaces.observers.IRatingObserver;
 import edu.ucsd.dj.managers.Settings;
 import edu.ucsd.dj.models.Event;
 

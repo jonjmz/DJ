@@ -9,7 +9,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import edu.ucsd.dj.interfaces.IDateTimeable;
+import edu.ucsd.dj.interfaces.models.IDateTimeable;
 
 /**
  * Loads the date and time of a photo using exif standard

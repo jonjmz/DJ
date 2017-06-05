@@ -14,19 +14,19 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
+import java.util.LinkedList;
 import java.util.List;
 
-import edu.ucsd.dj.interfaces.IAddressable;
-import edu.ucsd.dj.interfaces.IDateTimeable;
-import edu.ucsd.dj.interfaces.IFriendList;
+import edu.ucsd.dj.interfaces.models.IAddressable;
+import edu.ucsd.dj.interfaces.models.IFriendList;
 import edu.ucsd.dj.interfaces.IRemotePhotoStore;
-import edu.ucsd.dj.interfaces.IUser;
+import edu.ucsd.dj.interfaces.models.IUser;
 
 /**
  * Created by nguyen on 6/4/2017.
  */
-
 public class FirebaseDB implements IRemotePhotoStore {
+
     private static final StorageReference storageRef =
             FirebaseStorage.getInstance().getReference();
     private static final DatabaseReference databaseRef =
@@ -36,13 +36,24 @@ public class FirebaseDB implements IRemotePhotoStore {
     private static final String USERS = "users";
     private static final String DELIMITER = "/";
     private static final String TAG = "FirebaseDB";
+
     @Override
     public List<Photo> getAllFriendsPhotos(IFriendList friends) {
-        return null;
+        List<Photo> result = new LinkedList<>();
+
+        // TODO this is going to be slow as shit
+        for (IUser u : friends.getFriends()) {
+             result.addAll(getPhotos(u));
+        }
+
+        return result;
     }
 
     @Override
     public List<Photo> getPhotos(IUser friend) {
+
+        // TODO implement me
+
         return null;
     }
 

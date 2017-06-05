@@ -4,7 +4,7 @@ import android.support.annotation.NonNull;
 import java.io.Serializable;
 import java.util.HashMap;
 
-import edu.ucsd.dj.interfaces.IPhoto;
+import edu.ucsd.dj.interfaces.models.IPhoto;
 
 /**
  * Photo class to represent a photo

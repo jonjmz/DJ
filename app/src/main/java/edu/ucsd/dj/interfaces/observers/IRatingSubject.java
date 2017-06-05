@@ -1,7 +1,7 @@
-package edu.ucsd.dj.interfaces;
+package edu.ucsd.dj.interfaces.observers;
 
 /**
- * Created by jakesutton on 6/4/17.
+ * Created by Jake Sutton on 6/4/17.
  */
 
 public interface IRatingSubject {

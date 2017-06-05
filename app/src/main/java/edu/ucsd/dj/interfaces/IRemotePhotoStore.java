@@ -1,10 +1,13 @@
 package edu.ucsd.dj.interfaces;
 
 import java.util.List;
+
+import edu.ucsd.dj.interfaces.models.IFriendList;
+import edu.ucsd.dj.interfaces.models.IUser;
 import edu.ucsd.dj.models.Photo;
 
 /**
- * Created by jakesutton on 6/1/17.
+ * Created by Jake Sutton on 6/1/17.
  */
 
 public interface IRemotePhotoStore {

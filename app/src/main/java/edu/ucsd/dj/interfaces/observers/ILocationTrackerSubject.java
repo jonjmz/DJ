@@ -1,4 +1,4 @@
-package edu.ucsd.dj.interfaces;
+package edu.ucsd.dj.interfaces.observers;
 
 /**
  * Created by Gus on 5/29/2017.

@@ -8,7 +8,7 @@ import android.util.Log;
 
 import java.io.IOException;
 
-import edu.ucsd.dj.interfaces.ICollectionObserver;
+import edu.ucsd.dj.interfaces.observers.ICollectionObserver;
 import edu.ucsd.dj.others.PhotoCollection;
 import edu.ucsd.dj.strategies.AddressLabelStrategy;
 import edu.ucsd.dj.others.BitmapLabeler;

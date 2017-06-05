@@ -5,7 +5,7 @@ import android.util.Log;
 
 import java.io.IOException;
 
-import edu.ucsd.dj.interfaces.IAddressable;
+import edu.ucsd.dj.interfaces.models.IAddressable;
 
 /**
  * Responsible for loading location from the file system for this photo.

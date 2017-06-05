@@ -5,9 +5,7 @@ import android.location.Location;
 import java.util.Calendar;
 import java.util.TimeZone;
 
-import edu.ucsd.dj.interfaces.IAddressable;
-import edu.ucsd.dj.interfaces.IDateTimeable;
-import edu.ucsd.dj.interfaces.IEvent;
+import edu.ucsd.dj.interfaces.models.IEvent;
 
 /**
  * Event class that holds the information of a photo

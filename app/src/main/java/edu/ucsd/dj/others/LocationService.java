@@ -13,9 +13,9 @@ import com.google.android.gms.location.LocationServices;
 
 import java.util.ArrayList;
 
-import edu.ucsd.dj.interfaces.IAddressable;
-import edu.ucsd.dj.interfaces.ILocationTrackerObserver;
-import edu.ucsd.dj.interfaces.ILocationTrackerSubject;
+import edu.ucsd.dj.interfaces.models.IAddressable;
+import edu.ucsd.dj.interfaces.observers.ILocationTrackerObserver;
+import edu.ucsd.dj.interfaces.observers.ILocationTrackerSubject;
 import edu.ucsd.dj.managers.DJPhoto;
 import edu.ucsd.dj.models.Event;
 

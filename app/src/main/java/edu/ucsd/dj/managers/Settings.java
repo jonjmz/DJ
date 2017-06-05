@@ -6,8 +6,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Timer;
 
-import edu.ucsd.dj.interfaces.ISettingsObserver;
-import edu.ucsd.dj.interfaces.ISettingsSubject;
+import edu.ucsd.dj.interfaces.observers.ISettingsObserver;
+import edu.ucsd.dj.interfaces.observers.ISettingsSubject;
 
 /**
  * Setting class that holds all configurations
