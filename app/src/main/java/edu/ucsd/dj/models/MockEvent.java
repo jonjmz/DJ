@@ -17,7 +17,7 @@ public class MockEvent implements IDateTimeable, IAddressable {
         date = 666;
     }
     @Override
-    public boolean hasValidCoordinates() {
+    public boolean getHasValidCoordinates() {
         return true;
     }
 

@@ -51,7 +51,7 @@ public class DJWallpaper implements ICollectionObserver {
             labelStrategy = new AddressLabelStrategy(context);
 
             String label = "";
-            if (photo.getInfo().hasValidCoordinates()) {
+            if (photo.getInfo().getHasValidCoordinates()) {
                 label = labelStrategy.getLabel(photo.getInfo());
             }
 

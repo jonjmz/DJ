@@ -1,6 +1,9 @@
 package edu.ucsd.dj.models;
 
 import android.support.annotation.NonNull;
+
+import com.google.firebase.database.Exclude;
+
 import java.io.Serializable;
 import java.util.HashMap;
 
@@ -18,15 +21,21 @@ public class Photo implements IPhoto, Comparable, Serializable {
     private String pathname;     // Reference to image in album
     private Event info;          // Store photo Exif data for score calculations
 
+    public Photo(){
+        pathname = "";
+        info = new Event();
+    }
     public Photo(String reference) {
-        this.info = new Event();
+        info = new Event();
         this.pathname = reference;
     }
 
+    @Exclude
     public Event getInfo() { return info; }
 
     public String getPathname(){ return pathname; }
 
+    @Exclude
     public double getScore(){ return score; }
     public void setScore(double score) { this.score = score; }
     public boolean hasKarma() { return hasKarma; }
@@ -79,8 +88,8 @@ public class Photo implements IPhoto, Comparable, Serializable {
     }
 
     @Override
-    public boolean hasValidCoordinates() {
-        return info.hasValidCoordinates();
+    public boolean getHasValidCoordinates() {
+        return info.getHasValidCoordinates();
     }
 
     @Override

@@ -12,6 +12,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -74,12 +75,14 @@ public class FirebaseDB implements IRemotePhotoStore {
         int count = 0;
         for (Photo p: photos) {
             DatabaseReference temp = primaryUserPhotoRef.child("photo" + count);
+//            temp.child("karma").setValue(p.hasKarma());
+//            temp.child("lat").setValue(p.getLatitude());
+//            temp.child("lng").setValue(p.getLongitude());
+//            temp.child("local_pathname").setValue(p.getPathname());
+//            temp.child("date").setValue(p.getDateTime());
+            temp.setValue(p);
             temp.child("uid").setValue( p.getPathname() + "@" + primaryUserRef.getKey());
-            temp.child("karma").setValue(p.hasKarma());
-            temp.child("lat").setValue(p.getLatitude());
-            temp.child("lng").setValue(p.getLongitude());
-            temp.child("local_pathname").setValue(p.getPathname());
-            temp.child("date_time").setValue(p.getDateTime());
+
             count++;
 
             storePhoto(user, p);
@@ -89,18 +92,20 @@ public class FirebaseDB implements IRemotePhotoStore {
     @Override
     public void getPhotos(IUser friend) {
 
-        DatabaseReference temp = databaseRef.child(friend.getUserId()).child("photos");
+        Query query = databaseRef.child(friend.getUserId()).child("photos").orderByKey();
 
         // TODO THIS DOES NOTHING/DOES NOT WORK IDK WHY WE NEED THIS
-        temp.addListenerForSingleValueEvent(new ValueEventListener() {
+            query.addListenerForSingleValueEvent(new ValueEventListener() {
 
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
 
-                for (DataSnapshot dsp : dataSnapshot.getChildren()) {
-                    friendsPhotos.add(new Photo(dsp.child("uid").getKey()));
+                    for (DataSnapshot dsp : dataSnapshot.getChildren()) {
+                        Photo tempPhoto = dsp.getValue(Photo.class);
+                        Log.i("FirebaseDB", "Photo: " + tempPhoto.getPathname());
+                        friendsPhotos.add(tempPhoto);
+                    }
                 }
-            }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {

@@ -29,7 +29,7 @@ public class Event implements IEvent {
     public long getDateTime() { return date; }
 
     // IAddressable
-    public boolean hasValidCoordinates() { return hasValidCoordinates; }
+    public boolean getHasValidCoordinates() { return hasValidCoordinates; }
     public void setHasValidCoordinates(boolean hasValidCoordinates) {
         this.hasValidCoordinates = hasValidCoordinates;
     }

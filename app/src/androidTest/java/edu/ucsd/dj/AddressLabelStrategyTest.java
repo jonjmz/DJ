@@ -109,7 +109,7 @@ public class AddressLabelStrategyTest {
             hasValidCoordinates = hvc;
         }
         @Override
-        public boolean hasValidCoordinates() {
+        public boolean getHasValidCoordinates() {
             return hasValidCoordinates;
         }
 

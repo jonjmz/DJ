@@ -13,7 +13,7 @@ public class DJPrimaryUser extends DJUser {
 
     public DJPrimaryUser() {
         super("Primary User", "Unknown");
-
+        userId = "-1";
         loadEmail();
     }
 

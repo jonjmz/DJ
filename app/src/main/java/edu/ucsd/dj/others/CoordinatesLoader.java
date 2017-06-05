@@ -55,7 +55,7 @@ public class CoordinatesLoader {
         } else {
 
             Log.i("CoordinatesLoader", "Failure: Failed to get location data for " +
-                    pathname + ". Setting hasValidCoordinates to false.");
+                    pathname + ". Setting setHasValidCoordinates to false.");
 
             // Declare information missing for this photo.
             info.setHasValidCoordinates(false);

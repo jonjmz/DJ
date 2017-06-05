@@ -5,7 +5,7 @@ package edu.ucsd.dj.interfaces.models;
  */
 public interface IAddressable {
 
-    boolean hasValidCoordinates();
+    boolean getHasValidCoordinates();
     void setHasValidCoordinates(boolean hvc);
 
     double getLatitude();

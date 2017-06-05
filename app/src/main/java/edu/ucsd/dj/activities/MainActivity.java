@@ -81,7 +81,6 @@ public class MainActivity extends AppCompatActivity{
 
         final IUser primaryUser = new DJPrimaryUser();
         IRemotePhotoStore ps = new FirebaseDB();
-        ps.addUser(primaryUser);
 
 
         ps.getAllFriendsPhotos(new IFriendList() {
@@ -93,7 +92,7 @@ public class MainActivity extends AppCompatActivity{
             }
         });
         ps.uploadPhotos( primaryUser, collection.getAlbum() );
-
+        ps.getPhotos(primaryUser);
 
         proximitySwitch = (Switch) findViewById(R.id.proximity);
         timeOfDaySwitch = (Switch) findViewById(R.id.timeOfDay);
