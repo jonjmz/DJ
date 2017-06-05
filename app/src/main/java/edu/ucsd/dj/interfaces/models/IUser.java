@@ -7,4 +7,5 @@ package edu.ucsd.dj.interfaces.models;
 public interface IUser {
     String getName();
     String getEmail();
+    String getUserId();
 }

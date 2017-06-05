@@ -1,5 +1,7 @@
 package edu.ucsd.dj.interfaces;
 
+import com.google.firebase.database.DatabaseReference;
+
 import java.util.List;
 
 import edu.ucsd.dj.interfaces.models.IFriendList;
@@ -11,6 +13,14 @@ import edu.ucsd.dj.models.Photo;
  */
 
 public interface IRemotePhotoStore {
-    List<Photo> getAllFriendsPhotos( IFriendList friends );
-    List<Photo> getPhotos(IUser friend);
+    void addUser(IUser user);
+    void removeUser(IUser user);
+
+    void uploadPhotos( IUser user, List<Photo> photos );
+
+    DatabaseReference getPrimaryUserPhotoRef();
+    DatabaseReference getPrimaryUserRef();
+
+    void getPhotos(IUser friend);
+    void getAllFriendsPhotos( IFriendList friends );
 }

@@ -16,4 +16,9 @@ public class TestUser implements IUser {
     public String getEmail() {
         return "testing LMAO 420 lit";
     }
+
+    @Override
+    public String getUserId() {
+        return "testing LMAO 420 lit";
+    }
 }

@@ -112,7 +112,7 @@ public class PhotoLoader  {
     private void testDB(Photo photo){
         IUser user = new TestUser();
         FirebaseDB db = new FirebaseDB();
-        db.uploadPhoto(user, photo);
+        db.storePhoto(user, photo);
         db.uploadMetadata(user, photo, new MockEvent());
     }
 

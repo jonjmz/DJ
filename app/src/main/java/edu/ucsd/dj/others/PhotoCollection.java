@@ -212,6 +212,11 @@ public class PhotoCollection implements ICollectionSubject,
     public void updateRatingChange() {
         sort();
     }
+
+    public List<Photo> getAlbum() {
+        return album;
+    }
+
 }
 
 

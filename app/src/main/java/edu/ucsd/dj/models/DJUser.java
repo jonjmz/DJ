@@ -8,7 +8,7 @@ import edu.ucsd.dj.interfaces.models.IUser;
 
 public class DJUser implements IUser {
 
-    private String name, email;
+    protected String name, email, userId;
 
     public DJUser(String name, String email) {
         this.name = name;
@@ -23,5 +23,10 @@ public class DJUser implements IUser {
     @Override
     public String getEmail() {
         return email;
+    }
+
+    @Override
+    public String getUserId() {
+        return userId;
     }
 }
