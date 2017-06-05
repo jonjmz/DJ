@@ -46,10 +46,11 @@ public class DJFriends implements IFriendList {
                 // names comes in hand sometimes
                 String name = cur.getString(1);
                 String email = cur.getString(3);
+                String userId = email.substring(0, email.indexOf("@"));
 
                 // keep unique only
                 if (emlRecsHS.add(email.toLowerCase())) {
-                    emlRecs.add( new DJUser(name, email) );
+                    emlRecs.add( new DJUser(name, email, userId) );
                 }
             } while (cur.moveToNext());
         }

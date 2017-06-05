@@ -6,4 +6,5 @@ package edu.ucsd.dj.interfaces.models;
 
 public interface IPhoto extends IEvent, IKarma {
     IEvent getInfo();
+    String getName();
 }

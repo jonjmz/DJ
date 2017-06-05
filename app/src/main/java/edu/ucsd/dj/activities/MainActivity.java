@@ -11,14 +11,10 @@ import android.widget.CompoundButton;
 import android.widget.SeekBar;
 import android.widget.Switch;
 
-import java.util.LinkedList;
-import java.util.List;
-
 import edu.ucsd.dj.R;
 
 import edu.ucsd.dj.interfaces.IRating;
 import edu.ucsd.dj.interfaces.IRemotePhotoStore;
-import edu.ucsd.dj.interfaces.models.IFriendList;
 import edu.ucsd.dj.interfaces.models.IUser;
 import edu.ucsd.dj.models.DJFriends;
 import edu.ucsd.dj.models.DJPrimaryUser;
@@ -81,18 +77,11 @@ public class MainActivity extends AppCompatActivity{
 
         final IUser primaryUser = new DJPrimaryUser();
         IRemotePhotoStore ps = new FirebaseDB();
+        ps.addUser(primaryUser);
 
+        ps.downloadAllFriendsPhotos(new DJFriends());
 
-        ps.getAllFriendsPhotos(new IFriendList() {
-            @Override
-            public List<IUser> getFriends() {
-                LinkedList<IUser> result = new LinkedList();
-                result.add(primaryUser);
-                return result;
-            }
-        });
         ps.uploadPhotos( primaryUser, collection.getAlbum() );
-        ps.getPhotos(primaryUser);
 
         proximitySwitch = (Switch) findViewById(R.id.proximity);
         timeOfDaySwitch = (Switch) findViewById(R.id.timeOfDay);

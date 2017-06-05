@@ -21,6 +21,7 @@ public class Photo implements IPhoto, Comparable, Serializable {
     private String pathname;     // Reference to image in album
     private Event info;          // Store photo Exif data for score calculations
 
+
     public Photo(){
         pathname = "";
         info = new Event();
@@ -29,6 +30,9 @@ public class Photo implements IPhoto, Comparable, Serializable {
         info = new Event();
         this.pathname = reference;
     }
+
+    @Override @Exclude
+    public String getName(){ return getPathname().substring(getPathname().lastIndexOf("/")+1);}
 
     @Exclude
     public Event getInfo() { return info; }

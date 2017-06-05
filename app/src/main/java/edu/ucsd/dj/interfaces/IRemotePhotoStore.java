@@ -21,6 +21,6 @@ public interface IRemotePhotoStore {
     DatabaseReference getPrimaryUserPhotoRef();
     DatabaseReference getPrimaryUserRef();
 
-    void getPhotos(IUser friend);
-    void getAllFriendsPhotos( IFriendList friends );
+    void downloadPhotos(IUser friend);
+    void downloadAllFriendsPhotos(IFriendList friends );
 }

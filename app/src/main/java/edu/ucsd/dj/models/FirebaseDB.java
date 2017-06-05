@@ -7,7 +7,6 @@ import android.util.Log;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -50,11 +49,11 @@ public class FirebaseDB implements IRemotePhotoStore {
 
 
     @Override
-    public void getAllFriendsPhotos(IFriendList friends) {
+    public void downloadAllFriendsPhotos(IFriendList friends) {
 
-        // TODO THIS DOES NOTHING/DOES NOT WORK
         for (IUser u : friends.getFriends()) {
-             getPhotos(u);
+            Log.i("FirebaseDB", "Friends: " + u.getUserId());
+            downloadPhotos(u);
         }
     }
 
@@ -74,12 +73,8 @@ public class FirebaseDB implements IRemotePhotoStore {
     public void uploadPhotos(IUser user, List<Photo> photos) {
         int count = 0;
         for (Photo p: photos) {
-            DatabaseReference temp = primaryUserPhotoRef.child("photo" + count);
-//            temp.child("karma").setValue(p.hasKarma());
-//            temp.child("lat").setValue(p.getLatitude());
-//            temp.child("lng").setValue(p.getLongitude());
-//            temp.child("local_pathname").setValue(p.getPathname());
-//            temp.child("date").setValue(p.getDateTime());
+            //DatabaseReference temp = primaryUserPhotoRef.child("photo" + count);
+            DatabaseReference temp = primaryUserPhotoRef.push();
             temp.setValue(p);
             temp.child("uid").setValue( p.getPathname() + "@" + primaryUserRef.getKey());
 
@@ -90,11 +85,10 @@ public class FirebaseDB implements IRemotePhotoStore {
     }
 
     @Override
-    public void getPhotos(IUser friend) {
+    public void downloadPhotos(IUser friend) {
 
         Query query = databaseRef.child(friend.getUserId()).child("photos").orderByKey();
 
-        // TODO THIS DOES NOTHING/DOES NOT WORK IDK WHY WE NEED THIS
             query.addListenerForSingleValueEvent(new ValueEventListener() {
 
                 @Override
@@ -117,7 +111,7 @@ public class FirebaseDB implements IRemotePhotoStore {
     public StorageReference storePhoto(IUser user, Photo photo){
 
         //Get the path to upload
-        StorageReference ref = buildStoragePath(user, photo.getPathname());
+        StorageReference ref = buildStoragePath(user, photo.getName());
         // Get the data from an ImageView as bytes
         Bitmap bitmap = BitmapFactory.decodeFile(photo.getPathname());
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -145,16 +139,9 @@ public class FirebaseDB implements IRemotePhotoStore {
         return ref;
     }
 
+
     private StorageReference buildStoragePath(IUser user, String path){
-        return storageRef.child(path);
-    }
-
-    private DatabaseReference buildMetaPath(IUser user, String path){
-        return databaseRef.child(user.getEmail()    );
-    }
-
-    public void uploadMetadata(IUser user, Photo photo, IAddressable address){
-        buildMetaPath(user, photo.getPathname()).setValue(address);
+        return storageRef.child(user.getUserId() + DELIMITER + path);
     }
 
     @Override

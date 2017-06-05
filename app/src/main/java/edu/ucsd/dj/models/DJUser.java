@@ -13,6 +13,11 @@ public class DJUser implements IUser {
     public DJUser(String name, String email) {
         this.name = name;
         this.email = email;
+
+    }
+    public DJUser(String name, String email, String userId){
+        this(name, email);
+        this.userId = userId;
     }
 
     @Override
