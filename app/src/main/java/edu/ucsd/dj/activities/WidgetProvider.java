@@ -131,7 +131,8 @@ public class WidgetProvider extends AppWidgetProvider {
 //            WidgetProvider.locationService.connect();
 //            Settings.initTimer();
 //        }
-        //Settings.initTimer();
+//
+//        Settings.initTimer();
 
         PhotoCollection collection = PhotoCollection.getInstance();
 

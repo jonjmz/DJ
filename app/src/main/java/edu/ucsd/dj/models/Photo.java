@@ -4,11 +4,13 @@ import android.support.annotation.NonNull;
 import java.io.Serializable;
 import java.util.HashMap;
 
+import edu.ucsd.dj.interfaces.IPhoto;
+
 /**
  * Photo class to represent a photo
  * Created by jonathanjimenez on 5/1/17.
  */
-public class Photo implements Comparable, Serializable {
+public class Photo implements IPhoto, Comparable, Serializable {
 
     private double score;        // Used to order photos with precalulated scores
     private boolean hasKarma;    // Used to keep track of karma
@@ -30,7 +32,6 @@ public class Photo implements Comparable, Serializable {
     public boolean hasKarma() { return hasKarma; }
 
     public void setHasKarma(boolean karma) { this.hasKarma = karma; }
-
 
     /**
      * Indicates whether some other object is "equal to" this one.
@@ -75,5 +76,55 @@ public class Photo implements Comparable, Serializable {
         if (score < ((Photo) o).score) return -1;
         else if (score > ((Photo) o).score) return 1;
         else return 0;
+    }
+
+    @Override
+    public boolean hasValidCoordinates() {
+        return info.hasValidCoordinates();
+    }
+
+    @Override
+    public boolean hasValidDate() {
+        return info.hasValidDate();
+    }
+
+    @Override
+    public void setHasValidDate(boolean hvd) {
+        info.setHasValidDate(hvd);
+    }
+
+    @Override
+    public void setHasValidCoordinates(boolean hvc) {
+        info.setHasValidCoordinates(hvc);
+    }
+
+    @Override
+    public long getDateTime() {
+        return info.getDateTime();
+    }
+
+    @Override
+    public double getLatitude() {
+        return info.getLatitude();
+    }
+
+    @Override
+    public void setDateTime(long dateTime) {
+        info.setDateTime(dateTime);
+    }
+
+    @Override
+    public double getLongitude() {
+        return info.getLongitude();
+    }
+
+    @Override
+    public void setLatitude(double lat) {
+        info.setLatitude(lat);
+    }
+
+    @Override
+    public void setLongitude(double lng) {
+        info.setLongitude(lng);
     }
 }

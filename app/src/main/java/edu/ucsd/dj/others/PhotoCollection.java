@@ -12,18 +12,19 @@ import edu.ucsd.dj.interfaces.ICollectionObserver;
 import edu.ucsd.dj.interfaces.ICollectionSubject;
 import edu.ucsd.dj.interfaces.IRating;
 import edu.ucsd.dj.interfaces.ILocationTrackerObserver;
+import edu.ucsd.dj.interfaces.IRatingObserver;
 import edu.ucsd.dj.models.Photo;
-import edu.ucsd.dj.strategies.RatingStrategy;
 
 /**
  * Holds all photos and core functionality of the application
  * Created by Jake Sutton on 5/6/17.
  */
-public class PhotoCollection implements ICollectionSubject, ILocationTrackerObserver {
+public class PhotoCollection implements ICollectionSubject,
+                                        ILocationTrackerObserver,
+                                        IRatingObserver {
 
     // Current pointer to the image that's being set as the wallpaper
     private int curr;
-
     // Collection of photos queried from the gallery
     private List<Photo> album;
     // Collection of photos queried from the gallery, but not shown
@@ -42,7 +43,7 @@ public class PhotoCollection implements ICollectionSubject, ILocationTrackerObse
     public PhotoCollection() {
         curr = 0;
         album = new ArrayList<>();
-        releasedList = new ArrayList<>();
+        releasedList = new LinkedList<>();
         observers = new LinkedList<>();
     }
 
@@ -60,7 +61,7 @@ public class PhotoCollection implements ICollectionSubject, ILocationTrackerObse
     public void update() {
 
         PhotoLoader loader = new PhotoLoader();
-        ArrayList<Photo> newAlbum = loader.getPhotos();
+        List<Photo> newAlbum = loader.getPhotos();
 
         //TODO optimization problem
         for(Photo photo: newAlbum){
@@ -80,7 +81,7 @@ public class PhotoCollection implements ICollectionSubject, ILocationTrackerObse
         Log.i(this.getClass().toString(), "Running sort()");
 
         for(Photo photo: album){
-            photo.setScore(rating.rate(photo.getInfo(), photo.hasKarma()));
+            photo.setScore(rating.rate(photo));
         }
 
         Collections.sort(album);
@@ -187,8 +188,8 @@ public class PhotoCollection implements ICollectionSubject, ILocationTrackerObse
 
     public void setRatingStrategy(IRating rating) {
         this.rating = rating;
+        this.rating.addObserver(this);
     }
-
 
     @Override
     public void notifyObservers() {
@@ -205,6 +206,11 @@ public class PhotoCollection implements ICollectionSubject, ILocationTrackerObse
     @Override
     public void removeObserver(ICollectionObserver o) {
         observers.remove(o);
+    }
+
+    @Override
+    public void updateRatingChange() {
+        sort();
     }
 }
 

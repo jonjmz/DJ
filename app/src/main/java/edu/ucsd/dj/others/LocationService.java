@@ -25,9 +25,11 @@ import edu.ucsd.dj.models.Event;
  * Created by nguyen on 5/14/2017.
  */
 
-public class LocationService implements GoogleApiClient.ConnectionCallbacks
-        , GoogleApiClient.OnConnectionFailedListener, LocationListener,
-        ILocationTrackerSubject {
+public class LocationService implements GoogleApiClient.ConnectionCallbacks,
+                                        GoogleApiClient.OnConnectionFailedListener,
+                                        LocationListener,
+                                        ILocationTrackerSubject {
+
     private static final int UPDATE_INTERVAL = 5000;
     private static final int FASTEST_INTERVAL = 2000;
     private static final float MIN_DISTANCE = 152;

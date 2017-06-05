@@ -7,12 +7,13 @@ import java.util.TimeZone;
 
 import edu.ucsd.dj.interfaces.IAddressable;
 import edu.ucsd.dj.interfaces.IDateTimeable;
+import edu.ucsd.dj.interfaces.IEvent;
 
 /**
  * Event class that holds the information of a photo
  * Created by jonathanjimenez on 5/9/17.
  */
-public class Event implements IAddressable, IDateTimeable {
+public class Event implements IEvent {
 
     public enum TimeOfDay{ Night, Morning, Afternoon, Evening}
 
