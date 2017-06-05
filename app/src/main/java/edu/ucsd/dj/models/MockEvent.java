@@ -1,7 +1,7 @@
 package edu.ucsd.dj.models;
 
-import edu.ucsd.dj.interfaces.IAddressable;
-import edu.ucsd.dj.interfaces.IDateTimeable;
+import edu.ucsd.dj.interfaces.models.IAddressable;
+import edu.ucsd.dj.interfaces.models.IDateTimeable;
 
 /**
  * Created by nguyen on 6/4/2017.

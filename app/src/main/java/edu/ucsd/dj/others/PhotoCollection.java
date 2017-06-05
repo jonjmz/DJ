@@ -7,12 +7,12 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-import edu.ucsd.dj.interfaces.IAddressable;
-import edu.ucsd.dj.interfaces.ICollectionObserver;
-import edu.ucsd.dj.interfaces.ICollectionSubject;
+import edu.ucsd.dj.interfaces.models.IAddressable;
+import edu.ucsd.dj.interfaces.observers.ICollectionObserver;
+import edu.ucsd.dj.interfaces.observers.ICollectionSubject;
 import edu.ucsd.dj.interfaces.IRating;
-import edu.ucsd.dj.interfaces.ILocationTrackerObserver;
-import edu.ucsd.dj.interfaces.IRatingObserver;
+import edu.ucsd.dj.interfaces.observers.ILocationTrackerObserver;
+import edu.ucsd.dj.interfaces.observers.IRatingObserver;
 import edu.ucsd.dj.models.Photo;
 
 /**
@@ -212,6 +212,11 @@ public class PhotoCollection implements ICollectionSubject,
     public void updateRatingChange() {
         sort();
     }
+
+    public List<Photo> getAlbum() {
+        return album;
+    }
+
 }
 
 

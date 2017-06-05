@@ -9,8 +9,9 @@ import android.util.Log;
 import java.util.List;
 import java.util.ArrayList;
 
-import edu.ucsd.dj.interfaces.IUser;
+import edu.ucsd.dj.interfaces.models.IUser;
 import edu.ucsd.dj.managers.DJPhoto;
+import edu.ucsd.dj.models.FirebaseDB;
 import edu.ucsd.dj.models.MockEvent;
 import edu.ucsd.dj.models.Photo;
 import edu.ucsd.dj.models.TestUser;
@@ -111,7 +112,7 @@ public class PhotoLoader  {
     private void testDB(Photo photo){
         IUser user = new TestUser();
         FirebaseDB db = new FirebaseDB();
-        db.uploadPhoto(user, photo);
+        db.storePhoto(user, photo);
         db.uploadMetadata(user, photo, new MockEvent());
     }
 

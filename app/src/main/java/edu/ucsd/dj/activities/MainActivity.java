@@ -10,9 +10,19 @@ import android.util.Log;
 import android.widget.CompoundButton;
 import android.widget.SeekBar;
 import android.widget.Switch;
+
+import java.util.LinkedList;
+import java.util.List;
+
 import edu.ucsd.dj.R;
 
 import edu.ucsd.dj.interfaces.IRating;
+import edu.ucsd.dj.interfaces.IRemotePhotoStore;
+import edu.ucsd.dj.interfaces.models.IFriendList;
+import edu.ucsd.dj.interfaces.models.IUser;
+import edu.ucsd.dj.models.DJFriends;
+import edu.ucsd.dj.models.DJPrimaryUser;
+import edu.ucsd.dj.models.FirebaseDB;
 import edu.ucsd.dj.strategies.RatingStrategy;
 
 import edu.ucsd.dj.others.PhotoCollection;
@@ -54,6 +64,8 @@ public class MainActivity extends AppCompatActivity{
         askPermission(Manifest.permission.READ_EXTERNAL_STORAGE, READ_STORAGE_PERMISSION);
         askPermission(Manifest.permission.SET_WALLPAPER, SET_WALLPAPER_PERMISSION);
         askPermission(Manifest.permission.ACCESS_FINE_LOCATION, ACCESS_FINE_PERMISSION);
+        askPermission(Manifest.permission.READ_CONTACTS, READ_STORAGE_PERMISSION);
+        askPermission(Manifest.permission.GET_ACCOUNTS, READ_STORAGE_PERMISSION);
 
         IRating rating = new RatingStrategy(
                 Settings.getInstance().isConsideringRecency(),
@@ -66,6 +78,22 @@ public class MainActivity extends AppCompatActivity{
         collection.addObserver( DJWallpaper.getInstance() );
         collection.setRatingStrategy( rating );
         collection.update();
+
+        final IUser primaryUser = new DJPrimaryUser();
+        IRemotePhotoStore ps = new FirebaseDB();
+        ps.addUser(primaryUser);
+
+
+        ps.getAllFriendsPhotos(new IFriendList() {
+            @Override
+            public List<IUser> getFriends() {
+                LinkedList<IUser> result = new LinkedList();
+                result.add(primaryUser);
+                return result;
+            }
+        });
+        ps.uploadPhotos( primaryUser, collection.getAlbum() );
+
 
         proximitySwitch = (Switch) findViewById(R.id.proximity);
         timeOfDaySwitch = (Switch) findViewById(R.id.timeOfDay);

@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "469351679303-621hhqavupfo88fph0qhpp7g4a98uqai.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "edu.ucsd.dj",
+            "certificate_hash": "002a40603737b51371e6a72fd800482ee3b7ef36"
+          }
+        },
+        {
           "client_id": "469351679303-a5n10s76l2ftbog6smolv8jh6t18cf6q.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
