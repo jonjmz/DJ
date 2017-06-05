@@ -18,13 +18,14 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
 
-import edu.ucsd.dj.interfaces.models.IAddressable;
 import edu.ucsd.dj.interfaces.models.IFriendList;
 import edu.ucsd.dj.interfaces.IRemotePhotoStore;
 import edu.ucsd.dj.interfaces.models.IUser;
+import edu.ucsd.dj.others.PhotoLoader;
 
 /**
  * Created by nguyen on 6/4/2017.
@@ -42,11 +43,12 @@ public class FirebaseDB implements IRemotePhotoStore {
 
     private static final String IMAGE_PREFIX = "images";
     private static final String USERS = "users";
-    private static final String DELIMITER = "/";
+    private static final String DELIMITER = "@";
     private static final String TAG = "FirebaseDB";
 
     private static List<Photo> friendsPhotos =  new LinkedList<>();
 
+    private static final PhotoLoader loader = new PhotoLoader();
 
     @Override
     public void downloadAllFriendsPhotos(IFriendList friends) {
@@ -54,6 +56,9 @@ public class FirebaseDB implements IRemotePhotoStore {
         for (IUser u : friends.getFriends()) {
             Log.i("FirebaseDB", "Friends: " + u.getUserId());
             downloadPhotos(u);
+        }
+        for(Photo p: friendsPhotos){
+            //downloadPhotoFromStorage();
         }
     }
 
@@ -76,16 +81,16 @@ public class FirebaseDB implements IRemotePhotoStore {
             //DatabaseReference temp = primaryUserPhotoRef.child("photo" + count);
             DatabaseReference temp = primaryUserPhotoRef.push();
             temp.setValue(p);
-            temp.child("uid").setValue( p.getPathname() + "@" + primaryUserRef.getKey());
+            //temp.child("uid").setValue( p.getPathname() + "@" + primaryUserRef.getKey());
 
             count++;
 
-            storePhoto(user, p);
+            storePhotoToStorage(user, p);
         }
     }
 
     @Override
-    public void downloadPhotos(IUser friend) {
+    public void downloadPhotos(final IUser friend) {
 
         Query query = databaseRef.child(friend.getUserId()).child("photos").orderByKey();
 
@@ -98,6 +103,7 @@ public class FirebaseDB implements IRemotePhotoStore {
                         Photo tempPhoto = dsp.getValue(Photo.class);
                         Log.i("FirebaseDB", "Photo: " + tempPhoto.getPathname());
                         friendsPhotos.add(tempPhoto);
+                        downloadPhotoFromStorage(friend, tempPhoto);
                     }
                 }
 
@@ -108,10 +114,29 @@ public class FirebaseDB implements IRemotePhotoStore {
         });
     }
 
-    public StorageReference storePhoto(IUser user, Photo photo){
+    private void downloadPhotoFromStorage(IUser user, final Photo photo){
+        StorageReference temp = buildStoragePath(user, photo);
+
+        final long ONE_MEGABYTE = 1024 * 1024;
+        temp.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+            @Override
+            public void onSuccess(byte[] bytes) {
+                // Data for "images/island.jpg" is returns, use this as needed
+                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                loader.insertPhoto(bitmap, photo, "DejaPhotoFriends");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle any errors
+            }
+        });
+    }
+
+    public StorageReference storePhotoToStorage(IUser user, Photo photo){
 
         //Get the path to upload
-        StorageReference ref = buildStoragePath(user, photo.getName());
+        StorageReference ref = buildStoragePath(user, photo);
         // Get the data from an ImageView as bytes
         Bitmap bitmap = BitmapFactory.decodeFile(photo.getPathname());
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -140,8 +165,8 @@ public class FirebaseDB implements IRemotePhotoStore {
     }
 
 
-    private StorageReference buildStoragePath(IUser user, String path){
-        return storageRef.child(user.getUserId() + DELIMITER + path);
+    private StorageReference buildStoragePath(IUser user, Photo photo ){
+        return storageRef.child(user.getUserId() + DELIMITER + photo.getName());
     }
 
     @Override

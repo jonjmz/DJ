@@ -21,6 +21,7 @@ public class Photo implements IPhoto, Comparable, Serializable {
     private String pathname;     // Reference to image in album
     private Event info;          // Store photo Exif data for score calculations
 
+    private String uid;
 
     public Photo(){
         pathname = "";
@@ -140,4 +141,13 @@ public class Photo implements IPhoto, Comparable, Serializable {
     public void setLongitude(double lng) {
         info.setLongitude(lng);
     }
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
+
 }

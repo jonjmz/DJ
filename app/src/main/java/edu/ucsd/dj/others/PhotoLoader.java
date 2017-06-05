@@ -50,6 +50,7 @@ public class PhotoLoader  {
         selectionArgs = null;
         sortOrder = null;
         images = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+        initMediaDir();
     }
 
     //TODO Do some customizable query methods to optimize later
@@ -139,10 +140,10 @@ public class PhotoLoader  {
 
     }
 
-    public static String insertImage(ContentResolver cr,
-                                     Bitmap source,
-                                     IPhoto photo, String album) {
+    public static String insertPhoto(Bitmap source,
+                                     final Photo photo, String album) {
 
+        ContentResolver cr = DJPhoto.getAppContext().getContentResolver();
         ContentValues values = new ContentValues();
         //values.put(MediaStore.Images.Media.DESCRIPTION, description);
         //values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
@@ -189,8 +190,8 @@ public class PhotoLoader  {
     }
 
     /**
-     * A copy of the Android internals StoreThumbnail method, it used with the insertImage to
-     * populate the android.provider.MediaStore.Images.Media#insertImage with all the correct
+     * A copy of the Android internals StoreThumbnail method, it used with the insertPhoto to
+     * populate the android.provider.MediaStore.Images.Media#insertPhoto with all the correct
      * meta data. The StoreThumbnail method is private so it must be duplicated here.
      * @see android.provider.MediaStore.Images.Media (StoreThumbnail private method)
      */
