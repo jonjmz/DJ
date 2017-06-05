@@ -14,11 +14,13 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 import edu.ucsd.dj.interfaces.IAddressable;
 import edu.ucsd.dj.interfaces.IDateTimeable;
 import edu.ucsd.dj.interfaces.IFriendList;
+import edu.ucsd.dj.interfaces.IPhoto;
 import edu.ucsd.dj.interfaces.IRemotePhotoStore;
 import edu.ucsd.dj.interfaces.IUser;
 
@@ -46,10 +48,10 @@ public class FirebaseDB implements IRemotePhotoStore {
         return null;
     }
 
-    public void uploadPhoto(IUser user, Photo photo){
+    public void uploadPhoto(IUser user, IPhoto photo){
 
         //Get the path to upload
-        StorageReference ref = buildStoragePath(user, photo.getPathname());
+        StorageReference ref = buildStoragePath(user, photo.getName());
         // Get the data from an ImageView as bytes
         Bitmap bitmap = BitmapFactory.decodeFile(photo.getPathname());
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -75,8 +77,16 @@ public class FirebaseDB implements IRemotePhotoStore {
 
         //uploadMetadata(user, photo);
     }
+
+    public void downloadPhoto(IUser user){
+
+    }
+
+    private ArrayList<String> getPhotoList(IUser user){
+        databaseRef.child(user.getEmail());
+    }
     private StorageReference buildStoragePath(IUser user, String path){
-        return storageRef.child(path);
+        return storageRef.child(user.getEmail()).child(path);
     }
     private DatabaseReference buildMetaPath(IUser user, String path){
         return databaseRef.child(user.getEmail()    );

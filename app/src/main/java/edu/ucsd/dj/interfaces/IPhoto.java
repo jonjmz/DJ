@@ -5,6 +5,8 @@ package edu.ucsd.dj.interfaces;
  */
 
 public interface IPhoto extends IEvent, IKarma {
+
+    String getName();
     @Override
     boolean hasKarma();
 
@@ -42,4 +44,6 @@ public interface IPhoto extends IEvent, IKarma {
     void setLongitude(double lng);
 
     IEvent getInfo();
+
+    String getPathname();
 }

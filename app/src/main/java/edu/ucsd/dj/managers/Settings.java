@@ -6,8 +6,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Timer;
 
+import edu.ucsd.dj.interfaces.ILocationTrackerSubject;
 import edu.ucsd.dj.interfaces.ISettingsObserver;
 import edu.ucsd.dj.interfaces.ISettingsSubject;
+import edu.ucsd.dj.others.LocationService;
 
 /**
  * Setting class that holds all configurations
@@ -118,4 +120,7 @@ public final class Settings implements ISettingsSubject {
     public void removeObserver(ISettingsObserver o) {
         observers.remove(o);
     }
+
+    public static final ILocationTrackerSubject locationTrackerSubject = new LocationService();
+
 }

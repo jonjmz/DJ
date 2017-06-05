@@ -23,6 +23,8 @@ public class Photo implements IPhoto, Comparable, Serializable {
         this.pathname = reference;
     }
 
+    public String getName(){ return getPathname().substring(getPathname().lastIndexOf("/")+1);}
+
     public Event getInfo() { return info; }
 
     public String getPathname(){ return pathname; }

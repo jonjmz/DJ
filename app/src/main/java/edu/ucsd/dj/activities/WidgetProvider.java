@@ -13,6 +13,7 @@ import android.widget.RemoteViews;
 import android.widget.Toast;
 
 import edu.ucsd.dj.interfaces.ILocationTrackerSubject;
+import edu.ucsd.dj.managers.Settings;
 import edu.ucsd.dj.others.LocationService;
 import edu.ucsd.dj.models.Photo;
 import edu.ucsd.dj.others.PhotoCollection;
@@ -29,7 +30,7 @@ import edu.ucsd.dj.R;
 public class WidgetProvider extends AppWidgetProvider {
     private static String NEXT = "next";
     private static String PREVIOUS = "previous";
-    private ILocationTrackerSubject locationTrackerSubject;
+    //private ILocationTrackerSubject locationTrackerSubject;
 
     /**
      * called if an instance of WidgetProvider has been restored from backup
@@ -65,8 +66,8 @@ public class WidgetProvider extends AppWidgetProvider {
     @Override
     public void onEnabled(Context context) {
         super.onEnabled(context);
-        locationTrackerSubject = new LocationService();
-        locationTrackerSubject.addObserver(PhotoCollection.getInstance());
+//        Settings.locationTrackerSubject = new LocationService();
+        Settings.locationTrackerSubject.addObserver(PhotoCollection.getInstance());
         //Settings.initTimer();
 
     }
@@ -80,6 +81,7 @@ public class WidgetProvider extends AppWidgetProvider {
      */
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
+
         final int count = appWidgetIds.length;
 
         for (int i = 0; i < count; i++) {

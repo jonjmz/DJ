@@ -13,6 +13,7 @@ import android.widget.Switch;
 import edu.ucsd.dj.R;
 
 import edu.ucsd.dj.interfaces.IRating;
+import edu.ucsd.dj.others.PhotoLoader;
 import edu.ucsd.dj.strategies.RatingStrategy;
 
 import edu.ucsd.dj.others.PhotoCollection;
@@ -66,6 +67,11 @@ public class MainActivity extends AppCompatActivity{
         collection.addObserver( DJWallpaper.getInstance() );
         collection.setRatingStrategy( rating );
         collection.update();
+
+        //Initialize folders for future use
+        //TODO rename
+        PhotoLoader loader = new PhotoLoader();
+        loader.initMediaDir();
 
         proximitySwitch = (Switch) findViewById(R.id.proximity);
         timeOfDaySwitch = (Switch) findViewById(R.id.timeOfDay);
