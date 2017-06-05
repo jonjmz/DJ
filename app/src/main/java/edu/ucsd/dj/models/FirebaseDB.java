@@ -43,7 +43,7 @@ public class FirebaseDB implements IRemotePhotoStore {
 
     private static final String IMAGE_PREFIX = "images";
     private static final String USERS = "users";
-    private static final String DELIMITER = "@";
+    private static final String DELIMITER = "-";
     private static final String TAG = "FirebaseDB";
 
     private static List<Photo> friendsPhotos =  new LinkedList<>();
@@ -56,9 +56,6 @@ public class FirebaseDB implements IRemotePhotoStore {
         for (IUser u : friends.getFriends()) {
             Log.i("FirebaseDB", "Friends: " + u.getUserId());
             downloadPhotos(u);
-        }
-        for(Photo p: friendsPhotos){
-            //downloadPhotoFromStorage();
         }
     }
 
@@ -116,7 +113,7 @@ public class FirebaseDB implements IRemotePhotoStore {
 
     private void downloadPhotoFromStorage(IUser user, final Photo photo){
         StorageReference temp = buildStoragePath(user, photo);
-
+        Log.i("FirebaseDB", temp.getPath());
         final long ONE_MEGABYTE = 1024 * 1024;
         temp.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
             @Override
@@ -166,7 +163,8 @@ public class FirebaseDB implements IRemotePhotoStore {
 
 
     private StorageReference buildStoragePath(IUser user, Photo photo ){
-        return storageRef.child(user.getUserId() + DELIMITER + photo.getName());
+        String str = user.getUserId() + DELIMITER + photo.getName();
+        return storageRef.child(str);
     }
 
     @Override
