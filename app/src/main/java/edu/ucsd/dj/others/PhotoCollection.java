@@ -4,26 +4,36 @@ import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import edu.ucsd.dj.interfaces.IAddressable;
-import edu.ucsd.dj.interfaces.ICollectionObserver;
-import edu.ucsd.dj.interfaces.ICollectionSubject;
+import edu.ucsd.dj.interfaces.IRemotePhotoStore;
+import edu.ucsd.dj.interfaces.models.IAddressable;
+import edu.ucsd.dj.interfaces.models.IUser;
+import edu.ucsd.dj.interfaces.observers.ICollectionObserver;
+import edu.ucsd.dj.interfaces.observers.ICollectionSubject;
 import edu.ucsd.dj.interfaces.IRating;
-import edu.ucsd.dj.interfaces.ILocationTrackerObserver;
+import edu.ucsd.dj.interfaces.observers.ILocationTrackerObserver;
+import edu.ucsd.dj.interfaces.observers.IRatingObserver;
+import edu.ucsd.dj.interfaces.observers.ISettingsObserver;
+import edu.ucsd.dj.managers.Settings;
+import edu.ucsd.dj.models.DJFriends;
+import edu.ucsd.dj.models.DJPrimaryUser;
+import edu.ucsd.dj.models.FirebaseDB;
 import edu.ucsd.dj.models.Photo;
-import edu.ucsd.dj.strategies.RatingStrategy;
 
 /**
  * Holds all photos and core functionality of the application
  * Created by Jake Sutton on 5/6/17.
  */
-public class PhotoCollection implements ICollectionSubject, ILocationTrackerObserver {
+public class PhotoCollection implements ICollectionSubject,
+                                        ILocationTrackerObserver,
+                                        IRatingObserver,
+                                        ISettingsObserver{
 
     // Current pointer to the image that's being set as the wallpaper
     private int curr;
-
     // Collection of photos queried from the gallery
     private List<Photo> album;
     // Collection of photos queried from the gallery, but not shown
@@ -42,7 +52,7 @@ public class PhotoCollection implements ICollectionSubject, ILocationTrackerObse
     public PhotoCollection() {
         curr = 0;
         album = new ArrayList<>();
-        releasedList = new ArrayList<>();
+        releasedList = new LinkedList<>();
         observers = new LinkedList<>();
     }
 
@@ -59,13 +69,49 @@ public class PhotoCollection implements ICollectionSubject, ILocationTrackerObse
      */
     public void update() {
 
-        PhotoLoader loader = new PhotoLoader();
-        ArrayList<Photo> newAlbum = loader.getPhotos();
+        //TODO REFACTOR
+        if(Settings.getInstance().isViewingMyAlbum()){
+            PhotoLoader loader = new PhotoLoader("DejaPhotoMain");
+            List<Photo> newAlbum = loader.getPhotos();
+            //TODO optimization problem
+            for(Photo photo: newAlbum){
+                if(!album.contains(photo) && !releasedList.contains(photo)) {
+                    album.add( photo );
+                }
+            }
 
-        //TODO optimization problem
-        for(Photo photo: newAlbum){
-            if(!album.contains(photo) && !releasedList.contains(photo)) {
-                album.add( photo );
+        }
+        else{
+            DJPrimaryUser user = new DJPrimaryUser();
+            for(Iterator<Photo> it = album.listIterator(); it.hasNext();){
+                Photo temp = it.next();
+                if(temp.getUid().startsWith(user.getUserId()))
+                    it.remove();
+            }
+
+        }
+
+
+        //TODO REFACTOR
+        if(Settings.getInstance().isViewingFriendsAlbum()){
+            IRemotePhotoStore db = new FirebaseDB();
+            List<Photo> temp = db.downloadAllFriendsPhotos(new DJFriends());
+            album.addAll(temp);
+            for(Photo photo: temp) {
+                if (!album.contains(photo) && !releasedList.contains(photo)) {
+                    album.add(photo);
+                }
+            }
+        }
+        //TODO delete
+        else{
+            DJFriends friendsList = new DJFriends();
+            for(IUser friend: friendsList.getFriends()){
+                for(Iterator<Photo> it = album.listIterator(); it.hasNext();){
+                    Photo temp = it.next();
+                    if(temp.getUid().startsWith(friend.getUserId()))
+                        it.remove();
+                }
             }
         }
 
@@ -80,7 +126,7 @@ public class PhotoCollection implements ICollectionSubject, ILocationTrackerObse
         Log.i(this.getClass().toString(), "Running sort()");
 
         for(Photo photo: album){
-            photo.setScore(rating.rate(photo.getInfo(), photo.hasKarma()));
+            photo.setScore(rating.rate(photo));
         }
 
         Collections.sort(album);
@@ -187,8 +233,8 @@ public class PhotoCollection implements ICollectionSubject, ILocationTrackerObse
 
     public void setRatingStrategy(IRating rating) {
         this.rating = rating;
+        this.rating.addObserver(this);
     }
-
 
     @Override
     public void notifyObservers() {
@@ -206,6 +252,16 @@ public class PhotoCollection implements ICollectionSubject, ILocationTrackerObse
     public void removeObserver(ICollectionObserver o) {
         observers.remove(o);
     }
+
+    @Override
+    public void updateRatingChange() {
+        sort();
+    }
+
+    public List<Photo> getAlbum() {
+        return album;
+    }
+
 }
 
 

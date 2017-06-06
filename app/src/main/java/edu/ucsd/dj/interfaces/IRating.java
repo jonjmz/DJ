@@ -1,16 +1,16 @@
 package edu.ucsd.dj.interfaces;
 
-import android.location.Location;
-import edu.ucsd.dj.models.Event;
+import edu.ucsd.dj.interfaces.models.IAddressable;
+import edu.ucsd.dj.interfaces.models.IPhoto;
+import edu.ucsd.dj.interfaces.observers.IRatingObserver;
+import edu.ucsd.dj.interfaces.observers.IRatingSubject;
+import edu.ucsd.dj.interfaces.observers.ISettingsObserver;
 
 /**
  * Created by nguyen on 5/13/2017.
  */
 
-public interface IRating extends ISettingsObserver {
-    double rate(Event info, boolean karma);
+public interface IRating extends ISettingsObserver, IRatingSubject {
+    double rate(IPhoto photo);
     void setCurrentLocation(IAddressable location);
-
-    @Override
-    void update();
 }

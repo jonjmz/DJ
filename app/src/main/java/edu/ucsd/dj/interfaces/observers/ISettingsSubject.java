@@ -1,7 +1,7 @@
-package edu.ucsd.dj.interfaces;
+package edu.ucsd.dj.interfaces.observers;
 
 /**
- * Created by jakesutton on 6/1/17.
+ * Created by Jake Sutton on 6/1/17.
  */
 
 public interface ISettingsSubject {

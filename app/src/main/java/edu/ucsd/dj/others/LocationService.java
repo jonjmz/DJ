@@ -13,9 +13,9 @@ import com.google.android.gms.location.LocationServices;
 
 import java.util.ArrayList;
 
-import edu.ucsd.dj.interfaces.IAddressable;
-import edu.ucsd.dj.interfaces.ILocationTrackerObserver;
-import edu.ucsd.dj.interfaces.LocationTrackerSubject;
+import edu.ucsd.dj.interfaces.models.IAddressable;
+import edu.ucsd.dj.interfaces.observers.ILocationTrackerObserver;
+import edu.ucsd.dj.interfaces.observers.ILocationTrackerSubject;
 import edu.ucsd.dj.managers.DJPhoto;
 import edu.ucsd.dj.models.Event;
 
@@ -25,9 +25,11 @@ import edu.ucsd.dj.models.Event;
  * Created by nguyen on 5/14/2017.
  */
 
-public class LocationService implements GoogleApiClient.ConnectionCallbacks
-        , GoogleApiClient.OnConnectionFailedListener, LocationListener,
-        LocationTrackerSubject{
+public class LocationService implements GoogleApiClient.ConnectionCallbacks,
+                                        GoogleApiClient.OnConnectionFailedListener,
+                                        LocationListener,
+                                        ILocationTrackerSubject {
+
     private static final int UPDATE_INTERVAL = 5000;
     private static final int FASTEST_INTERVAL = 2000;
     private static final float MIN_DISTANCE = 152;

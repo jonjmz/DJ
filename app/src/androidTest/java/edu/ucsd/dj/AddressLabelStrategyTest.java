@@ -7,7 +7,7 @@ import android.util.Log;
 import org.junit.Before;
 import org.junit.Test;
 
-import edu.ucsd.dj.interfaces.IAddressable;
+import edu.ucsd.dj.interfaces.models.IAddressable;
 import edu.ucsd.dj.strategies.AddressLabelStrategy;
 
 import static org.junit.Assert.assertEquals;
@@ -109,7 +109,7 @@ public class AddressLabelStrategyTest {
             hasValidCoordinates = hvc;
         }
         @Override
-        public boolean hasValidCoordinates() {
+        public boolean getHasValidCoordinates() {
             return hasValidCoordinates;
         }
 

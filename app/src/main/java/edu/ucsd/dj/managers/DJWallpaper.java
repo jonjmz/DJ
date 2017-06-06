@@ -8,7 +8,7 @@ import android.util.Log;
 
 import java.io.IOException;
 
-import edu.ucsd.dj.interfaces.ICollectionObserver;
+import edu.ucsd.dj.interfaces.observers.ICollectionObserver;
 import edu.ucsd.dj.others.PhotoCollection;
 import edu.ucsd.dj.strategies.AddressLabelStrategy;
 import edu.ucsd.dj.others.BitmapLabeler;
@@ -51,7 +51,7 @@ public class DJWallpaper implements ICollectionObserver {
             labelStrategy = new AddressLabelStrategy(context);
 
             String label = "";
-            if (photo.getInfo().hasValidCoordinates()) {
+            if (photo.getInfo().getHasValidCoordinates()) {
                 label = labelStrategy.getLabel(photo.getInfo());
             }
 

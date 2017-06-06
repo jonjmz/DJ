@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
-import edu.ucsd.dj.interfaces.IAddressable;
+import edu.ucsd.dj.interfaces.models.IAddressable;
 import edu.ucsd.dj.interfaces.ILabelAddressable;
 
 /**

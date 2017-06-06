@@ -20,25 +20,25 @@ import edu.ucsd.dj.managers.Settings;
 public class MainActivityTest {
     @Rule
     public ActivityTestRule<MainActivity> rule  = new  ActivityTestRule<>(MainActivity.class);
-
-    @Test
-    @UiThreadTest
-    public void testPrioritizeRecent() throws Exception {
-        Switch s = (Switch) rule.getActivity().findViewById(R.id.recency); // Get toggle by id
-
-        // It should match the current setting
-        assert(s.isChecked() == Settings.isConsideringRecency());
-
-        // Flip the toggle
-        boolean currentValue = s.isChecked();
-        s.toggle();
-
-        // It should have changed
-        assert(currentValue != s.isChecked());
-
-        // It should match the current setting
-        assert(currentValue == Settings.getInstance().isConsideringRecency());
-    }
+//
+//    @Test
+//    @UiThreadTest
+//    public void testPrioritizeRecent() throws Exception {
+//        Switch s = (Switch) rule.getActivity().findViewById(R.id.recency); // Get toggle by id
+//
+//        // It should match the current setting
+//        assert(s.isChecked() == Settings.isConsideringRecency());
+//
+//        // Flip the toggle
+//        boolean currentValue = s.isChecked();
+//        s.toggle();
+//
+//        // It should have changed
+//        assert(currentValue != s.isChecked());
+//
+//        // It should match the current setting
+//        assert(currentValue == Settings.getInstance().isConsideringRecency());
+//    }
 
     @Test
     @UiThreadTest

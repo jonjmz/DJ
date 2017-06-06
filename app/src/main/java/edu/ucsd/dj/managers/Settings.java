@@ -6,20 +6,23 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Timer;
 
-import edu.ucsd.dj.interfaces.ISettingsObserver;
-import edu.ucsd.dj.interfaces.ISettingsSubject;
+import edu.ucsd.dj.interfaces.observers.ISettingsObserver;
+import edu.ucsd.dj.interfaces.observers.ISettingsSubject;
 
 /**
  * Setting class that holds all configurations
  * Created by jonathanjimenez on 5/9/17.
  */
 public final class Settings implements ISettingsSubject {
+
     private final int MILLIS_PER_MINUTE = 60000;
     private boolean considerProximity = true;
     private boolean considerTOD = true;
     private boolean considerRecency = true;
+
     private boolean viewingMyAlbum  = true;
     private boolean viewingFriendsAlbum = true;
+
     private List<ISettingsObserver> observers;
 
     private static Timer timer;
@@ -33,7 +36,7 @@ public final class Settings implements ISettingsSubject {
     }
 
     private Settings() {
-        observers = new LinkedList<ISettingsObserver>();
+        observers = new LinkedList<>();
     }
 
     public boolean isConsideringProximity() {
@@ -76,19 +79,21 @@ public final class Settings implements ISettingsSubject {
 
     public void setViewingMyAlbum (boolean viewingMyAlbum ) {
         this.viewingMyAlbum = viewingMyAlbum ;
+        notifyObservers();
+
     }
 
     public void setViewingFriendsAlbum(boolean viewingFriendsAlbum) {
         this.viewingFriendsAlbum = viewingFriendsAlbum;
+        notifyObservers();
+
     }
 
     public long getRefreshRateMillis() {
         return refreshRate * MILLIS_PER_MINUTE;
     }
 
-    public void setRefreshRateMinutes(int refreshRate) {
-        Settings.refreshRate = refreshRate;
-    }
+    public void setRefreshRateMinutes(int refreshRate) { Settings.refreshRate = refreshRate; }
 
     /**
      * Initialize a timer to run the updateLocation procedure task

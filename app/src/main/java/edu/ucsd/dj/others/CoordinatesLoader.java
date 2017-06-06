@@ -5,7 +5,7 @@ import android.util.Log;
 
 import java.io.IOException;
 
-import edu.ucsd.dj.interfaces.IAddressable;
+import edu.ucsd.dj.interfaces.models.IAddressable;
 
 /**
  * Responsible for loading location from the file system for this photo.
@@ -55,7 +55,7 @@ public class CoordinatesLoader {
         } else {
 
             Log.i("CoordinatesLoader", "Failure: Failed to get location data for " +
-                    pathname + ". Setting hasValidCoordinates to false.");
+                    pathname + ". Setting setHasValidCoordinates to false.");
 
             // Declare information missing for this photo.
             info.setHasValidCoordinates(false);

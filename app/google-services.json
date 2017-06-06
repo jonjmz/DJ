@@ -1,0 +1,63 @@
+{
+  "project_info": {
+    "project_number": "469351679303",
+    "firebase_url": "https://djfirebaseproject.firebaseio.com",
+    "project_id": "djfirebaseproject",
+    "storage_bucket": "djfirebaseproject.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:469351679303:android:0c80d41e0762e13c",
+        "android_client_info": {
+          "package_name": "edu.ucsd.dj"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "469351679303-621hhqavupfo88fph0qhpp7g4a98uqai.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "edu.ucsd.dj",
+            "certificate_hash": "002a40603737b51371e6a72fd800482ee3b7ef36"
+          }
+        },
+        {
+          "client_id": "469351679303-a5n10s76l2ftbog6smolv8jh6t18cf6q.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "edu.ucsd.dj",
+            "certificate_hash": "b94f8aa64d414968b431071aecfafb7348758530"
+          }
+        },
+        {
+          "client_id": "469351679303-dgif0gld56gl8ojm2u1b3m4dg8s16sha.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCdY2rZW9wpP7Wvkv40xFSplr468pdp6xI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "469351679303-dgif0gld56gl8ojm2u1b3m4dg8s16sha.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

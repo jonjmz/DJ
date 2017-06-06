@@ -1,22 +1,44 @@
 package edu.ucsd.dj.activities;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.SeekBar;
 import android.widget.Switch;
 
-import edu.ucsd.dj.interfaces.IRating;
-import edu.ucsd.dj.others.PhotoCollection;
+import java.util.Set;
+
 import edu.ucsd.dj.R;
+
+import edu.ucsd.dj.interfaces.IRating;
+import edu.ucsd.dj.interfaces.IRemotePhotoStore;
+import edu.ucsd.dj.interfaces.models.IUser;
+import edu.ucsd.dj.models.DJFriends;
+import edu.ucsd.dj.models.DJPrimaryUser;
+import edu.ucsd.dj.models.FirebaseDB;
+import edu.ucsd.dj.strategies.RatingStrategy;
+
+import edu.ucsd.dj.others.PhotoCollection;
+
+import edu.ucsd.dj.interfaces.IRating;
+import edu.ucsd.dj.interfaces.IRemotePhotoStore;
+import edu.ucsd.dj.interfaces.models.IUser;
+import edu.ucsd.dj.managers.StartUpUtilities;
+import edu.ucsd.dj.models.DJFriends;
+import edu.ucsd.dj.models.DJPrimaryUser;
+import edu.ucsd.dj.models.FirebaseDB;
+import edu.ucsd.dj.strategies.RatingStrategy;
+
+import edu.ucsd.dj.others.PhotoCollection;
 import edu.ucsd.dj.managers.DJWallpaper;
 import edu.ucsd.dj.managers.Settings;
-import edu.ucsd.dj.strategies.RatingStrategy;
 
 /**
  * Main activity. The 'Settings' page.
@@ -25,12 +47,14 @@ public class MainActivity extends AppCompatActivity{
     private static final int READ_STORAGE_PERMISSION = 123;
     private static final int SET_WALLPAPER_PERMISSION = 69;
     private static final int ACCESS_FINE_PERMISSION = 420;
+    private static final int WRITE_STORAGE_PERMISSION = 666;
+    private Switch
+            proximitySwitch,
+            timeOfDaySwitch,
+            recencySwitch,
+            myAlbumSwitch,
+            friendsAlbumSwitch;
 
-    private Switch proximitySwitch;
-    private Switch timeOfDaySwitch;
-    private Switch recencySwitch;
-    private Switch myAlbumSwitch;
-    private Switch friendsAlbumSwitch;
     private SeekBar refreshRateBar;
 
     @Override
@@ -51,18 +75,30 @@ public class MainActivity extends AppCompatActivity{
         askPermission(Manifest.permission.READ_EXTERNAL_STORAGE, READ_STORAGE_PERMISSION);
         askPermission(Manifest.permission.SET_WALLPAPER, SET_WALLPAPER_PERMISSION);
         askPermission(Manifest.permission.ACCESS_FINE_LOCATION, ACCESS_FINE_PERMISSION);
-
+        askPermission(Manifest.permission.READ_CONTACTS, READ_STORAGE_PERMISSION);
+        askPermission(Manifest.permission.GET_ACCOUNTS, READ_STORAGE_PERMISSION);
+        askPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, WRITE_STORAGE_PERMISSION);
         IRating rating = new RatingStrategy(
                 Settings.getInstance().isConsideringRecency(),
                 Settings.getInstance().isConsideringTOD(),
                 Settings.getInstance().isConsideringProximity());
 
+        Settings.getInstance().addObserver( rating );
+
+        //TODO REFACTOR
+        Settings.getInstance().addObserver(PhotoCollection.getInstance());
         PhotoCollection collection = PhotoCollection.getInstance();
         collection.addObserver( DJWallpaper.getInstance() );
         collection.setRatingStrategy( rating );
         collection.update();
 
-        Settings.getInstance().addObserver( rating );
+        final IUser primaryUser = new DJPrimaryUser();
+        IRemotePhotoStore ps = new FirebaseDB();
+        ps.addUser(primaryUser);
+
+        //downloadAllFriendsPhotos(new DJFriends());
+
+        ps.uploadPhotos( primaryUser, collection.getAlbum() );
 
         proximitySwitch = (Switch) findViewById(R.id.proximity);
         timeOfDaySwitch = (Switch) findViewById(R.id.timeOfDay);
@@ -139,6 +175,13 @@ public class MainActivity extends AppCompatActivity{
         });
 
         Log.i(this.getClass().toString() + ":onCreate()", "MainActivity listeners configured.");
+
+        StartUpUtilities.CreateAlbums();
+    }
+
+    public void openPicker(View view){
+        Intent intent = new Intent(MainActivity.this, PhotoPicker.class);
+        startActivity(intent);
     }
 
     private void askPermission(String permission, int requestCode){

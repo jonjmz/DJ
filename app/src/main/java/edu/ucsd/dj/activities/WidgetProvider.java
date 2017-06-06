@@ -12,13 +12,11 @@ import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 
-import edu.ucsd.dj.interfaces.LocationTrackerSubject;
-import edu.ucsd.dj.managers.DJWallpaper;
+import edu.ucsd.dj.interfaces.observers.ILocationTrackerSubject;
 import edu.ucsd.dj.others.LocationService;
 import edu.ucsd.dj.models.Photo;
 import edu.ucsd.dj.others.PhotoCollection;
 import edu.ucsd.dj.R;
-import edu.ucsd.dj.managers.Settings;
 
 /**
  * Created by Josh on 5/2/2017.
@@ -31,7 +29,7 @@ import edu.ucsd.dj.managers.Settings;
 public class WidgetProvider extends AppWidgetProvider {
     private static String NEXT = "next";
     private static String PREVIOUS = "previous";
-    private LocationTrackerSubject locationTrackerSubject;
+    private ILocationTrackerSubject locationTrackerSubject;
 
     /**
      * called if an instance of WidgetProvider has been restored from backup
@@ -133,7 +131,8 @@ public class WidgetProvider extends AppWidgetProvider {
 //            WidgetProvider.locationService.connect();
 //            Settings.initTimer();
 //        }
-        //Settings.initTimer();
+//
+//        Settings.initTimer();
 
         PhotoCollection collection = PhotoCollection.getInstance();
 
