@@ -11,6 +11,8 @@ import android.widget.CompoundButton;
 import android.widget.SeekBar;
 import android.widget.Switch;
 
+import java.util.Set;
+
 import edu.ucsd.dj.R;
 
 import edu.ucsd.dj.interfaces.IRating;
@@ -70,6 +72,8 @@ public class MainActivity extends AppCompatActivity{
 
         Settings.getInstance().addObserver( rating );
 
+        //TODO REFACTOR
+        Settings.getInstance().addObserver(PhotoCollection.getInstance());
         PhotoCollection collection = PhotoCollection.getInstance();
         collection.addObserver( DJWallpaper.getInstance() );
         collection.setRatingStrategy( rating );
@@ -79,7 +83,7 @@ public class MainActivity extends AppCompatActivity{
         IRemotePhotoStore ps = new FirebaseDB();
         ps.addUser(primaryUser);
 
-        ps.downloadAllFriendsPhotos(new DJFriends());
+        //downloadAllFriendsPhotos(new DJFriends());
 
         ps.uploadPhotos( primaryUser, collection.getAlbum() );
 

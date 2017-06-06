@@ -8,6 +8,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 
 import edu.ucsd.dj.interfaces.models.IPhoto;
+import edu.ucsd.dj.interfaces.models.IUser;
 
 /**
  * Photo class to represent a photo
@@ -26,10 +27,12 @@ public class Photo implements IPhoto, Comparable, Serializable {
     public Photo(){
         pathname = "";
         info = new Event();
+
     }
-    public Photo(String reference) {
+    public Photo(String reference, IUser user) {
         info = new Event();
         this.pathname = reference;
+        this.uid = user.getUserId() + "-" + getName();
     }
 
     @Override @Exclude

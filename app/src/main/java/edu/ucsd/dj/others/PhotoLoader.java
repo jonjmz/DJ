@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import edu.ucsd.dj.interfaces.models.IPhoto;
 import edu.ucsd.dj.interfaces.models.IUser;
 import edu.ucsd.dj.managers.DJPhoto;
+import edu.ucsd.dj.models.DJPrimaryUser;
 import edu.ucsd.dj.models.FirebaseDB;
 import edu.ucsd.dj.models.MockEvent;
 import edu.ucsd.dj.models.Photo;
@@ -67,6 +68,8 @@ public class PhotoLoader  {
         if (DJPhoto.getAppContext() != null) {
             resolver = DJPhoto.getAppContext().getContentResolver();
 
+            //TODO REFACTOR
+            DJPrimaryUser user = new DJPrimaryUser();
             try {
                 Cursor cur = resolver.query(
                         images,
@@ -103,7 +106,7 @@ public class PhotoLoader  {
 
                         Log.i("ListingImages",  " path_name: " + pathName);
 
-                        Photo photo = new Photo(pathName);
+                        Photo photo = new Photo(pathName, user);
                         latLngLoader.loadCoordinatesFor(pathName, photo.getInfo());
                         dateLoader.loadDateFor(pathName, photo.getInfo());
 

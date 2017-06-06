@@ -7,12 +7,19 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+import edu.ucsd.dj.interfaces.IRemotePhotoStore;
 import edu.ucsd.dj.interfaces.models.IAddressable;
+import edu.ucsd.dj.interfaces.models.IUser;
 import edu.ucsd.dj.interfaces.observers.ICollectionObserver;
 import edu.ucsd.dj.interfaces.observers.ICollectionSubject;
 import edu.ucsd.dj.interfaces.IRating;
 import edu.ucsd.dj.interfaces.observers.ILocationTrackerObserver;
 import edu.ucsd.dj.interfaces.observers.IRatingObserver;
+import edu.ucsd.dj.interfaces.observers.ISettingsObserver;
+import edu.ucsd.dj.managers.Settings;
+import edu.ucsd.dj.models.DJFriends;
+import edu.ucsd.dj.models.DJPrimaryUser;
+import edu.ucsd.dj.models.FirebaseDB;
 import edu.ucsd.dj.models.Photo;
 
 /**
@@ -21,7 +28,8 @@ import edu.ucsd.dj.models.Photo;
  */
 public class PhotoCollection implements ICollectionSubject,
                                         ILocationTrackerObserver,
-                                        IRatingObserver {
+                                        IRatingObserver,
+                                        ISettingsObserver{
 
     // Current pointer to the image that's being set as the wallpaper
     private int curr;
@@ -60,13 +68,47 @@ public class PhotoCollection implements ICollectionSubject,
      */
     public void update() {
 
-        PhotoLoader loader = new PhotoLoader();
-        List<Photo> newAlbum = loader.getPhotos();
+        //TODO REFACTOR
+        if(Settings.getInstance().isViewingMyAlbum()){
+            PhotoLoader loader = new PhotoLoader();
+            List<Photo> newAlbum = loader.getPhotos();
+            //TODO optimization problem
+            for(Photo photo: newAlbum){
+                if(!album.contains(photo) && !releasedList.contains(photo)) {
+                    album.add( photo );
+                }
+            }
 
-        //TODO optimization problem
-        for(Photo photo: newAlbum){
-            if(!album.contains(photo) && !releasedList.contains(photo)) {
-                album.add( photo );
+        }
+        else{
+            DJPrimaryUser user = new DJPrimaryUser();
+            for(int i = 0; i < album.size(); i++){
+                if(album.get(i).getUid().startsWith(user.getUserId())){
+                    album.remove(i);
+                }
+            }
+        }
+
+        //TODO REFACTOR
+        if(Settings.getInstance().isViewingFriendsAlbum()){
+            IRemotePhotoStore db = new FirebaseDB();
+            List<Photo> temp = db.downloadAllFriendsPhotos(new DJFriends());
+            album.addAll(temp);
+            for(Photo photo: temp) {
+                if (!album.contains(photo) && !releasedList.contains(photo)) {
+                    album.add(photo);
+                }
+            }
+        }
+        //TODO delete
+        else{
+            DJFriends friendsList = new DJFriends();
+            for(IUser friend: friendsList.getFriends()){
+                for(int i = 0; i < album.size(); i++){
+                    if(album.get(i).getUid().startsWith(friend.getUserId())){
+                        album.remove(i);
+                    }
+                }
             }
         }
 

@@ -36,7 +36,7 @@ public class FirebaseDB implements IRemotePhotoStore {
     private static final DatabaseReference
             databaseRef = FirebaseDatabase.getInstance().getReference();
 
-    private DatabaseReference
+    private static DatabaseReference
             primaryUserRef,
             primaryUserPhotoRef;
 
@@ -51,12 +51,14 @@ public class FirebaseDB implements IRemotePhotoStore {
     private static final PhotoLoader loader = new PhotoLoader();
 
     @Override
-    public void downloadAllFriendsPhotos(IFriendList friends) {
+    public List<Photo> downloadAllFriendsPhotos(IFriendList friends) {
 
         for (IUser u : friends.getFriends()) {
             Log.i("FirebaseDB", "Friends: " + u.getUserId());
             downloadPhotos(u);
         }
+        return friendsPhotos;
+
     }
 
     @Override
