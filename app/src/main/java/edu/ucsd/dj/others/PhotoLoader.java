@@ -6,6 +6,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -26,6 +27,8 @@ import edu.ucsd.dj.models.FirebaseDB;
 import edu.ucsd.dj.models.MockEvent;
 import edu.ucsd.dj.models.Photo;
 import edu.ucsd.dj.models.TestUser;
+
+import static android.provider.CalendarContract.CalendarCache.URI;
 
 /**
  * Load photos from the phone's gallery
@@ -147,10 +150,23 @@ public class PhotoLoader  {
                                      final Photo photo, String album) {
 
         ContentResolver cr = DJPhoto.getAppContext().getContentResolver();
-        MediaStore.Images.Media.insertImage(cr, source, photo.getName() , photo.getUid());
+        String url = MediaStore.Images.Media.insertImage(cr, source, photo.getName() , photo.getUid());
 
         File file = new File(Environment.getExternalStorageDirectory() + "/DCIM/" + album + photo.getName());
-
+        file.mkdirs();
+        ContentValues values = new ContentValues();
+//        values.put( Media.TITLE, title );
+//        values.put( Images.Media.DATE_TAKEN, System.currentTimeMillis() );
+//        values.put( Images.Media.BUCKET_ID, filePath.hashCode() );
+//        values.put( Images.Media.BUCKET_DISPLAY_NAME, Constants.TA_PHOTO_ALBUM_NAME );
+//
+//        values.put( Images.Media.MIME_TYPE, "image/jpeg" );
+//        values.put( Media.DESCRIPTION, context.getResources().getString( R.string.product_image_description ) );
+        values.put( MediaStore.MediaColumns.DATA, url );
+        Uri uri = cr.insert( Uri.fromFile(file) , values );
+        MediaScannerConnection connection = new MediaScannerConnection(DJPhoto.getAppContext(), null);
+        connection.connect();
+        connection.scanFile(file.toString(), null);
     }
 
     /**
