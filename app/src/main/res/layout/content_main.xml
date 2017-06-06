@@ -29,6 +29,13 @@
         android:layout_below="@+id/refresh_label"
         />
 
+    <Button
+        android:id="@+id/viewPhotoPicker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="openPicker"
+        android:text="View Photo Picker" />
+
     <TextView
         android:id="@+id/text"
         android:text="When selecting background image,\nconsider the photo's:"

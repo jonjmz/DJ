@@ -16,6 +16,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.URI;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -27,8 +28,6 @@ import edu.ucsd.dj.models.FirebaseDB;
 import edu.ucsd.dj.models.MockEvent;
 import edu.ucsd.dj.models.Photo;
 import edu.ucsd.dj.models.TestUser;
-
-import static android.provider.CalendarContract.CalendarCache.URI;
 
 /**
  * Load photos from the phone's gallery
@@ -45,15 +44,26 @@ public class PhotoLoader  {
     /**
      * Default constructor. Initializing params for the query.
      */
-    public PhotoLoader() {
+    public PhotoLoader(String folder) {
         projection = new String[] {
                 MediaStore.Images.Media.DATE_TAKEN,
                 MediaStore.Images.Media.DATA
         };
-        selectionClause = null;
-        selectionArgs = null;
+        selectionClause = MediaStore.Images.Media.DATA + " like ? ";
+        selectionArgs = new String[]{"%" + folder + "%"};
         sortOrder = null;
+//        Log.v("Photo Loader", Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)+File.separator+"DejaPhotoMain");
+//        Log.v("Photo Loader", MediaStore.Images.Media.EXTERNAL_CONTENT_URI.toString());
+//        Log.v("Photo Loader",  MediaStore.Images.Media.getContentUri(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)+File.separator+"DejaPhotoMain").toString());
+
+
         images = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+//        images = new Uri.Builder()
+//                .appendPath((Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)+File.separator+"DejaPhotoMain"))
+//                .build();
+//
+//        images = MediaStore.Images.Media.getContentUri(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)+File.separator+"DejaPhotoMain");
+
         initMediaDir();
     }
 

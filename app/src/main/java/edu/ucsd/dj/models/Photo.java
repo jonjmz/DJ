@@ -4,6 +4,10 @@ import android.support.annotation.NonNull;
 
 import com.google.firebase.database.Exclude;
 
+
+import com.google.firebase.database.Exclude;
+
+import java.io.File;
 import java.io.Serializable;
 import java.util.HashMap;
 
@@ -61,7 +65,7 @@ public class Photo implements IPhoto, Comparable, Serializable {
      */
     @Override
     public boolean equals(Object o) {
-        return pathname.equals(((Photo) o).pathname);
+        return new File(pathname).getName().equals(new File(((Photo) o).pathname).getName());
     }
 
     /**

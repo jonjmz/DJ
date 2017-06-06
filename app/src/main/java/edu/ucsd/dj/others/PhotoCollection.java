@@ -71,7 +71,7 @@ public class PhotoCollection implements ICollectionSubject,
 
         //TODO REFACTOR
         if(Settings.getInstance().isViewingMyAlbum()){
-            PhotoLoader loader = new PhotoLoader();
+            PhotoLoader loader = new PhotoLoader("DejaPhotoMain");
             List<Photo> newAlbum = loader.getPhotos();
             //TODO optimization problem
             for(Photo photo: newAlbum){
