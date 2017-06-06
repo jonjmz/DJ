@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity{
     private static final int READ_STORAGE_PERMISSION = 123;
     private static final int SET_WALLPAPER_PERMISSION = 69;
     private static final int ACCESS_FINE_PERMISSION = 420;
-
+    private static final int WRITE_STORAGE_PERMISSION = 666;
     private Switch
             proximitySwitch,
             timeOfDaySwitch,
@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity{
         askPermission(Manifest.permission.ACCESS_FINE_LOCATION, ACCESS_FINE_PERMISSION);
         askPermission(Manifest.permission.READ_CONTACTS, READ_STORAGE_PERMISSION);
         askPermission(Manifest.permission.GET_ACCOUNTS, READ_STORAGE_PERMISSION);
-
+        askPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, WRITE_STORAGE_PERMISSION);
         IRating rating = new RatingStrategy(
                 Settings.getInstance().isConsideringRecency(),
                 Settings.getInstance().isConsideringTOD(),

@@ -140,53 +140,14 @@ public class PhotoLoader  {
 
     }
 
-    public static String insertPhoto(Bitmap source,
+    public static void insertPhoto(Bitmap source,
                                      final Photo photo, String album) {
 
         ContentResolver cr = DJPhoto.getAppContext().getContentResolver();
-        ContentValues values = new ContentValues();
-        //values.put(MediaStore.Images.Media.DESCRIPTION, description);
-        //values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
-        // Add the date meta data to ensure the image is added at the front of the gallery
-        values.put(MediaStore.Images.Media.DATE_ADDED, System.currentTimeMillis());
-        values.put(MediaStore.Images.Media.DATE_TAKEN, photo.getDateTime());
+        MediaStore.Images.Media.insertImage(cr, source, photo.getName() , photo.getUid());
 
-        Uri url = null;
-        String stringUrl = null;    /* value to be returned */
         File file = new File(Environment.getExternalStorageDirectory() + "/DCIM/" + album + photo.getName());
-        Uri path = Uri.parse(file.toString());
-        try {
-            //url = cr.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
-            url = cr.insert(path, values);
-            if (source != null) {
-                OutputStream imageOut = cr.openOutputStream(url);
-                try {
-                    source.compress(Bitmap.CompressFormat.JPEG, 50, imageOut);
-                } finally {
-                    imageOut.close();
-                }
 
-                long id = ContentUris.parseId(url);
-                // Wait until MINI_KIND thumbnail is generated.
-                Bitmap miniThumb = MediaStore.Images.Thumbnails.getThumbnail(cr, id, MediaStore.Images.Thumbnails.MINI_KIND, null);
-                // This is for backward compatibility.
-                storeThumbnail(cr, miniThumb, id, 50F, 50F, MediaStore.Images.Thumbnails.MICRO_KIND);
-            } else {
-                cr.delete(url, null, null);
-                url = null;
-            }
-        } catch (Exception e) {
-            if (url != null) {
-                cr.delete(url, null, null);
-                url = null;
-            }
-        }
-
-        if (url != null) {
-            stringUrl = url.toString();
-        }
-
-        return stringUrl;
     }
 
     /**

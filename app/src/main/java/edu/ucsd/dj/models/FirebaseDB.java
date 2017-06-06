@@ -18,7 +18,6 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -45,6 +44,7 @@ public class FirebaseDB implements IRemotePhotoStore {
     private static final String USERS = "users";
     private static final String DELIMITER = "-";
     private static final String TAG = "FirebaseDB";
+    final long FILE_SIZE = 1024 * 1024;
 
     private static List<Photo> friendsPhotos =  new LinkedList<>();
 
@@ -114,8 +114,7 @@ public class FirebaseDB implements IRemotePhotoStore {
     private void downloadPhotoFromStorage(IUser user, final Photo photo){
         StorageReference temp = buildStoragePath(user, photo);
         Log.i("FirebaseDB", temp.getPath());
-        final long ONE_MEGABYTE = 1024 * 1024;
-        temp.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+        temp.getBytes(FILE_SIZE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
             @Override
             public void onSuccess(byte[] bytes) {
                 // Data for "images/island.jpg" is returns, use this as needed
@@ -128,6 +127,7 @@ public class FirebaseDB implements IRemotePhotoStore {
                 // Handle any errors
             }
         });
+
     }
 
     public StorageReference storePhotoToStorage(IUser user, Photo photo){
