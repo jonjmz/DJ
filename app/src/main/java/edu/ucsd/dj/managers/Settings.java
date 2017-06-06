@@ -79,19 +79,21 @@ public final class Settings implements ISettingsSubject {
 
     public void setViewingMyAlbum (boolean viewingMyAlbum ) {
         this.viewingMyAlbum = viewingMyAlbum ;
+        notifyObservers();
+
     }
 
     public void setViewingFriendsAlbum(boolean viewingFriendsAlbum) {
         this.viewingFriendsAlbum = viewingFriendsAlbum;
+        notifyObservers();
+
     }
 
     public long getRefreshRateMillis() {
         return refreshRate * MILLIS_PER_MINUTE;
     }
 
-    public void setRefreshRateMinutes(int refreshRate) {
-        Settings.refreshRate = refreshRate;
-    }
+    public void setRefreshRateMinutes(int refreshRate) { Settings.refreshRate = refreshRate; }
 
     /**
      * Initialize a timer to run the updateLocation procedure task

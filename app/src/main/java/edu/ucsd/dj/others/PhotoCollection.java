@@ -4,6 +4,7 @@ import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -82,12 +83,14 @@ public class PhotoCollection implements ICollectionSubject,
         }
         else{
             DJPrimaryUser user = new DJPrimaryUser();
-            for(int i = 0; i < album.size(); i++){
-                if(album.get(i).getUid().startsWith(user.getUserId())){
-                    album.remove(i);
-                }
+            for(Iterator<Photo> it = album.listIterator(); it.hasNext();){
+                Photo temp = it.next();
+                if(temp.getUid().startsWith(user.getUserId()))
+                    it.remove();
             }
+
         }
+
 
         //TODO REFACTOR
         if(Settings.getInstance().isViewingFriendsAlbum()){
@@ -104,10 +107,10 @@ public class PhotoCollection implements ICollectionSubject,
         else{
             DJFriends friendsList = new DJFriends();
             for(IUser friend: friendsList.getFriends()){
-                for(int i = 0; i < album.size(); i++){
-                    if(album.get(i).getUid().startsWith(friend.getUserId())){
-                        album.remove(i);
-                    }
+                for(Iterator<Photo> it = album.listIterator(); it.hasNext();){
+                    Photo temp = it.next();
+                    if(temp.getUid().startsWith(friend.getUserId()))
+                        it.remove();
                 }
             }
         }
