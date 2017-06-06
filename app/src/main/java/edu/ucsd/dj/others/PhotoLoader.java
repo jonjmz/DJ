@@ -58,13 +58,6 @@ public class PhotoLoader  {
 
 
         images = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-//        images = new Uri.Builder()
-//                .appendPath((Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)+File.separator+"DejaPhotoMain"))
-//                .build();
-//
-//        images = MediaStore.Images.Media.getContentUri(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)+File.separator+"DejaPhotoMain");
-
-        initMediaDir();
     }
 
     //TODO Do some customizable query methods to optimize later
@@ -135,26 +128,26 @@ public class PhotoLoader  {
         return album;
     }
 
-    public void initMediaDir(){
-        File sdcard = Environment.getExternalStorageDirectory();
-        if (sdcard != null) {
-            File DejaPhoto = new File(sdcard, "DCIM/DejaPhoto");
-            File DejaPhotoCopied = new File(sdcard, "DCIM/DejaPhotoCopied");
-            File DejaPhotoFriends = new File(sdcard, "DCIM/DejaPhotoFriends");
-
-            if (!DejaPhoto.exists()) {
-                DejaPhoto.mkdirs();
-            }
-            if (!DejaPhotoCopied.exists()) {
-                DejaPhotoCopied.mkdirs();
-            }
-            if (!DejaPhotoFriends.exists()) {
-                DejaPhotoFriends.mkdirs();
-            }
-
-        }
-
-    }
+//    public void initMediaDir(){
+//        File sdcard = Environment.getExternalStorageDirectory();
+//        if (sdcard != null) {
+//            File DejaPhoto = new File(sdcard, "DCIM/DejaPhoto");
+//            File DejaPhotoCopied = new File(sdcard, "DCIM/DejaPhotoCopied");
+//            File DejaPhotoFriends = new File(sdcard, "DCIM/DejaPhotoFriends");
+//
+//            if (!DejaPhoto.exists()) {
+//                DejaPhoto.mkdirs();
+//            }
+//            if (!DejaPhotoCopied.exists()) {
+//                DejaPhotoCopied.mkdirs();
+//            }
+//            if (!DejaPhotoFriends.exists()) {
+//                DejaPhotoFriends.mkdirs();
+//            }
+//
+//        }
+//
+//    }
 
     public static void insertPhoto(Bitmap source,
                                      final Photo photo, String album) {
