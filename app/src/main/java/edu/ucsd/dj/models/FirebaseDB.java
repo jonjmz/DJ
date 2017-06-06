@@ -2,6 +2,8 @@ package edu.ucsd.dj.models;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.MediaScannerConnection;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -13,17 +15,20 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
 
 import edu.ucsd.dj.interfaces.models.IFriendList;
 import edu.ucsd.dj.interfaces.IRemotePhotoStore;
 import edu.ucsd.dj.interfaces.models.IUser;
+import edu.ucsd.dj.managers.DJPhoto;
 import edu.ucsd.dj.others.PhotoLoader;
 
 /**
@@ -102,7 +107,8 @@ public class FirebaseDB implements IRemotePhotoStore {
                         Photo tempPhoto = dsp.getValue(Photo.class);
                         Log.i("FirebaseDB", "Photo: " + tempPhoto.getPathname());
                         friendsPhotos.add(tempPhoto);
-                        downloadPhotoFromStorage(friend, tempPhoto);
+                        //downloadPhotoFromStorage(friend, tempPhoto);
+                        downloadPhotoFromStorage_file(friend, tempPhoto);
                     }
                 }
 
@@ -122,6 +128,7 @@ public class FirebaseDB implements IRemotePhotoStore {
                 // Data for "images/island.jpg" is returns, use this as needed
                 Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
                 loader.insertPhoto(bitmap, photo, "DejaPhotoFriends");
+                //
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -130,6 +137,31 @@ public class FirebaseDB implements IRemotePhotoStore {
             }
         });
 
+    }
+
+    private void downloadPhotoFromStorage_file(IUser user, final Photo photo){
+        StorageReference temp = buildStoragePath(user, photo);
+
+        final File localFile = new File(
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)+
+                        File.separator+
+                        "DejaPhotoFriends"+
+                        File.separator+
+                        photo.getUid()
+        );
+
+        temp.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                // Local temp file has been created
+                Log.i("FirebaseDB", "Downloading file success: " + taskSnapshot.toString());
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle any errors
+            }
+        });
     }
 
     public StorageReference storePhotoToStorage(IUser user, Photo photo){

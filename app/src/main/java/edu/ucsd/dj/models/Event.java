@@ -19,6 +19,7 @@ public class Event implements IEvent {
     private boolean hasValidCoordinates;
     private boolean hasValidDate;
     private Location loc;
+
     //private double latitude;
     //private double longitude;
 
