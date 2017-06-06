@@ -52,9 +52,6 @@ public class PhotoLoader  {
         selectionClause = MediaStore.Images.Media.DATA + " like ? ";
         selectionArgs = new String[]{"%" + folder + "%"};
         sortOrder = null;
-//        Log.v("Photo Loader", Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)+File.separator+"DejaPhotoMain");
-//        Log.v("Photo Loader", MediaStore.Images.Media.EXTERNAL_CONTENT_URI.toString());
-//        Log.v("Photo Loader",  MediaStore.Images.Media.getContentUri(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)+File.separator+"DejaPhotoMain").toString());
 
 
         images = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
