@@ -104,9 +104,9 @@
         android:id="@+id/floatingActionButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/refresh_label"
-        android:layout_alignTop="@+id/refresh_label"
-        android:layout_marginEnd="19dp"
+        android:layout_below="@+id/friendsAlbum"
+        android:layout_marginTop="41dp"
+        android:layout_toEndOf="@+id/text"
         android:clickable="true"
         app:fabSize="normal"
         app:srcCompat="@drawable/camera" />
