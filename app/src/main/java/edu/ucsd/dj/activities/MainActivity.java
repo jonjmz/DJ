@@ -97,12 +97,15 @@ public class MainActivity extends AppCompatActivity{
         LocationService.getInstance().connect();
         collection.update();
         Settings.getInstance().initTimer();
-//        final IUser primaryUser = new DJPrimaryUser();
-//        IRemotePhotoStore ps = new FirebaseDB();
-//        ps.addUser(primaryUser);
 
 
-//        ps.uploadPhotos( primaryUser, collection.getAlbum() );
+        //TODO update task
+        final IUser primaryUser = new DJPrimaryUser();
+        IRemotePhotoStore ps = new FirebaseDB();
+        ps.addUser(primaryUser);
+
+
+        ps.uploadPhotos( primaryUser, collection.getAlbum() );
 
         proximitySwitch = (Switch) findViewById(R.id.proximity);
         timeOfDaySwitch = (Switch) findViewById(R.id.timeOfDay);
