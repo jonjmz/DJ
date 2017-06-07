@@ -11,7 +11,7 @@ import java.io.File;
 
 public class StartUpUtilities {
     public static void CreateAlbums(){
-        String[] RequiredDirectories = {"DejaPhotoMain", "DejaPhotoFriends", "DejaPhotoCopied"};
+        String[] RequiredDirectories = {"DejaPhoto", "DejaPhotoFriends", "DejaPhotoCopied"};
         for (String directoryName : RequiredDirectories){
             // Create the directory
             File directory = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)+File.separator+directoryName);

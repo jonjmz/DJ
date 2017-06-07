@@ -30,6 +30,7 @@ public final class Settings implements ISettingsSubject {
 
     private static final Settings ourInstance = new Settings();
 
+
     public static Settings getInstance() {
         return ourInstance;
     }

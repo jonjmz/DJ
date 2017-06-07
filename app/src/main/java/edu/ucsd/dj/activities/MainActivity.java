@@ -23,6 +23,7 @@ import edu.ucsd.dj.interfaces.models.IUser;
 import edu.ucsd.dj.models.DJFriends;
 import edu.ucsd.dj.models.DJPrimaryUser;
 import edu.ucsd.dj.models.FirebaseDB;
+import edu.ucsd.dj.others.LocationService;
 import edu.ucsd.dj.strategies.RatingStrategy;
 
 import edu.ucsd.dj.others.PhotoCollection;
@@ -78,10 +79,12 @@ public class MainActivity extends AppCompatActivity{
         askPermission(Manifest.permission.READ_CONTACTS, READ_STORAGE_PERMISSION);
         askPermission(Manifest.permission.GET_ACCOUNTS, READ_STORAGE_PERMISSION);
         askPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, WRITE_STORAGE_PERMISSION);
+
         IRating rating = new RatingStrategy(
                 Settings.getInstance().isConsideringRecency(),
                 Settings.getInstance().isConsideringTOD(),
                 Settings.getInstance().isConsideringProximity());
+        StartUpUtilities.CreateAlbums();
 
         Settings.getInstance().addObserver( rating );
 
@@ -90,15 +93,16 @@ public class MainActivity extends AppCompatActivity{
         PhotoCollection collection = PhotoCollection.getInstance();
         collection.addObserver( DJWallpaper.getInstance() );
         collection.setRatingStrategy( rating );
+        LocationService.getInstance().addObserver(PhotoCollection.getInstance());
+        LocationService.getInstance().connect();
         collection.update();
 
-        final IUser primaryUser = new DJPrimaryUser();
-        IRemotePhotoStore ps = new FirebaseDB();
-        ps.addUser(primaryUser);
+//        final IUser primaryUser = new DJPrimaryUser();
+//        IRemotePhotoStore ps = new FirebaseDB();
+//        ps.addUser(primaryUser);
 
-        //downloadAllFriendsPhotos(new DJFriends());
 
-        ps.uploadPhotos( primaryUser, collection.getAlbum() );
+//        ps.uploadPhotos( primaryUser, collection.getAlbum() );
 
         proximitySwitch = (Switch) findViewById(R.id.proximity);
         timeOfDaySwitch = (Switch) findViewById(R.id.timeOfDay);
@@ -176,7 +180,6 @@ public class MainActivity extends AppCompatActivity{
 
         Log.i(this.getClass().toString() + ":onCreate()", "MainActivity listeners configured.");
 
-        StartUpUtilities.CreateAlbums();
     }
 
     public void openPicker(View view){

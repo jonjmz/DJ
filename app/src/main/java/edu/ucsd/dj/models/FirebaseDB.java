@@ -53,7 +53,7 @@ public class FirebaseDB implements IRemotePhotoStore {
 
     private static List<Photo> friendsPhotos =  new LinkedList<>();
 
-    private static final PhotoLoader loader = new PhotoLoader("DejaPhotoMain");
+    private final PhotoLoader loader = new PhotoLoader("DejaPhoto");
 
     @Override
     public List<Photo> downloadAllFriendsPhotos(IFriendList friends) {

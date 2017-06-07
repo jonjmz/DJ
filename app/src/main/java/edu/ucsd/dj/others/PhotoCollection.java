@@ -71,7 +71,7 @@ public class PhotoCollection implements ICollectionSubject,
 
         //TODO REFACTOR
         if(Settings.getInstance().isViewingMyAlbum()){
-            PhotoLoader loader = new PhotoLoader("DejaPhotoMain");
+            PhotoLoader loader = new PhotoLoader("DejaPhoto");
             List<Photo> newAlbum = loader.getPhotos();
             //TODO optimization problem
             for(Photo photo: newAlbum){
@@ -81,6 +81,7 @@ public class PhotoCollection implements ICollectionSubject,
             }
 
         }
+
         else{
             DJPrimaryUser user = new DJPrimaryUser();
             for(Iterator<Photo> it = album.listIterator(); it.hasNext();){
