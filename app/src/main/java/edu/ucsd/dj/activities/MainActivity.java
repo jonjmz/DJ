@@ -96,7 +96,7 @@ public class MainActivity extends AppCompatActivity{
         LocationService.getInstance().addObserver(PhotoCollection.getInstance());
         LocationService.getInstance().connect();
         collection.update();
-
+        Settings.getInstance().initTimer();
 //        final IUser primaryUser = new DJPrimaryUser();
 //        IRemotePhotoStore ps = new FirebaseDB();
 //        ps.addUser(primaryUser);
