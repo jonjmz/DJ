@@ -66,36 +66,20 @@ public class ImageAdapter extends BaseAdapter {
         View.OnClickListener listener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Using custom type of ImageView
                 GreyImage image = (GreyImage) v;
+                // It should now be a color image
                 image.makeColor();
-
-                // call some method that moves file into album
-                File from = new File(Settings.getInstance().DCIM_LOCATION + image.getFileName());
-                File to = new File(Settings.getInstance().MAIN_LOCATION + image.getFileName());
-
-                InputStream is = null;
-                OutputStream os = null;
-                try {
-                    is = new FileInputStream(from);
-                    os = new FileOutputStream(to);
-                    byte[] buffer = new byte[1024];
-                    int length;
-                    while ((length = is.read(buffer)) > 0) {
-                        os.write(buffer, 0, length);
-                    }
-                    is.close();
-                    os.close();
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                // Update MediaStore
-                Intent intent =
-                        new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-                intent.setData(Uri.fromFile(to));
-                context.sendBroadcast(intent);
+                // Copy the file over
+                FileUtilities.copy(
+                        Settings.getInstance().DCIM_LOCATION + image.getFileName(),
+                        Settings.getInstance().MAIN_LOCATION + image.getFileName()
+                );
+                // Tell mediastore the file was created
+                FileUtilities.UpdateMediastore(
+                        context,
+                        Settings.getInstance().MAIN_LOCATION + image.getFileName()
+                );
             }};
 
         image.setOnClickListener(listener);

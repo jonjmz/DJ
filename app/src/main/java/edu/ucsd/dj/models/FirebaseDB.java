@@ -175,25 +175,25 @@ public class FirebaseDB implements IRemotePhotoStore {
         });
     }
 
-    private void downloadPhotoFromStorage(IUser user, final Photo photo){
-        StorageReference temp = buildStoragePath(user, photo);
-        Log.i("FirebaseDB", temp.getPath());
-        temp.getBytes(FILE_SIZE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-            @Override
-            public void onSuccess(byte[] bytes) {
-                // Data for "images/island.jpg" is returns, use this as needed
-                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                loader.insertPhoto(bitmap, photo, "DejaPhotoFriends");
-                //
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                // Handle any errors
-            }
-        });
-
-    }
+//    private void downloadPhotoFromStorage(IUser user, final Photo photo){
+//        StorageReference temp = buildStoragePath(user, photo);
+//        Log.i("FirebaseDB", temp.getPath());
+//        temp.getBytes(FILE_SIZE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+//            @Override
+//            public void onSuccess(byte[] bytes) {
+//                // Data for "images/island.jpg" is returns, use this as needed
+//                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+//                loader.insertPhoto(bitmap, photo, "DejaPhotoFriends");
+//                //
+//            }
+//        }).addOnFailureListener(new OnFailureListener() {
+//            @Override
+//            public void onFailure(@NonNull Exception exception) {
+//                // Handle any errors
+//            }
+//        });
+//
+//    }
 
     private void downloadPhotoFromStorage_file(IUser user, final Photo photo){
         StorageReference temp = buildStoragePath(user, photo);
@@ -211,10 +211,6 @@ public class FirebaseDB implements IRemotePhotoStore {
             public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
                 // Local temp file has been created
                 Log.i("FirebaseDB", "Downloading file success: " + taskSnapshot.toString());
-//                PhotoLoader loader = new PhotoLoader("DejaPhotoFriends");
-//                for(Photo p : loader.getPhotos()){
-//                    PhotoCollection.getInstance().addPhoto(p);
-//                }
                 photo.setPathname(localFile.getPath());
                 PhotoCollection.getInstance().addPhoto(photo);
             }
