@@ -163,10 +163,20 @@ public class PhotoCollection implements ICollectionSubject,
         if (curr == album.size()) curr--;
 
         releasedList.add( photo );
-
+        Log.i("PhotoCollection", "Photo UID: " + photo.getUid());
+        Log.i("PhotoCollection", "User Name: " + DJPrimaryUser.getInstance().getUserId());
+        if(photo.getUid().startsWith(DJPrimaryUser.getInstance().getUserId())){
+            FirebaseDB.getInstance().deleteUserPhoto(photo);
+        }
         notifyObservers();
     }
 
+    public void release(Photo photo){
+        updatePhotoFromStorage(photo);
+        album.remove(photo);
+        releasedList.add(photo);
+
+    }
     /**
      * Return the next photo from the current list
      * If there is no image, return the stock image
@@ -194,7 +204,7 @@ public class PhotoCollection implements ICollectionSubject,
     private void switchPhoto() {
         curr++;
 
-        if (curr == album.size()) {
+        if (curr >= album.size()) {
             sort();
         }
     }

@@ -55,6 +55,7 @@ public class FirebaseDB implements IRemotePhotoStore {
     final long FILE_SIZE = 1024 * 1024;
 
     private static List<Photo> friendsPhotos =  new LinkedList<>();
+    private static List<Photo> releasedPhotos = new LinkedList<>();
 
     public static FirebaseDB getInstance() {
         return ourInstance;
@@ -88,9 +89,9 @@ public class FirebaseDB implements IRemotePhotoStore {
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
                 Log.d(TAG, "onChildRemoved:" + dataSnapshot.getKey());
-
-                //TODO THIS IS HARD
-
+                Photo tempPhoto = dataSnapshot.getValue(Photo.class);
+                Log.i("FirebaseDB", "Photo removed: " + tempPhoto.getPathname());
+                PhotoCollection.getInstance().release(tempPhoto);
             }
 
             @Override
@@ -251,21 +252,36 @@ public class FirebaseDB implements IRemotePhotoStore {
         return ref;
     }
 
-    public void deleteUserPhoto(Photo photo){
-        final IUser user = new DJPrimaryUser();
-        StorageReference ref = buildStoragePath(user, photo);
+    public void deleteUserPhoto(final Photo photo){
+        StorageReference ref = buildStoragePath(DJPrimaryUser.getInstance(), photo);
         ref.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-
+                Log.i("FirebaseDB", "Delete photo successful: " + photo.getUid());
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
+                Log.i("FirebaseDB", "Delete photo unsuccessful: " + photo.getUid());
+
+            }
+        });
+        Query ref2 = primaryUserPhotoRef.orderByChild("uid").equalTo(photo.getUid());
+        ref2.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot dsp: dataSnapshot.getChildren()){
+                    dataSnapshot.getRef().removeValue();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
 
             }
         });
     }
+
     private StorageReference buildStoragePath(IUser user, Photo photo ){
         String str = user.getUserId() + DELIMITER + photo.getName();
         return storageRef.child(str);
