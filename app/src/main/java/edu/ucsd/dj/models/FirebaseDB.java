@@ -3,7 +3,6 @@ package edu.ucsd.dj.models;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Environment;
-import android.provider.Contacts;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -29,8 +28,8 @@ import java.util.List;
 import edu.ucsd.dj.interfaces.models.IFriendList;
 import edu.ucsd.dj.interfaces.IRemotePhotoStore;
 import edu.ucsd.dj.interfaces.models.IUser;
-import edu.ucsd.dj.managers.DJPhoto;
 import edu.ucsd.dj.managers.Settings;
+import edu.ucsd.dj.others.FileUtilities;
 import edu.ucsd.dj.others.PhotoCollection;
 import edu.ucsd.dj.others.PhotoLoader;
 
@@ -213,6 +212,7 @@ public class FirebaseDB implements IRemotePhotoStore {
                 Log.i("FirebaseDB", "Downloading file success: " + taskSnapshot.toString());
                 photo.setPathname(localFile.getPath());
                 PhotoCollection.getInstance().addPhoto(photo);
+                FileUtilities.updateMediastore(localFile.getPath());
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override

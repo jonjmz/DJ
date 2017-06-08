@@ -1,28 +1,11 @@
 package edu.ucsd.dj.others;
 
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.ColorMatrix;
-import android.graphics.ColorMatrixColorFilter;
-import android.media.MediaScannerConnection;
-import android.net.Uri;
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.GridView;
-import android.widget.ImageView;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.List;
 
 import edu.ucsd.dj.managers.Settings;
@@ -76,10 +59,7 @@ public class ImageAdapter extends BaseAdapter {
                         Settings.getInstance().MAIN_LOCATION + image.getFileName()
                 );
                 // Tell mediastore the file was created
-                FileUtilities.UpdateMediastore(
-                        context,
-                        Settings.getInstance().MAIN_LOCATION + image.getFileName()
-                );
+                FileUtilities.updateMediastore(Settings.getInstance().MAIN_LOCATION + image.getFileName());
             }};
 
         image.setOnClickListener(listener);

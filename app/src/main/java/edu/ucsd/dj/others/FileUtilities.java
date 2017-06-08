@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import edu.ucsd.dj.managers.DJPhoto;
 import edu.ucsd.dj.managers.Settings;
 
 /**
@@ -42,10 +43,10 @@ public class FileUtilities {
         }
     }
 
-    public static void UpdateMediastore(Context x, String fileName){
+    public static void updateMediastore(String fileName){
         File file = new File(fileName);
         Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
         intent.setData(Uri.fromFile(file));
-        x.sendBroadcast(intent);
+        DJPhoto.getAppContext().sendBroadcast(intent);
     }
 }
