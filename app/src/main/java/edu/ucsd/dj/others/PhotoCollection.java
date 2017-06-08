@@ -129,6 +129,7 @@ public class PhotoCollection implements ICollectionSubject,
     public void updatePhotoFromStorage(Photo photo){
         for(int i = 0; i < album.size(); i++){
             if(photo.getUid().equals(album.get(i).getUid())){
+                photo.setPathname(album.get(i).getPathname());
                 album.set(i, photo);
                 return;
             }
