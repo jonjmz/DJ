@@ -50,6 +50,7 @@ public class DJWallpaper implements ICollectionObserver {
             labelStrategy = new AddressLabelStrategy(context);
             Bitmap newBackground = null;
             Bitmap bitmap = BitmapFactory.decodeFile(photo.getPathname());
+
             if (photo.hasCustomLocation()){
                 newBackground = labeler.label( bitmap, photo.getCustomLocation(), context );
             } else {
@@ -60,6 +61,7 @@ public class DJWallpaper implements ICollectionObserver {
                 newBackground = labeler.label( bitmap, label, context );
             }
 
+            newBackground = labeler.createBitmapWithKarmaLabel(newBackground, photo);
             WallpaperManager.getInstance(context).setBitmap( newBackground );
 
             Log.i(this.getClass().toString(), "wallpaper set successfully.");
