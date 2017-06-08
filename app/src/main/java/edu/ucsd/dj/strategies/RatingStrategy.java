@@ -78,7 +78,7 @@ public class RatingStrategy implements IRating {
         }
 
         // We always consider karma
-        if (!photo.hasKarma()) scoreSquared += 1;
+        if (photo.karmaScore() != 0) scoreSquared += 1;
 
         // Score Calculations Here
         return Math.sqrt(scoreSquared);

@@ -5,8 +5,6 @@ import android.support.annotation.NonNull;
 import com.google.firebase.database.Exclude;
 
 
-import com.google.firebase.database.Exclude;
-
 import java.io.File;
 import java.io.Serializable;
 import java.util.HashMap;
@@ -21,7 +19,7 @@ import edu.ucsd.dj.interfaces.models.IUser;
 public class Photo implements IPhoto, Comparable, Serializable {
 
     private double score;        // Used to order photos with precalulated scores
-    private boolean hasKarma;    // Used to keep track of karma
+    private int karma;    // Used to keep track of karma
 
     private String pathname;     // Reference to image in album
     private Event info;          // Store photo Exif data for score calculations
@@ -50,9 +48,9 @@ public class Photo implements IPhoto, Comparable, Serializable {
     @Exclude
     public double getScore(){ return score; }
     public void setScore(double score) { this.score = score; }
-    public boolean hasKarma() { return hasKarma; }
+    public int karmaScore() { return karma; }
 
-    public void setHasKarma(boolean karma) { this.hasKarma = karma; }
+    public void setKarma(int karma) { this.karma = karma; }
 
     /**
      * Indicates whether some other object is "equal to" this one.
