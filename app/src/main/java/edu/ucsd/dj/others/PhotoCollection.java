@@ -92,10 +92,10 @@ public class PhotoCollection implements ICollectionSubject,
 
         }
 
-
+        /*
         //TODO REFACTOR
         if(Settings.getInstance().isViewingFriendsAlbum()){
-            IRemotePhotoStore db = new FirebaseDB();
+            FirebaseDB db = FirebaseDB.getInstance();
             List<Photo> temp = db.downloadAllFriendsPhotos(new DJFriends());
             album.addAll(temp);
             for(Photo photo: temp) {
@@ -115,7 +115,7 @@ public class PhotoCollection implements ICollectionSubject,
                 }
             }
         }
-
+        */
         sort(); // this notifies the observers
     }
 
@@ -124,7 +124,7 @@ public class PhotoCollection implements ICollectionSubject,
         sort();
     }
 
-    public void changeCustomLocation(Photo photo){
+    public void updatePhotoFromStorage(Photo photo){
         for(int i = 0; i < album.size(); i++){
             if(photo.getUid().equals(album.get(i).getUid())){
                 album.set(i, photo);

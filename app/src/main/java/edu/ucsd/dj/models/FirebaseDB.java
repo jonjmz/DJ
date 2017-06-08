@@ -2,7 +2,6 @@ package edu.ucsd.dj.models;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.MediaScannerConnection;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -29,7 +28,6 @@ import java.util.List;
 import edu.ucsd.dj.interfaces.models.IFriendList;
 import edu.ucsd.dj.interfaces.IRemotePhotoStore;
 import edu.ucsd.dj.interfaces.models.IUser;
-import edu.ucsd.dj.managers.DJPhoto;
 import edu.ucsd.dj.others.PhotoCollection;
 import edu.ucsd.dj.others.PhotoLoader;
 
@@ -42,6 +40,7 @@ public class FirebaseDB implements IRemotePhotoStore {
             FirebaseStorage.getInstance().getReference();
     private static final DatabaseReference
             databaseRef = FirebaseDatabase.getInstance().getReference();
+    private static final FirebaseDB ourInstance = new FirebaseDB();
 
     private static DatabaseReference
             primaryUserRef,
@@ -54,6 +53,10 @@ public class FirebaseDB implements IRemotePhotoStore {
     final long FILE_SIZE = 1024 * 1024;
 
     private static List<Photo> friendsPhotos =  new LinkedList<>();
+
+    public static FirebaseDB getInstance() {
+        return ourInstance;
+    }
 
     private final PhotoLoader loader = new PhotoLoader("DejaPhoto");
 //TODO ADD THIS TO CURRENT USER TOO MAN
@@ -80,7 +83,7 @@ public class FirebaseDB implements IRemotePhotoStore {
                 Photo tempPhoto = dataSnapshot.getValue(Photo.class);
                 Log.i("FirebaseDB", "Photo: " + tempPhoto.getPathname());
                 //This means karma could be changed, or location
-                PhotoCollection.getInstance().changeCustomLocation(tempPhoto);
+                PhotoCollection.getInstance().updatePhotoFromStorage(tempPhoto);
 
             }
 
