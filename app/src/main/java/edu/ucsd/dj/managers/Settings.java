@@ -47,7 +47,7 @@ public final class Settings implements ISettingsSubject {
 
         DCIM_LOCATION = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)+File.separator;
         String base = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)+ File.separator;
-        MAIN_LOCATION = base + "DejaPhoto" + File.separator;
+        MAIN_LOCATION = base + "DejaPhotoMain" + File.separator;
         FRIENDS_LOCATION = base + "DejaPhotoFriends" + File.separator;
         COPIED_LOCATION = base + "DejaPhotoCopied" + File.separator;
 
