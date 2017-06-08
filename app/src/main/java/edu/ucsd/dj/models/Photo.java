@@ -177,7 +177,7 @@ public class Photo implements IPhoto, Comparable, Serializable {
         return hasKarma;
     }
 
-    public boolean hasCustomLocation() {
+    public boolean getHasCustomLocation() {
         return hasCustomLocation;
     }
 

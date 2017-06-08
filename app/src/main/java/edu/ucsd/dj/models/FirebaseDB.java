@@ -273,10 +273,13 @@ public class FirebaseDB implements IRemotePhotoStore {
                 for(DataSnapshot dsp: dataSnapshot.getChildren()){
                     dataSnapshot.getRef().removeValue();
                 }
+                Log.i("FirebaseDB", "Delete photo successful (ref): " + photo.getUid());
+
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
+                Log.i("FirebaseDB", "Delete photo unsuccessful (ref): " + photo.getUid());
 
             }
         });
