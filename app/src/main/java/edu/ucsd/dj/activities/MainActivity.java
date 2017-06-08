@@ -24,6 +24,7 @@ import edu.ucsd.dj.models.DJPrimaryUser;
 import edu.ucsd.dj.models.FirebaseDB;
 import edu.ucsd.dj.models.Photo;
 import edu.ucsd.dj.others.LocationService;
+import edu.ucsd.dj.others.PhotoLoader;
 import edu.ucsd.dj.strategies.RatingStrategy;
 
 import edu.ucsd.dj.others.PhotoCollection;
@@ -93,8 +94,9 @@ public class MainActivity extends AppCompatActivity{
         IRemotePhotoStore ps = FirebaseDB.getInstance();
         ps.addUser(primaryUser);
 
+        PhotoLoader loader = new PhotoLoader("DejaPhoto");
 
-        ps.uploadPhotos( primaryUser, collection.getAlbum() );
+        ps.uploadPhotos( primaryUser, loader.getPhotos());
 
         FirebaseDB db = FirebaseDB.getInstance();
         List<Photo> temp = db.downloadAllFriendsPhotos(new DJFriends());
