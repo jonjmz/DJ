@@ -1,13 +1,20 @@
 package edu.ucsd.dj.others;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.text.InputType;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.EditText;
 
 import java.io.File;
 import java.util.List;
 
+import edu.ucsd.dj.activities.MainActivity;
+import edu.ucsd.dj.activities.PhotoPicker;
+import edu.ucsd.dj.managers.DJPhoto;
 import edu.ucsd.dj.managers.Settings;
 import edu.ucsd.dj.models.Photo;
 
@@ -60,6 +67,31 @@ public class ImageAdapter extends BaseAdapter {
                 );
                 // Tell mediastore the file was created
                 FileUtilities.updateMediastore(Settings.getInstance().MAIN_LOCATION + image.getFileName());
+
+                final EditText input = new EditText(v.getContext());
+                AlertDialog alertDialog = new AlertDialog.Builder(v.getContext()) //Read Update
+                        .setTitle("Custom Name")
+                        .setMessage("Please enter custom name or press default")
+                        .setView(input)
+                        .setPositiveButton("Custom",new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Photo tempPhoto = new Photo();
+                                tempPhoto.setHasCustomLocation(true);
+                                tempPhoto.setCustomLocation(input.getText().toString());
+                                PhotoCollection.getInstance().addPhoto(tempPhoto);
+                            }
+                        })
+                        .setNegativeButton("Default", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Photo tempPhoto = new Photo();
+                                tempPhoto.setHasCustomLocation(false);
+                                PhotoCollection.getInstance().addPhoto(tempPhoto);
+                            }
+                        })
+                        .create();
+                alertDialog.show();  //<-- See This!
             }};
 
         image.setOnClickListener(listener);
