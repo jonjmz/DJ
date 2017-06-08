@@ -12,10 +12,8 @@ import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.SeekBar;
 import android.widget.Switch;
-
 import java.util.List;
 import java.util.Set;
-
 import edu.ucsd.dj.R;
 
 import edu.ucsd.dj.interfaces.IRating;
@@ -30,16 +28,6 @@ import edu.ucsd.dj.strategies.RatingStrategy;
 
 import edu.ucsd.dj.others.PhotoCollection;
 
-import edu.ucsd.dj.interfaces.IRating;
-import edu.ucsd.dj.interfaces.IRemotePhotoStore;
-import edu.ucsd.dj.interfaces.models.IUser;
-import edu.ucsd.dj.managers.StartUpUtilities;
-import edu.ucsd.dj.models.DJFriends;
-import edu.ucsd.dj.models.DJPrimaryUser;
-import edu.ucsd.dj.models.FirebaseDB;
-import edu.ucsd.dj.strategies.RatingStrategy;
-
-import edu.ucsd.dj.others.PhotoCollection;
 import edu.ucsd.dj.managers.DJWallpaper;
 import edu.ucsd.dj.managers.Settings;
 
@@ -86,7 +74,6 @@ public class MainActivity extends AppCompatActivity{
                 Settings.getInstance().isConsideringRecency(),
                 Settings.getInstance().isConsideringTOD(),
                 Settings.getInstance().isConsideringProximity());
-        StartUpUtilities.CreateAlbums();
 
         Settings.getInstance().addObserver( rating );
 

@@ -3,6 +3,7 @@ package edu.ucsd.dj.models;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Environment;
+import android.provider.Contacts;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -28,6 +29,8 @@ import java.util.List;
 import edu.ucsd.dj.interfaces.models.IFriendList;
 import edu.ucsd.dj.interfaces.IRemotePhotoStore;
 import edu.ucsd.dj.interfaces.models.IUser;
+import edu.ucsd.dj.managers.DJPhoto;
+import edu.ucsd.dj.managers.Settings;
 import edu.ucsd.dj.others.PhotoCollection;
 import edu.ucsd.dj.others.PhotoLoader;
 
@@ -57,8 +60,7 @@ public class FirebaseDB implements IRemotePhotoStore {
     public static FirebaseDB getInstance() {
         return ourInstance;
     }
-
-    private final PhotoLoader loader = new PhotoLoader("DejaPhoto");
+    private final PhotoLoader loader = new PhotoLoader(Settings.getInstance().MAIN_LOCATION);
 //TODO ADD THIS TO CURRENT USER TOO MAN
     public void addFriendsListeners(final IUser user){
         DatabaseReference temp = databaseRef.child(user.getUserId()).child("photos");

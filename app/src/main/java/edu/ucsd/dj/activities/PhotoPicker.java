@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.ucsd.dj.R;
+import edu.ucsd.dj.managers.Settings;
 import edu.ucsd.dj.models.Photo;
 import edu.ucsd.dj.others.ImageAdapter;
 import edu.ucsd.dj.others.PhotoLoader;
@@ -20,7 +21,7 @@ public class PhotoPicker extends AppCompatActivity {
         setContentView(R.layout.activity_photo_picker);
 
 
-        PhotoLoader loader = new PhotoLoader("DCIM");
+        PhotoLoader loader = new PhotoLoader(Settings.getInstance().DCIM_LOCATION);
         List<Photo> newAlbum = loader.getPhotos();
 
         GridView gridView = (GridView) findViewById(R.id.grid);

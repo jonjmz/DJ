@@ -1,7 +1,9 @@
 package edu.ucsd.dj.managers;
 
+import android.os.Environment;
 import android.util.Log;
 
+import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Timer;
@@ -28,6 +30,11 @@ public final class Settings implements ISettingsSubject {
 
     private static int refreshRate = 60;
 
+    public String DCIM_LOCATION;
+    public String MAIN_LOCATION;
+    public String FRIENDS_LOCATION;
+    public String COPIED_LOCATION;
+
     private static final Settings ourInstance = new Settings();
 
 
@@ -37,6 +44,16 @@ public final class Settings implements ISettingsSubject {
 
     private Settings() {
         observers = new LinkedList<>();
+
+        DCIM_LOCATION = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)+File.separator;
+        String base = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)+ File.separator;
+        MAIN_LOCATION = base + "DejaPhoto" + File.separator;
+        FRIENDS_LOCATION = base + "DejaPhotoFriends" + File.separator;
+        COPIED_LOCATION = base + "DejaPhotoCopied" + File.separator;
+
+        new File(MAIN_LOCATION).mkdir();
+        new File(FRIENDS_LOCATION).mkdir();
+        new File(COPIED_LOCATION).mkdir();
     }
 
     public boolean isConsideringProximity() {

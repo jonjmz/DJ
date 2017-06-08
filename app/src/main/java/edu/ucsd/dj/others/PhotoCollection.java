@@ -71,7 +71,7 @@ public class PhotoCollection implements ICollectionSubject,
 
         //TODO REFACTOR
         if(Settings.getInstance().isViewingMyAlbum()){
-            PhotoLoader loader = new PhotoLoader("DejaPhoto");
+            PhotoLoader loader = new PhotoLoader(Settings.getInstance().MAIN_LOCATION);
             List<Photo> newAlbum = loader.getPhotos();
             //TODO optimization problem
             for(Photo photo: newAlbum){
@@ -91,7 +91,6 @@ public class PhotoCollection implements ICollectionSubject,
             }
 
         }
-
         /*
         //TODO REFACTOR
         if(Settings.getInstance().isViewingFriendsAlbum()){
