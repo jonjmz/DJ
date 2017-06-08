@@ -43,7 +43,7 @@ public class MainActivityTest {
     @Test
     @UiThreadTest
     public void testPrioritizeProximity() throws Exception {
-        Switch s = (Switch) rule.getActivity().findViewById(R.id.proximity); // Get toggle by id
+        Switch s = (Switch) rule.getActivity().findViewById(R.id.proximitySwitch); // Get toggle by id
 
         // It should match the current setting
         assert(s.isChecked() == Settings.getInstance().isConsideringProximity());
@@ -62,7 +62,7 @@ public class MainActivityTest {
     @Test
     @UiThreadTest
     public void testPrioritizeTOD() throws Exception {
-        Switch s = (Switch) rule.getActivity().findViewById(R.id.timeOfDay); // Get toggle by id
+        Switch s = (Switch) rule.getActivity().findViewById(R.id.timeOfDaySwitch); // Get toggle by id
 
         // It should match the current setting
         assert(s.isChecked() == Settings.getInstance().isConsideringTOD());
