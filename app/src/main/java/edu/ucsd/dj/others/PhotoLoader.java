@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import edu.ucsd.dj.interfaces.models.IPhoto;
 import edu.ucsd.dj.interfaces.models.IUser;
 import edu.ucsd.dj.managers.DJPhoto;
+import edu.ucsd.dj.managers.Settings;
 import edu.ucsd.dj.models.DJPrimaryUser;
 import edu.ucsd.dj.models.FirebaseDB;
 import edu.ucsd.dj.models.MockEvent;

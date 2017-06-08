@@ -65,8 +65,6 @@ public class WidgetProvider extends AppWidgetProvider {
     @Override
     public void onEnabled(Context context) {
         super.onEnabled(context);
-        locationTrackerSubject = new LocationService();
-        locationTrackerSubject.addObserver(PhotoCollection.getInstance());
         //Settings.initTimer();
 
     }

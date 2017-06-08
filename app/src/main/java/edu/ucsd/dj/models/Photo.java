@@ -26,16 +26,29 @@ public class Photo implements IPhoto, Comparable, Serializable {
 
     private String uid;
 
+    private String customLocation;
     public Photo(){
         pathname = "";
         info = new Event();
+        customLocation = "";
 
     }
     public Photo(String reference, IUser user) {
         info = new Event();
         this.pathname = reference;
         this.uid = user.getUserId() + "-" + getName();
+        customLocation = "";
+
     }
+
+    public String getCustomLocation() {
+        return customLocation;
+    }
+
+    public void setCustomLocation(String customLocation) {
+        this.customLocation = customLocation;
+    }
+
 
     @Override @Exclude
     public String getName(){ return getPathname().substring(getPathname().lastIndexOf("/")+1);}

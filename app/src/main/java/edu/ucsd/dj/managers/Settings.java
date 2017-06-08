@@ -14,7 +14,6 @@ import edu.ucsd.dj.interfaces.observers.ISettingsSubject;
  * Created by jonathanjimenez on 5/9/17.
  */
 public final class Settings implements ISettingsSubject {
-
     private final int MILLIS_PER_MINUTE = 60000;
     private boolean considerProximity = true;
     private boolean considerTOD = true;
@@ -30,6 +29,7 @@ public final class Settings implements ISettingsSubject {
     private static int refreshRate = 60;
 
     private static final Settings ourInstance = new Settings();
+
 
     public static Settings getInstance() {
         return ourInstance;

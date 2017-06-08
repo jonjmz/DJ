@@ -39,6 +39,7 @@ public class LocationService implements GoogleApiClient.ConnectionCallbacks,
     private IAddressable loc;
 
     private ArrayList<ILocationTrackerObserver> obs;
+    private static final LocationService ourInstance = new LocationService();
 
     @Override
     public void addObserver(ILocationTrackerObserver o) {
@@ -78,7 +79,6 @@ public class LocationService implements GoogleApiClient.ConnectionCallbacks,
         loc = new Event();
         loc.setLatitude(defaultLoc.getLatitude());
         loc.setLongitude(defaultLoc.getLongitude());
-        connect();
         obs = new ArrayList<>();
     }
 
@@ -104,6 +104,15 @@ public class LocationService implements GoogleApiClient.ConnectionCallbacks,
         try{
             LocationServices.FusedLocationApi.requestLocationUpdates(
                     mGoogleApiClient, mLocationRequest, this);
+            Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
+                    mGoogleApiClient);
+            if (mLastLocation != null){
+                loc.setLatitude(mLastLocation.getLatitude());
+                loc.setLongitude(mLastLocation.getLongitude());
+                Log.i("LocationService", "Initialized location: " + loc.getLongitude()
+                        + " " + loc.getLatitude());
+                updateCurrentLocation();
+            }
         }
         catch(SecurityException e){
             e.printStackTrace();
@@ -149,6 +158,10 @@ public class LocationService implements GoogleApiClient.ConnectionCallbacks,
         for(ILocationTrackerObserver o: obs){
             o.updateLocation(loc);
         }
+    }
+
+    public static LocationService getInstance() {
+        return ourInstance;
     }
 
 }
