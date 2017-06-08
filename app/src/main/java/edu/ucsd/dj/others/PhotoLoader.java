@@ -52,7 +52,7 @@ public class PhotoLoader  {
         };
         selectionClause = MediaStore.Images.Media.DATA + " like ? ";
         String temp = Settings.getInstance().DCIM_LOCATION;
-        selectionArgs = new String[]{"%" + folder + "%"};
+        selectionArgs = new String[]{folder + "%"};
 
         sortOrder = null;
 

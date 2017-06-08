@@ -96,8 +96,7 @@ public class MainActivity extends AppCompatActivity{
         IRemotePhotoStore ps = FirebaseDB.getInstance();
         ps.addUser(primaryUser);
 
-        PhotoLoader loader = new PhotoLoader("DejaPhotoMain");
-
+        PhotoLoader loader = new PhotoLoader(Settings.getInstance().MAIN_LOCATION);
         ps.uploadPhotos( primaryUser, loader.getPhotos());
 
         FirebaseDB db = FirebaseDB.getInstance();
