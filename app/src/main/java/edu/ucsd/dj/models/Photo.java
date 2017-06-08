@@ -59,7 +59,7 @@ public class Photo implements IPhoto, Comparable, Serializable {
     public Event getInfo() { return info; }
 
     public String getPathname(){ return pathname; }
-
+    public void setPathname(String pathname) { this.pathname = pathname; }
     @Exclude
     public double getScore(){ return score; }
     public void setScore(double score) { this.score = score; }

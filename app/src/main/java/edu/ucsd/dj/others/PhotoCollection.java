@@ -123,7 +123,7 @@ public class PhotoCollection implements ICollectionSubject,
         if (!album.contains(photo) && !releasedList.contains(photo)) {
             album.add(photo);
         }
-        sort();
+        //sort();
     }
 
     public void updatePhotoFromStorage(Photo photo){

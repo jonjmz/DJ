@@ -211,10 +211,12 @@ public class FirebaseDB implements IRemotePhotoStore {
             public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
                 // Local temp file has been created
                 Log.i("FirebaseDB", "Downloading file success: " + taskSnapshot.toString());
-                PhotoLoader loader = new PhotoLoader("DejaPhotoFriends");
-                for(Photo p : loader.getPhotos()){
-                    PhotoCollection.getInstance().addPhoto(p);
-                }
+//                PhotoLoader loader = new PhotoLoader("DejaPhotoFriends");
+//                for(Photo p : loader.getPhotos()){
+//                    PhotoCollection.getInstance().addPhoto(p);
+//                }
+                photo.setPathname(localFile.getPath());
+                PhotoCollection.getInstance().addPhoto(photo);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
