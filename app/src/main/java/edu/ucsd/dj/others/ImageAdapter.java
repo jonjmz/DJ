@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import edu.ucsd.dj.R;
 import edu.ucsd.dj.activities.MainActivity;
 import edu.ucsd.dj.activities.PhotoPicker;
 import edu.ucsd.dj.managers.DJPhoto;
@@ -80,15 +81,17 @@ public class ImageAdapter extends BaseAdapter {
                     .setTitle("Custom Name")
                     .setMessage("Please enter custom name or press default")
                     .setView(input)
-                    .setPositiveButton("Custom",new DialogCustomResponseListener(image.getFileName()))
+                    .setPositiveButton("Custom",new DialogCustomResponseListener(image.getFileName(), input))
                     .setNegativeButton("Default", new DialogDefaultResponseListener(image.getFileName()))
                     .create();
             alertDialog.show();
         }
         class DialogCustomResponseListener implements DialogInterface.OnClickListener{
             private String fileName;
-            DialogCustomResponseListener(String file){
+            private EditText input;
+            DialogCustomResponseListener(String file, EditText in){
                 fileName = file;
+                input = in;
             }
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -97,7 +100,7 @@ public class ImageAdapter extends BaseAdapter {
                 Photo tempPhoto = new Photo(fileName, primaryUser);
                 tempPhoto.setPathname(Settings.getInstance().MAIN_LOCATION + fileName);
                 tempPhoto.setHasCustomLocation(true);
-                tempPhoto.setCustomLocation(fileName);
+                tempPhoto.setCustomLocation(input.getText().toString());
                 PhotoCollection.getInstance().addPhoto(tempPhoto);
                 FirebaseDB.getInstance().uploadPhotos(primaryUser, Arrays.asList(tempPhoto));
             }
