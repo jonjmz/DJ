@@ -8,6 +8,10 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.Log;
 
+import edu.ucsd.dj.interfaces.ILabelKarma;
+import edu.ucsd.dj.interfaces.models.IPhoto;
+import edu.ucsd.dj.managers.DJPhoto;
+
 /**
  * Responsible for providing labels for photos that have valid location data.
  *
@@ -15,7 +19,7 @@ import android.util.Log;
  * Created by Jake Sutton on 5/9/17.
  */
 
-public class BitmapLabeler {
+public class BitmapLabeler implements ILabelKarma {
     BitmapFactory.Options options;
 
     /**
@@ -50,6 +54,27 @@ public class BitmapLabeler {
         paint.setTextSize(35);
         paint.setShadowLayer(6.0f, 0.0f, 0.0f, Color.BLACK);
         canvas.drawText(text, 40, (height/4) * 3, paint);
+
+        return bitmap;
+    }
+
+    @Override
+    public Bitmap createBitmapWithKarmaLabel(Bitmap bitmap, IPhoto photo) {
+
+        Log.i("Label: ", "Karma: " + photo.hasKarma());
+
+        int width = DJPhoto.getAppContext().getResources().getDisplayMetrics().widthPixels;
+        int height = DJPhoto.getAppContext().getResources().getDisplayMetrics().heightPixels;
+
+        bitmap = bitmap.createScaledBitmap( bitmap, width, height, false );
+        Canvas canvas = new Canvas(bitmap);
+
+        Paint paint = new Paint();
+        paint.setColor(Color.WHITE);
+        paint.setTextSize(35);
+        paint.setShadowLayer(6.0f, 0.0f, 0.0f, Color.BLACK);
+        String label = "Karma: " + photo.hasKarma();
+        canvas.drawText(label, 500, (height/3) * 3 - 10, paint);
 
         return bitmap;
     }
