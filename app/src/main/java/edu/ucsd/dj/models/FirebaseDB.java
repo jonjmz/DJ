@@ -68,8 +68,6 @@ public class FirebaseDB implements IRemotePhotoStore {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
                 Log.d(TAG, "onChildAdded:" + "New photo added");
-
-
                 Photo tempPhoto = dataSnapshot.getValue(Photo.class);
                 Log.i("FirebaseDB", "Photo: " + tempPhoto.getPathname());
                 //downloadPhotoFromStorage(friend, tempPhoto);
@@ -90,6 +88,7 @@ public class FirebaseDB implements IRemotePhotoStore {
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
                 Log.d(TAG, "onChildRemoved:" + dataSnapshot.getKey());
+
                 //TODO THIS IS HARD
 
             }
@@ -204,7 +203,6 @@ public class FirebaseDB implements IRemotePhotoStore {
                         File.separator+
                         photo.getUid()
         );
-
         temp.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
@@ -253,7 +251,21 @@ public class FirebaseDB implements IRemotePhotoStore {
         return ref;
     }
 
+    public void deleteUserPhoto(Photo photo){
+        final IUser user = new DJPrimaryUser();
+        StorageReference ref = buildStoragePath(user, photo);
+        ref.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
 
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+
+            }
+        });
+    }
     private StorageReference buildStoragePath(IUser user, Photo photo ){
         String str = user.getUserId() + DELIMITER + photo.getName();
         return storageRef.child(str);

@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity{
 
         PhotoLoader loader = new PhotoLoader(Settings.getInstance().MAIN_LOCATION);
         ps.uploadPhotos( primaryUser, loader.getPhotos());
-
+        
         FirebaseDB db = FirebaseDB.getInstance();
         List<Photo> temp = db.downloadAllFriendsPhotos(new DJFriends());
 
