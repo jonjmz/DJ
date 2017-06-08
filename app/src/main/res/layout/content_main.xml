@@ -115,6 +115,7 @@
         android:layout_marginTop="41dp"
         android:layout_toEndOf="@+id/text"
         android:clickable="true"
+        android:onClick="openCamera"
         app:fabSize="normal"
         app:srcCompat="@drawable/camera" />
 
