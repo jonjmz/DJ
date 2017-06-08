@@ -33,7 +33,7 @@ public final class Settings implements ISettingsSubject {
     public String DCIM_LOCATION;
     public String MAIN_LOCATION;
     public String FRIENDS_LOCATION;
-    public String COPIED_LOCATION;
+    public String CAMERA_LOCATION;
 
     private static final Settings ourInstance = new Settings();
 
@@ -47,13 +47,13 @@ public final class Settings implements ISettingsSubject {
 
         DCIM_LOCATION = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)+File.separator;
         String base = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)+ File.separator;
-        MAIN_LOCATION = base + "DejaPhotoMain" + File.separator;
+        MAIN_LOCATION = base + "DejaPhotoCopied" + File.separator;
         FRIENDS_LOCATION = base + "DejaPhotoFriends" + File.separator;
-        COPIED_LOCATION = base + "DejaPhotoCopied" + File.separator;
+        CAMERA_LOCATION = base + "DejaPhoto" + File.separator;
 
         new File(MAIN_LOCATION).mkdir();
         new File(FRIENDS_LOCATION).mkdir();
-        new File(COPIED_LOCATION).mkdir();
+        new File(CAMERA_LOCATION).mkdir();
     }
 
     public boolean isConsideringProximity() {
