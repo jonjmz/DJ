@@ -46,17 +46,19 @@ public class DJWallpaper implements ICollectionObserver {
             setDefault();
             return;
         }
-
         try {
             labelStrategy = new AddressLabelStrategy(context);
-
-            String label = "";
-            if (photo.getInfo().getHasValidCoordinates()) {
-                label = labelStrategy.getLabel(photo.getInfo());
-            }
-
+            Bitmap newBackground = null;
             Bitmap bitmap = BitmapFactory.decodeFile(photo.getPathname());
-            Bitmap newBackground = labeler.label( bitmap, label, context );
+            if (photo.hasCustomLocation()){
+                newBackground = labeler.label( bitmap, photo.getCustomLocation(), context );
+            } else {
+                String label = "";
+                if (photo.getInfo().getHasValidCoordinates()) {
+                    label = labelStrategy.getLabel(photo.getInfo());
+                }
+                newBackground = labeler.label( bitmap, label, context );
+            }
 
             WallpaperManager.getInstance(context).setBitmap( newBackground );
 

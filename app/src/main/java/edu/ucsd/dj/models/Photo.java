@@ -35,6 +35,7 @@ public class Photo implements IPhoto, Comparable, Serializable {
         pathname = "";
         info = new Event();
         customLocation = "";
+        hasCustomLocation = false;
 
     }
     public Photo(String reference, IUser user) {
@@ -176,7 +177,7 @@ public class Photo implements IPhoto, Comparable, Serializable {
         return hasKarma;
     }
 
-    public boolean isHasCustomLocation() {
+    public boolean hasCustomLocation() {
         return hasCustomLocation;
     }
 
