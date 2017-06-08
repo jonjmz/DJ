@@ -119,6 +119,19 @@ public class PhotoCollection implements ICollectionSubject,
         sort(); // this notifies the observers
     }
 
+    public void addPhoto(Photo photo){
+        album.add(photo);
+        sort();
+    }
+
+    public void changeCustomLocation(Photo photo){
+        for(int i = 0; i < album.size(); i++){
+            if(photo.getUid().equals(album.get(i).getUid())){
+                album.set(i, photo);
+                return;
+            }
+        }
+    }
     /**
      *  Updates the values of photo, used after changing settings
      */

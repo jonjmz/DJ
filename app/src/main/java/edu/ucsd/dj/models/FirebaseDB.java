@@ -9,6 +9,7 @@ import android.util.Log;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -29,6 +30,7 @@ import edu.ucsd.dj.interfaces.models.IFriendList;
 import edu.ucsd.dj.interfaces.IRemotePhotoStore;
 import edu.ucsd.dj.interfaces.models.IUser;
 import edu.ucsd.dj.managers.DJPhoto;
+import edu.ucsd.dj.others.PhotoCollection;
 import edu.ucsd.dj.others.PhotoLoader;
 
 /**
@@ -54,6 +56,55 @@ public class FirebaseDB implements IRemotePhotoStore {
     private static List<Photo> friendsPhotos =  new LinkedList<>();
 
     private final PhotoLoader loader = new PhotoLoader("DejaPhoto");
+//TODO ADD THIS TO CURRENT USER TOO MAN
+    public void addFriendsListeners(final IUser user){
+        DatabaseReference temp = databaseRef.child(user.getUserId()).child("photos");
+
+        ChildEventListener childEventListener = new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
+                Log.d(TAG, "onChildAdded:" + "New photo added");
+
+                Photo tempPhoto = dataSnapshot.getValue(Photo.class);
+                Log.i("FirebaseDB", "Photo: " + tempPhoto.getPathname());
+                //downloadPhotoFromStorage(friend, tempPhoto);
+                downloadPhotoFromStorage_file(user, tempPhoto);
+                PhotoCollection.getInstance().addPhoto(tempPhoto);
+
+
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String previousChildName) {
+                Log.d(TAG, "onChildChanged:" + dataSnapshot.getKey());
+                Photo tempPhoto = dataSnapshot.getValue(Photo.class);
+                Log.i("FirebaseDB", "Photo: " + tempPhoto.getPathname());
+                //This means karma could be changed, or location
+                PhotoCollection.getInstance().changeCustomLocation(tempPhoto);
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                Log.d(TAG, "onChildRemoved:" + dataSnapshot.getKey());
+                //TODO THIS IS HARD
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String previousChildName) {
+                Log.d(TAG, "onChildMoved:" + dataSnapshot.getKey());
+
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.w(TAG, "postComments:onCancelled", databaseError.toException());
+            }
+        };
+        temp.addChildEventListener(childEventListener);
+    }
 
     @Override
     public List<Photo> downloadAllFriendsPhotos(IFriendList friends) {
@@ -61,6 +112,7 @@ public class FirebaseDB implements IRemotePhotoStore {
         for (IUser u : friends.getFriends()) {
             Log.i("FirebaseDB", "Friends: " + u.getUserId());
             downloadPhotos(u);
+            addFriendsListeners(u);
         }
         return friendsPhotos;
 
