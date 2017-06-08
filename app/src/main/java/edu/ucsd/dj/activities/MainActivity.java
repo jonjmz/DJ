@@ -13,6 +13,7 @@ import android.widget.CompoundButton;
 import android.widget.SeekBar;
 import android.widget.Switch;
 
+import java.util.List;
 import java.util.Set;
 
 import edu.ucsd.dj.R;
@@ -23,6 +24,7 @@ import edu.ucsd.dj.interfaces.models.IUser;
 import edu.ucsd.dj.models.DJFriends;
 import edu.ucsd.dj.models.DJPrimaryUser;
 import edu.ucsd.dj.models.FirebaseDB;
+import edu.ucsd.dj.models.Photo;
 import edu.ucsd.dj.others.LocationService;
 import edu.ucsd.dj.strategies.RatingStrategy;
 
@@ -106,6 +108,9 @@ public class MainActivity extends AppCompatActivity{
 
 
         ps.uploadPhotos( primaryUser, collection.getAlbum() );
+
+        FirebaseDB db = FirebaseDB.getInstance();
+        List<Photo> temp = db.downloadAllFriendsPhotos(new DJFriends());
 
         proximitySwitch = (Switch) findViewById(R.id.proximity);
         timeOfDaySwitch = (Switch) findViewById(R.id.timeOfDay);

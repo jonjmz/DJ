@@ -95,15 +95,15 @@ public class PhotoCollection implements ICollectionSubject,
         /*
         //TODO REFACTOR
         if(Settings.getInstance().isViewingFriendsAlbum()){
-            FirebaseDB db = FirebaseDB.getInstance();
-            List<Photo> temp = db.downloadAllFriendsPhotos(new DJFriends());
-            album.addAll(temp);
-            for(Photo photo: temp) {
+            PhotoLoader loader = new PhotoLoader("DejaPhotoFriends");
+            List<Photo> newAlbum = loader.getPhotos();
+            for(Photo photo: newAlbum) {
                 if (!album.contains(photo) && !releasedList.contains(photo)) {
                     album.add(photo);
                 }
             }
         }
+
         //TODO delete
         else{
             DJFriends friendsList = new DJFriends();
@@ -116,11 +116,14 @@ public class PhotoCollection implements ICollectionSubject,
             }
         }
         */
+
         sort(); // this notifies the observers
     }
 
     public void addPhoto(Photo photo){
-        album.add(photo);
+        if (!album.contains(photo) && !releasedList.contains(photo)) {
+            album.add(photo);
+        }
         sort();
     }
 

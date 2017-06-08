@@ -68,12 +68,11 @@ public class FirebaseDB implements IRemotePhotoStore {
             public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
                 Log.d(TAG, "onChildAdded:" + "New photo added");
 
+
                 Photo tempPhoto = dataSnapshot.getValue(Photo.class);
                 Log.i("FirebaseDB", "Photo: " + tempPhoto.getPathname());
                 //downloadPhotoFromStorage(friend, tempPhoto);
                 downloadPhotoFromStorage_file(user, tempPhoto);
-                PhotoCollection.getInstance().addPhoto(tempPhoto);
-
 
             }
 
@@ -210,6 +209,10 @@ public class FirebaseDB implements IRemotePhotoStore {
             public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
                 // Local temp file has been created
                 Log.i("FirebaseDB", "Downloading file success: " + taskSnapshot.toString());
+                PhotoLoader loader = new PhotoLoader("DejaPhotoFriends");
+                for(Photo p : loader.getPhotos()){
+                    PhotoCollection.getInstance().addPhoto(p);
+                }
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
