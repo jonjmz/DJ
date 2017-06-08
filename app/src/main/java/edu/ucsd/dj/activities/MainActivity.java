@@ -9,11 +9,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.SeekBar;
 import android.widget.Switch;
 import java.util.List;
-import java.util.Set;
+
 import edu.ucsd.dj.R;
 
 import edu.ucsd.dj.interfaces.IRating;
@@ -48,6 +49,7 @@ public class MainActivity extends AppCompatActivity{
             friendsAlbumSwitch;
 
     private SeekBar refreshRateBar;
+    private Button refreshNow, viewPhotoPicker;
 
     @Override
     protected void onStart() {
@@ -63,7 +65,7 @@ public class MainActivity extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.content_main);
+        setContentView(R.layout.activity_main);
         askPermission(Manifest.permission.READ_EXTERNAL_STORAGE, READ_STORAGE_PERMISSION);
         askPermission(Manifest.permission.SET_WALLPAPER, SET_WALLPAPER_PERMISSION);
         askPermission(Manifest.permission.ACCESS_FINE_LOCATION, ACCESS_FINE_PERMISSION);
@@ -101,12 +103,14 @@ public class MainActivity extends AppCompatActivity{
         FirebaseDB db = FirebaseDB.getInstance();
         List<Photo> temp = db.downloadAllFriendsPhotos(new DJFriends());
 
-        proximitySwitch = (Switch) findViewById(R.id.proximity);
-        timeOfDaySwitch = (Switch) findViewById(R.id.timeOfDay);
-        recencySwitch = (Switch) findViewById(R.id.recency);
+        proximitySwitch = (Switch) findViewById(R.id.proximitySwitch);
+        timeOfDaySwitch = (Switch) findViewById(R.id.timeOfDaySwitch);
+        recencySwitch = (Switch) findViewById(R.id.recencySwitch);
         myAlbumSwitch = (Switch) findViewById(R.id.myAlbum);
         friendsAlbumSwitch = (Switch) findViewById(R.id.friendsAlbum);
         refreshRateBar = (SeekBar) findViewById(R.id.refresh);
+        refreshNow = (Button) findViewById(R.id.refreshNow);
+        viewPhotoPicker = (Button) findViewById(R.id.viewPhotoPicker);
 
         proximitySwitch.setChecked(Settings.getInstance().isConsideringProximity());
         timeOfDaySwitch.setChecked(Settings.getInstance().isConsideringTOD());
@@ -159,6 +163,21 @@ public class MainActivity extends AppCompatActivity{
             }
         });
 
+        refreshNow.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                PhotoCollection.getInstance().update();
+            }
+        });
+
+        viewPhotoPicker.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, PhotoPicker.class);
+                startActivity(intent);
+            }
+        });
+
         refreshRateBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
@@ -174,14 +193,8 @@ public class MainActivity extends AppCompatActivity{
                 Settings.getInstance().setRefreshRateMinutes(20 + seekBar.getProgress());
             }
         });
-
         Log.i(this.getClass().toString() + ":onCreate()", "MainActivity listeners configured.");
 
-    }
-
-    public void openPicker(View view){
-        Intent intent = new Intent(MainActivity.this, PhotoPicker.class);
-        startActivity(intent);
     }
 
     private void askPermission(String permission, int requestCode){
