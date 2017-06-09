@@ -51,7 +51,8 @@ public class PhotoLoader  {
                 MediaStore.Images.Media.DATA
         };
         selectionClause = MediaStore.Images.Media.DATA + " like ? ";
-        selectionArgs = new String[]{"%" + folder + "%"};
+        selectionArgs = new String[]{folder + "%"};
+
         sortOrder = null;
 
 

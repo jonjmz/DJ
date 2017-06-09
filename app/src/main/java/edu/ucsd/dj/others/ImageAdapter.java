@@ -1,19 +1,26 @@
 package edu.ucsd.dj.others;
 
+import android.app.AlertDialog;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.ColorMatrix;
-import android.graphics.ColorMatrixColorFilter;
+import android.content.DialogInterface;
+import android.text.InputType;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.GridView;
-import android.widget.ImageView;
+import android.widget.EditText;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+import edu.ucsd.dj.R;
+import edu.ucsd.dj.activities.MainActivity;
+import edu.ucsd.dj.activities.PhotoPicker;
+import edu.ucsd.dj.managers.DJPhoto;
+import edu.ucsd.dj.managers.Settings;
+import edu.ucsd.dj.models.DJPrimaryUser;
+import edu.ucsd.dj.models.FirebaseDB;
 import edu.ucsd.dj.models.Photo;
 
 /**
@@ -23,18 +30,10 @@ import edu.ucsd.dj.models.Photo;
 public class ImageAdapter extends BaseAdapter {
     private Context context;
     List<Photo> photos;
-    ColorMatrixColorFilter gray;
-    ColorMatrixColorFilter normal;
 
     public ImageAdapter(Context c, List<Photo> p){
         this.context = c;
         this.photos = p;
-        ColorMatrix matrix = new ColorMatrix();
-        matrix.setSaturation(0);  //0 means grayscale
-        this.gray = new ColorMatrixColorFilter(matrix);
-        matrix = new ColorMatrix();
-        matrix.setSaturation(1);  //0 means grayscale
-        this.normal = new ColorMatrixColorFilter(matrix);
     }
     @Override
     public int getCount() {
@@ -53,33 +52,73 @@ public class ImageAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        File imgFile = new  File(photos.get(position).getPathname());
-        Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-        ImageView imageView = new ImageView(context);
-        imageView.setImageBitmap(myBitmap);
-        imageView.setLayoutParams(new GridView.LayoutParams(240, 240));
+        GreyImage image = new GreyImage(context, new File(photos.get(position).getPathname()).getName());
 
-        if(PhotoCollection.getInstance().getAlbum().contains(photos.get(position))){
-            imageView.setEnabled(false);
-        } else {
-            imageView.setColorFilter(gray);
-            imageView.setImageAlpha(128);   // 128 = 0.5
-
-            View.OnClickListener listener  = new View.OnClickListener(){
-                @Override
-                public void onClick(View v) {
-                    ImageView image = (ImageView) v;
-                    image.setImageAlpha(254);
-                    image.setColorFilter(normal);
-                    // call some method that moves file into album
-                }
-            };
-            imageView.setOnClickListener(listener);
+        if (!PhotoCollection.getInstance().getAlbum().contains(photos.get(position))) {
+            image.makeGrey();
         }
-        return imageView;
+        image.setOnClickListener(new ImageClickedListener());
+
+        return image;
     }
+    class ImageClickedListener implements View.OnClickListener{
+        @Override
+        public void onClick(View v) {
+            // Using custom type of ImageView
+            final GreyImage image = (GreyImage) v;
+            // It should now be a color image
+            image.makeColor();
+            // Copy the file over
+            FileUtilities.copy(
+                    Settings.getInstance().DCIM_LOCATION + image.getFileName(),
+                    Settings.getInstance().MAIN_LOCATION + image.getFileName()
+            );
+            // Tell mediastore the file was created
+            FileUtilities.updateMediastore(Settings.getInstance().MAIN_LOCATION + image.getFileName());
 
-    public void addPhoto(View view){
-
+            final EditText input = new EditText(v.getContext());
+            AlertDialog alertDialog = new AlertDialog.Builder(v.getContext()) //Read Update
+                    .setTitle("Custom Name")
+                    .setMessage("Please enter custom name or press default")
+                    .setView(input)
+                    .setPositiveButton("Custom",new DialogCustomResponseListener(image.getFileName(), input))
+                    .setNegativeButton("Default", new DialogDefaultResponseListener(image.getFileName()))
+                    .create();
+            alertDialog.show();
+        }
+        class DialogCustomResponseListener implements DialogInterface.OnClickListener{
+            private String fileName;
+            private EditText input;
+            DialogCustomResponseListener(String file, EditText in){
+                fileName = file;
+                input = in;
+            }
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // Create a photo and user
+                DJPrimaryUser primaryUser = new DJPrimaryUser();
+                Photo tempPhoto = new Photo(fileName, primaryUser);
+                tempPhoto.setPathname(Settings.getInstance().MAIN_LOCATION + fileName);
+                tempPhoto.setHasCustomLocation(true);
+                tempPhoto.setCustomLocation(input.getText().toString());
+                PhotoCollection.getInstance().addPhoto(tempPhoto);
+                FirebaseDB.getInstance().uploadPhotos(primaryUser, Arrays.asList(tempPhoto));
+            }
+        }
+        class DialogDefaultResponseListener implements DialogInterface.OnClickListener{
+            private String fileName;
+            DialogDefaultResponseListener(String file){
+                fileName = file;
+            }
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // Create a photo and user
+                DJPrimaryUser primaryUser = new DJPrimaryUser();
+                Photo tempPhoto = new Photo(fileName, primaryUser);
+                tempPhoto.setPathname(Settings.getInstance().MAIN_LOCATION + fileName);
+                PhotoCollection.getInstance().addPhoto(tempPhoto);
+                FirebaseDB.getInstance().uploadPhotos(primaryUser, Arrays.asList(tempPhoto));
+            }
+        }
     }
 }

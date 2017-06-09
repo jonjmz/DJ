@@ -13,6 +13,9 @@ import android.widget.RemoteViews;
 import android.widget.Toast;
 
 import edu.ucsd.dj.interfaces.observers.ILocationTrackerSubject;
+import edu.ucsd.dj.managers.DJPhoto;
+import edu.ucsd.dj.managers.DJWallpaper;
+import edu.ucsd.dj.managers.Settings;
 import edu.ucsd.dj.others.LocationService;
 import edu.ucsd.dj.models.Photo;
 import edu.ucsd.dj.others.PhotoCollection;
@@ -152,7 +155,16 @@ public class WidgetProvider extends AppWidgetProvider {
                         + " Score: " + photo.getScore() + " DateTime: " + photo.getInfo().timeOfDay());
             }
             else if (intent.getAction().equals(KARMA)) {
-                photo.setKarma(photo.karmaScore());
+
+                if (photo.getUserKarma()) {
+                    photo.setKarma(photo.karmaScore() - 1);
+                } else {
+                    photo.setKarma(photo.karmaScore() + 1);
+                }
+                photo.setUserKarma(!photo.getUserKarma());
+
+                DJWallpaper.getInstance().set(photo);
+
                 String result = "Karma " + (photo.karmaScore() != 0 ? "given, tap to remove." : "taken.");
                 Toast.makeText(context, result, Toast.LENGTH_SHORT).show();
 
@@ -200,7 +212,7 @@ public class WidgetProvider extends AppWidgetProvider {
 
         RemoteViews remoteViews = new RemoteViews( context.getPackageName(), R.layout.simple_widget);
 
-        if (photo.karmaScore() != 0)
+        if (photo.getUserKarma())
             remoteViews.setImageViewResource(R.id.heart, R.mipmap.filled);
         else
             remoteViews.setImageViewResource(R.id.heart, R.mipmap.open);

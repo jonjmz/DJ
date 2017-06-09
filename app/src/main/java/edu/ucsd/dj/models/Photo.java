@@ -20,6 +20,7 @@ public class Photo implements IPhoto, Comparable, Serializable {
 
     private double score;        // Used to order photos with precalulated scores
     private int karma;    // Used to keep track of karma
+    private boolean userKarma;
 
     private String pathname;     // Reference to image in album
     private Event info;          // Store photo Exif data for score calculations
@@ -27,10 +28,13 @@ public class Photo implements IPhoto, Comparable, Serializable {
     private String uid;
 
     private String customLocation;
+    private boolean hasCustomLocation;
+
     public Photo(){
         pathname = "";
         info = new Event();
         customLocation = "";
+        hasCustomLocation = false;
 
     }
     public Photo(String reference, IUser user) {
@@ -57,13 +61,23 @@ public class Photo implements IPhoto, Comparable, Serializable {
     public Event getInfo() { return info; }
 
     public String getPathname(){ return pathname; }
-
+    public void setPathname(String pathname) { this.pathname = pathname; }
     @Exclude
     public double getScore(){ return score; }
     public void setScore(double score) { this.score = score; }
     public int karmaScore() { return karma; }
 
     public void setKarma(int karma) { this.karma = karma; }
+
+    @Exclude
+    public boolean getUserKarma() {
+        return userKarma;
+    }
+
+    @Exclude
+    public void setUserKarma(boolean uk) {
+        userKarma = uk;
+    }
 
     /**
      * Indicates whether some other object is "equal to" this one.
@@ -168,4 +182,11 @@ public class Photo implements IPhoto, Comparable, Serializable {
         this.uid = uid;
     }
 
+    public boolean hasCustomLocation() {
+        return hasCustomLocation;
+    }
+
+    public void setHasCustomLocation(boolean hasCustomLocation) {
+        this.hasCustomLocation = hasCustomLocation;
+    }
 }

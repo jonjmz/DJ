@@ -2,13 +2,13 @@ package edu.ucsd.dj.models;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.MediaScannerConnection;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -28,7 +28,9 @@ import java.util.List;
 import edu.ucsd.dj.interfaces.models.IFriendList;
 import edu.ucsd.dj.interfaces.IRemotePhotoStore;
 import edu.ucsd.dj.interfaces.models.IUser;
-import edu.ucsd.dj.managers.DJPhoto;
+import edu.ucsd.dj.managers.Settings;
+import edu.ucsd.dj.others.FileUtilities;
+import edu.ucsd.dj.others.PhotoCollection;
 import edu.ucsd.dj.others.PhotoLoader;
 
 /**
@@ -40,6 +42,7 @@ public class FirebaseDB implements IRemotePhotoStore {
             FirebaseStorage.getInstance().getReference();
     private static final DatabaseReference
             databaseRef = FirebaseDatabase.getInstance().getReference();
+    private static final FirebaseDB ourInstance = new FirebaseDB();
 
     private static DatabaseReference
             primaryUserRef,
@@ -53,7 +56,58 @@ public class FirebaseDB implements IRemotePhotoStore {
 
     private static List<Photo> friendsPhotos =  new LinkedList<>();
 
-    private final PhotoLoader loader = new PhotoLoader("DejaPhoto");
+    public static FirebaseDB getInstance() {
+        return ourInstance;
+    }
+    private final PhotoLoader loader = new PhotoLoader(Settings.getInstance().MAIN_LOCATION);
+//TODO ADD THIS TO CURRENT USER TOO MAN
+    public void addFriendsListeners(final IUser user){
+        DatabaseReference temp = databaseRef.child(user.getUserId()).child("photos");
+
+        ChildEventListener childEventListener = new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
+                Log.d(TAG, "onChildAdded:" + "New photo added");
+
+
+                Photo tempPhoto = dataSnapshot.getValue(Photo.class);
+                Log.i("FirebaseDB", "Photo: " + tempPhoto.getPathname());
+                //downloadPhotoFromStorage(friend, tempPhoto);
+                downloadPhotoFromStorage_file(user, tempPhoto);
+
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String previousChildName) {
+                Log.d(TAG, "onChildChanged:" + dataSnapshot.getKey());
+                Photo tempPhoto = dataSnapshot.getValue(Photo.class);
+                Log.i("FirebaseDB", "Photo: " + tempPhoto.getPathname());
+                //This means karma could be changed, or location
+                PhotoCollection.getInstance().updatePhotoFromStorage(tempPhoto);
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                Log.d(TAG, "onChildRemoved:" + dataSnapshot.getKey());
+                //TODO THIS IS HARD
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String previousChildName) {
+                Log.d(TAG, "onChildMoved:" + dataSnapshot.getKey());
+
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.w(TAG, "postComments:onCancelled", databaseError.toException());
+            }
+        };
+        temp.addChildEventListener(childEventListener);
+    }
 
     @Override
     public List<Photo> downloadAllFriendsPhotos(IFriendList friends) {
@@ -61,6 +115,7 @@ public class FirebaseDB implements IRemotePhotoStore {
         for (IUser u : friends.getFriends()) {
             Log.i("FirebaseDB", "Friends: " + u.getUserId());
             downloadPhotos(u);
+            addFriendsListeners(u);
         }
         return friendsPhotos;
 
@@ -119,25 +174,25 @@ public class FirebaseDB implements IRemotePhotoStore {
         });
     }
 
-    private void downloadPhotoFromStorage(IUser user, final Photo photo){
-        StorageReference temp = buildStoragePath(user, photo);
-        Log.i("FirebaseDB", temp.getPath());
-        temp.getBytes(FILE_SIZE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-            @Override
-            public void onSuccess(byte[] bytes) {
-                // Data for "images/island.jpg" is returns, use this as needed
-                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                loader.insertPhoto(bitmap, photo, "DejaPhotoFriends");
-                //
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                // Handle any errors
-            }
-        });
-
-    }
+//    private void downloadPhotoFromStorage(IUser user, final Photo photo){
+//        StorageReference temp = buildStoragePath(user, photo);
+//        Log.i("FirebaseDB", temp.getPath());
+//        temp.getBytes(FILE_SIZE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+//            @Override
+//            public void onSuccess(byte[] bytes) {
+//                // Data for "images/island.jpg" is returns, use this as needed
+//                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+//                loader.insertPhoto(bitmap, photo, "DejaPhotoFriends");
+//                //
+//            }
+//        }).addOnFailureListener(new OnFailureListener() {
+//            @Override
+//            public void onFailure(@NonNull Exception exception) {
+//                // Handle any errors
+//            }
+//        });
+//
+//    }
 
     private void downloadPhotoFromStorage_file(IUser user, final Photo photo){
         StorageReference temp = buildStoragePath(user, photo);
@@ -155,6 +210,9 @@ public class FirebaseDB implements IRemotePhotoStore {
             public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
                 // Local temp file has been created
                 Log.i("FirebaseDB", "Downloading file success: " + taskSnapshot.toString());
+                photo.setPathname(localFile.getPath());
+                PhotoCollection.getInstance().addPhoto(photo);
+                FileUtilities.updateMediastore(localFile.getPath());
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
