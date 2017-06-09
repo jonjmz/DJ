@@ -152,11 +152,11 @@ public class WidgetProvider extends AppWidgetProvider {
                         + " Score: " + photo.getScore() + " DateTime: " + photo.getInfo().timeOfDay());
             }
             else if (intent.getAction().equals(KARMA)) {
-                photo.setHasKarma(!photo.hasKarma());
-                String result = "Karma " + (photo.hasKarma() ? "given, tap to remove." : "taken.");
+                photo.setKarma(photo.karmaScore());
+                String result = "Karma " + (photo.karmaScore() != 0 ? "given, tap to remove." : "taken.");
                 Toast.makeText(context, result, Toast.LENGTH_SHORT).show();
 
-                Log.i("onReceive: KARMA ", "Set karma to " + photo.hasKarma() + " for Photo: [" +
+                Log.i("onReceive: KARMA ", "Set karma to " + photo.karmaScore() + " for Photo: [" +
                         collection.getCurrentIndex() + "/" +
                         (collection.size() - 1) + "]" +
                         " Score: " + photo.getScore() + " DateTime: " + photo.getInfo().timeOfDay());
@@ -200,7 +200,7 @@ public class WidgetProvider extends AppWidgetProvider {
 
         RemoteViews remoteViews = new RemoteViews( context.getPackageName(), R.layout.simple_widget);
 
-        if (photo.hasKarma())
+        if (photo.karmaScore() != 0)
             remoteViews.setImageViewResource(R.id.heart, R.mipmap.filled);
         else
             remoteViews.setImageViewResource(R.id.heart, R.mipmap.open);

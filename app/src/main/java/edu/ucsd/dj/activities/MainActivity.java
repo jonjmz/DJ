@@ -3,6 +3,8 @@ package edu.ucsd.dj.activities;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.provider.MediaStore;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -41,6 +43,8 @@ public class MainActivity extends AppCompatActivity{
     private static final int SET_WALLPAPER_PERMISSION = 69;
     private static final int ACCESS_FINE_PERMISSION = 420;
     private static final int WRITE_STORAGE_PERMISSION = 666;
+    private static final int REQUEST_IMAGE_CAPTURE = 1;
+
     private Switch
             proximitySwitch,
             timeOfDaySwitch,
@@ -50,6 +54,7 @@ public class MainActivity extends AppCompatActivity{
 
     private SeekBar refreshRateBar;
     private Button refreshNow, viewPhotoPicker;
+    private FloatingActionButton cameraButton;
 
     @Override
     protected void onStart() {
@@ -72,6 +77,7 @@ public class MainActivity extends AppCompatActivity{
         askPermission(Manifest.permission.READ_CONTACTS, READ_STORAGE_PERMISSION);
         askPermission(Manifest.permission.GET_ACCOUNTS, READ_STORAGE_PERMISSION);
         askPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, WRITE_STORAGE_PERMISSION);
+        askPermission(Manifest.permission.CAMERA, WRITE_STORAGE_PERMISSION );
 
         IRating rating = new RatingStrategy(
                 Settings.getInstance().isConsideringRecency(),
@@ -110,6 +116,7 @@ public class MainActivity extends AppCompatActivity{
         refreshRateBar = (SeekBar) findViewById(R.id.refresh);
         refreshNow = (Button) findViewById(R.id.refreshNow);
         viewPhotoPicker = (Button) findViewById(R.id.viewPhotoPicker);
+        cameraButton = (FloatingActionButton) findViewById(R.id.floatingActionButton);
 
         proximitySwitch.setChecked(Settings.getInstance().isConsideringProximity());
         timeOfDaySwitch.setChecked(Settings.getInstance().isConsideringTOD());
@@ -196,6 +203,17 @@ public class MainActivity extends AppCompatActivity{
 
     }
 
+    public void openPicker(View view){
+        Intent intent = new Intent(MainActivity.this, PhotoPicker.class);
+        startActivity(intent);
+    }
+
+    public void openCamera(View view){
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if(intent.resolveActivity(getPackageManager()) != null ) {
+            startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
+        }
+    }
     private void askPermission(String permission, int requestCode){
 
         if (ContextCompat.checkSelfPermission(this, permission) !=
