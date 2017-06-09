@@ -181,6 +181,7 @@ public class MainActivity extends AppCompatActivity{
         refreshNow.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
+                FileUtilities.updateMediastore(Settings.getInstance().DCIM_LOCATION);
                 PhotoCollection.getInstance().update();
             }
         });

@@ -45,6 +45,8 @@ public class BitmapLabeler implements ILabelKarma {
 
         int height = context.getResources().getDisplayMetrics().heightPixels;
 
+        bitmap = resize(bitmap);
+
         Canvas canvas = new Canvas(bitmap);
 
         Paint paint = new Paint();

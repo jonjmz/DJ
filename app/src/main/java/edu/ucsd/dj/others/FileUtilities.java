@@ -24,13 +24,20 @@ import edu.ucsd.dj.managers.Settings;
 
 public class FileUtilities {
     public static void copy(String fromFile, String toFile){
-        Bitmap bitmap = BitmapFactory.decodeFile(fromFile);
-        bitmap = BitmapLabeler.resize(bitmap);
+        File from = new File(fromFile);
         File to = new File(toFile);
+
+        InputStream is = null;
         OutputStream os = null;
         try {
+            is = new FileInputStream(from);
             os = new FileOutputStream(to);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, os);
+            byte[] buffer = new byte[1024];
+            int length;
+            while ((length = is.read(buffer)) > 0) {
+                os.write(buffer, 0, length);
+            }
+            is.close();
             os.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
