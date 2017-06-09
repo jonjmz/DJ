@@ -61,7 +61,7 @@ public class BitmapLabeler implements ILabelKarma {
     @Override
     public Bitmap createBitmapWithKarmaLabel(Bitmap bitmap, IPhoto photo) {
 
-        Log.i("Label: ", "Karma: " + photo.hasKarma());
+        Log.i("Label: ", "Karma: " + photo.karmaScore());
 
         int width = DJPhoto.getAppContext().getResources().getDisplayMetrics().widthPixels;
         int height = DJPhoto.getAppContext().getResources().getDisplayMetrics().heightPixels;
@@ -73,7 +73,7 @@ public class BitmapLabeler implements ILabelKarma {
         paint.setColor(Color.WHITE);
         paint.setTextSize(35);
         paint.setShadowLayer(6.0f, 0.0f, 0.0f, Color.BLACK);
-        String label = "Karma: " + photo.hasKarma();
+        String label = "Karma: " + photo.karmaScore();
         canvas.drawText(label, 500, (height/3) * 3 - 10, paint);
 
         return bitmap;

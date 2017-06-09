@@ -3,7 +3,6 @@ package edu.ucsd.dj.activities;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -22,6 +21,7 @@ import edu.ucsd.dj.R;
 import edu.ucsd.dj.interfaces.IRating;
 import edu.ucsd.dj.interfaces.IRemotePhotoStore;
 import edu.ucsd.dj.interfaces.models.IUser;
+import edu.ucsd.dj.managers.Camera;
 import edu.ucsd.dj.models.DJFriends;
 import edu.ucsd.dj.models.DJPrimaryUser;
 import edu.ucsd.dj.models.FirebaseDB;
@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity{
     private static final int SET_WALLPAPER_PERMISSION = 69;
     private static final int ACCESS_FINE_PERMISSION = 420;
     private static final int WRITE_STORAGE_PERMISSION = 666;
-    private static final int REQUEST_IMAGE_CAPTURE = 1;
+
 
     private Switch
             proximitySwitch,
@@ -117,6 +117,7 @@ public class MainActivity extends AppCompatActivity{
         refreshNow = (Button) findViewById(R.id.refreshNow);
         viewPhotoPicker = (Button) findViewById(R.id.viewPhotoPicker);
         cameraButton = (FloatingActionButton) findViewById(R.id.floatingActionButton);
+
 
         proximitySwitch.setChecked(Settings.getInstance().isConsideringProximity());
         timeOfDaySwitch.setChecked(Settings.getInstance().isConsideringTOD());
@@ -208,11 +209,8 @@ public class MainActivity extends AppCompatActivity{
         startActivity(intent);
     }
 
-    public void openCamera(View view){
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if(intent.resolveActivity(getPackageManager()) != null ) {
-            startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
-        }
+    public void openCamera(View view) {
+        Camera camera = new Camera();
     }
     private void askPermission(String permission, int requestCode){
 
