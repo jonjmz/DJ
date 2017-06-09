@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="16sp"
         android:clickable="true"
-        app:fabSize="normal"
+        app:fabSize="mini"
         android:layout_gravity="bottom|right"
         app:srcCompat="@drawable/camera" />
 
@@ -75,7 +75,6 @@
             android:id="@+id/viewPhotoPicker"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="openPicker"
             android:text="View Photo Picker" />
 
         <Button
