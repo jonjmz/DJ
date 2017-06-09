@@ -8,6 +8,7 @@ import edu.ucsd.dj.interfaces.observers.ISettingsObserver;
 
 /**
  * Created by nguyen on 5/13/2017.
+ * Interface for setting address with current location
  */
 
 public interface IRating extends ISettingsObserver, IRatingSubject {

@@ -35,6 +35,7 @@ import edu.ucsd.dj.others.PhotoLoader;
 
 /**
  * Created by nguyen on 6/4/2017.
+ * Class for our database
  */
 public class FirebaseDB implements IRemotePhotoStore {
 

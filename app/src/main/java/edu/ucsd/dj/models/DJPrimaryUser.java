@@ -7,6 +7,7 @@ import edu.ucsd.dj.managers.DJPhoto;
 
 /**
  * Created by Jake Sutton on 6/4/17.
+ * To signify the primary user
  */
 
 public class DJPrimaryUser extends DJUser {

@@ -6,6 +6,7 @@ import edu.ucsd.dj.interfaces.models.IPhoto;
 
 /**
  * Created by Jake Sutton on 6/8/17.
+ * Interface for karma labeler
  */
 
 public interface ILabelKarma {

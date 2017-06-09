@@ -14,6 +14,7 @@ import edu.ucsd.dj.managers.DJPhoto;
 
 /**
  * Created by Jake Sutton on 6/4/17.
+ * To hold list of friends
  */
 
 public class DJFriends implements IFriendList {
