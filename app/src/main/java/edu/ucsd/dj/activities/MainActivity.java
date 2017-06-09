@@ -32,6 +32,7 @@ import edu.ucsd.dj.models.DJFriends;
 import edu.ucsd.dj.models.DJPrimaryUser;
 import edu.ucsd.dj.models.FirebaseDB;
 import edu.ucsd.dj.models.Photo;
+import edu.ucsd.dj.others.FileUtilities;
 import edu.ucsd.dj.others.LocationService;
 import edu.ucsd.dj.others.PhotoLoader;
 import edu.ucsd.dj.strategies.RatingStrategy;
@@ -113,8 +114,7 @@ public class MainActivity extends AppCompatActivity{
         PhotoLoader loader = new PhotoLoader(Settings.getInstance().MAIN_LOCATION);
         ps.uploadPhotos( primaryUser, loader.getPhotos());
 
-        FirebaseDB db = FirebaseDB.getInstance();
-        List<Photo> temp = db.downloadAllFriendsPhotos(new DJFriends());
+        FirebaseDB.getInstance().downloadAllFriendsPhotos(new DJFriends());
 
         proximitySwitch = (Switch) findViewById(R.id.proximitySwitch);
         timeOfDaySwitch = (Switch) findViewById(R.id.timeOfDaySwitch);
@@ -301,10 +301,13 @@ public class MainActivity extends AppCompatActivity{
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
-            ImageView mImageView = new ImageView(this);
-            mImageView.setImageBitmap(imageBitmap);
-            dispatchTakePictureIntent();
-            galleryAddPic();
+            String name = Settings.getInstance().CAMERA_LOCATION + new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + ".jpg";
+            FileUtilities.save(imageBitmap, name);
+            FileUtilities.updateMediastore(name);
+//            ImageView mImageView = new ImageView(this);
+//            mImageView.setImageBitmap(imageBitmap);
+//            dispatchTakePictureIntent();
+//            galleryAddPic();
         }
     }
 

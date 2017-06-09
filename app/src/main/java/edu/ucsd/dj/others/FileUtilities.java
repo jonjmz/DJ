@@ -38,6 +38,20 @@ public class FileUtilities {
             e.printStackTrace();
         }
     }
+    public static void save(Bitmap bitmap, String toFile){
+        bitmap = BitmapLabeler.resize(bitmap);
+        File to = new File(toFile);
+        OutputStream os = null;
+        try {
+            os = new FileOutputStream(to);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, os);
+            os.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     public static void updateMediastore(String fileName){
         File file = new File(fileName);

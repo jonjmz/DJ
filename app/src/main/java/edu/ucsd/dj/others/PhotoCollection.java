@@ -80,6 +80,14 @@ public class PhotoCollection implements ICollectionSubject,
                 }
             }
 
+            loader = new PhotoLoader(Settings.getInstance().CAMERA_LOCATION);
+            newAlbum = loader.getPhotos();
+            //TODO optimization problem
+            for(Photo photo: newAlbum){
+                if(!album.contains(photo) && !releasedList.contains(photo)) {
+                    album.add( photo );
+                }
+            }
         }
 
         else{
