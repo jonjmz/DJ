@@ -43,10 +43,8 @@ public class BitmapLabeler implements ILabelKarma {
         Log.i("Label: ", text);
         if (text.equals("")) return bitmap;
 
-        int width = context.getResources().getDisplayMetrics().widthPixels;
         int height = context.getResources().getDisplayMetrics().heightPixels;
 
-        bitmap = bitmap.createScaledBitmap( bitmap, width, height, false );
         Canvas canvas = new Canvas(bitmap);
 
         Paint paint = new Paint();
@@ -55,6 +53,14 @@ public class BitmapLabeler implements ILabelKarma {
         paint.setShadowLayer(6.0f, 0.0f, 0.0f, Color.BLACK);
         canvas.drawText(text, 40, (height/4) * 3, paint);
 
+        return bitmap;
+    }
+
+    public static Bitmap resize(Bitmap bitmap){
+        Context context = DJPhoto.getAppContext();
+        int width = context.getResources().getDisplayMetrics().widthPixels;
+        int height = context.getResources().getDisplayMetrics().heightPixels;
+        bitmap = bitmap.createScaledBitmap( bitmap, width, height, false );
         return bitmap;
     }
 
