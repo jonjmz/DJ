@@ -4,24 +4,18 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.net.Uri;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
-import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.Switch;
-import java.io.File;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import edu.ucsd.dj.R;
@@ -31,7 +25,6 @@ import edu.ucsd.dj.interfaces.models.IUser;
 import edu.ucsd.dj.models.DJFriends;
 import edu.ucsd.dj.models.DJPrimaryUser;
 import edu.ucsd.dj.models.FirebaseDB;
-import edu.ucsd.dj.models.Photo;
 import edu.ucsd.dj.others.FileUtilities;
 import edu.ucsd.dj.others.LocationService;
 import edu.ucsd.dj.others.PhotoLoader;
@@ -39,7 +32,6 @@ import edu.ucsd.dj.strategies.RatingStrategy;
 import edu.ucsd.dj.others.PhotoCollection;
 import edu.ucsd.dj.managers.DJWallpaper;
 import edu.ucsd.dj.managers.Settings;
-import static edu.ucsd.dj.others.FileUtilities.copy;
 
 /**
  * Main activity. The 'Settings' page.
@@ -50,9 +42,6 @@ public class MainActivity extends AppCompatActivity{
     private static final int ACCESS_FINE_PERMISSION = 420;
     private static final int WRITE_STORAGE_PERMISSION = 666;
     private static final int REQUEST_IMAGE_CAPTURE = 1;
-
-    String mCurrentPhotoPath;
-    private static final int REQUEST_TAKE_PHOTO = 1;
 
     private Switch
             proximitySwitch,
@@ -69,7 +58,6 @@ public class MainActivity extends AppCompatActivity{
     protected void onStart() {
         super.onStart();
     }
-
 
     @Override
     protected void onStop() {
@@ -125,7 +113,6 @@ public class MainActivity extends AppCompatActivity{
         refreshNow = (Button) findViewById(R.id.refreshNow);
         viewPhotoPicker = (Button) findViewById(R.id.viewPhotoPicker);
         cameraButton = (FloatingActionButton) findViewById(R.id.floatingActionButton);
-
 
         proximitySwitch.setChecked(Settings.getInstance().isConsideringProximity());
         timeOfDaySwitch.setChecked(Settings.getInstance().isConsideringTOD());
@@ -201,7 +188,6 @@ public class MainActivity extends AppCompatActivity{
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-
             }
 
             @Override
@@ -214,9 +200,8 @@ public class MainActivity extends AppCompatActivity{
             @Override
             public void onClick(View v){
                 Intent picIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                if (picIntent.resolveActivity(getPackageManager()) != null) {
+                if (picIntent.resolveActivity(getPackageManager()) != null)
                     startActivityForResult(picIntent, REQUEST_IMAGE_CAPTURE);
-                }
             }
         });
 
@@ -297,15 +282,16 @@ public class MainActivity extends AppCompatActivity{
         }
     }
 
+    // Camera results processed here.
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
-            String name = Settings.getInstance().CAMERA_LOCATION + new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + ".jpg";
+            String date = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+            String name = Settings.getInstance().CAMERA_LOCATION +  date + ".jpg";
             FileUtilities.save(imageBitmap, name);
             FileUtilities.updateMediastore(name);
         }
     }
-
 }

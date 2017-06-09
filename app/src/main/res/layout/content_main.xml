@@ -36,17 +36,6 @@
         android:onClick="openPicker"
         android:text="View Photo Picker" />
 
-    <TextView
-        android:id="@+id/text"
-        android:text="When selecting background image,\nconsider the photo's:"
-        android:textSize="20sp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
-        android:layout_marginLeft="15dp"
-        android:layout_marginStart="15dp"
-        android:layout_below="@+id/refresh"/>
-
     <Switch
         android:id="@+id/proximity"
         android:text="Proximity"
@@ -84,10 +73,21 @@
         android:layout_alignLeft="@+id/proximity"
         android:layout_alignStart="@+id/proximity"
         tools:ignore="RtlHardcoded" />
-    
+
+    <TextView
+        android:id="@+id/text"
+        android:text="When selecting background image, use:"
+        android:textSize="20sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginStart="15dp"
+        android:layout_below="@+id/refresh"/>
+
     <Switch
         android:id="@+id/myAlbum"
-        android:text="Use my album"
+        android:text="My album"
         android:textSize="17sp"
         android:layout_width="330dp"
         android:layout_height="wrap_content"
@@ -98,7 +98,7 @@
 
     <Switch
         android:id="@+id/friendsAlbum"
-        android:text="Use friend's album"
+        android:text="Friend's album"
         android:textSize="17sp"
         android:layout_width="330dp"
         android:layout_height="wrap_content"
