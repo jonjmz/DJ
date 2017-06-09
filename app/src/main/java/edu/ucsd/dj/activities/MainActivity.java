@@ -20,19 +20,14 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.Switch;
-
-
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
 import edu.ucsd.dj.R;
-
 import edu.ucsd.dj.interfaces.IRating;
 import edu.ucsd.dj.interfaces.IRemotePhotoStore;
 import edu.ucsd.dj.interfaces.models.IUser;
-import edu.ucsd.dj.managers.Camera;
 import edu.ucsd.dj.models.DJFriends;
 import edu.ucsd.dj.models.DJPrimaryUser;
 import edu.ucsd.dj.models.FirebaseDB;
@@ -40,12 +35,9 @@ import edu.ucsd.dj.models.Photo;
 import edu.ucsd.dj.others.LocationService;
 import edu.ucsd.dj.others.PhotoLoader;
 import edu.ucsd.dj.strategies.RatingStrategy;
-
 import edu.ucsd.dj.others.PhotoCollection;
-
 import edu.ucsd.dj.managers.DJWallpaper;
 import edu.ucsd.dj.managers.Settings;
-
 import static edu.ucsd.dj.others.FileUtilities.copy;
 
 /**
@@ -121,8 +113,8 @@ public class MainActivity extends AppCompatActivity{
         PhotoLoader loader = new PhotoLoader(Settings.getInstance().MAIN_LOCATION);
         ps.uploadPhotos( primaryUser, loader.getPhotos());
 
-//        FirebaseDB db = FirebaseDB.getInstance();
-//        List<Photo> temp = db.downloadAllFriendsPhotos(new DJFriends());
+        FirebaseDB db = FirebaseDB.getInstance();
+        List<Photo> temp = db.downloadAllFriendsPhotos(new DJFriends());
 
         proximitySwitch = (Switch) findViewById(R.id.proximitySwitch);
         timeOfDaySwitch = (Switch) findViewById(R.id.timeOfDaySwitch);
