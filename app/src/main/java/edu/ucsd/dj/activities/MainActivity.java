@@ -53,8 +53,8 @@ public class MainActivity extends AppCompatActivity{
             friendsAlbumSwitch;
 
     private SeekBar refreshRateBar;
-    private FloatingActionButton cameraButton;
     private Button refreshNow, viewPhotoPicker;
+    private FloatingActionButton cameraButton;
 
     @Override
     protected void onStart() {
@@ -98,15 +98,14 @@ public class MainActivity extends AppCompatActivity{
 
 
         //TODO update task
-        final IUser primaryUser = new DJPrimaryUser();
+        IUser primaryUser = new DJPrimaryUser();
         IRemotePhotoStore ps = FirebaseDB.getInstance();
         ps.addUser(primaryUser);
 
         PhotoLoader loader = new PhotoLoader(Settings.getInstance().MAIN_LOCATION);
         ps.uploadPhotos( primaryUser, loader.getPhotos());
 
-        FirebaseDB db = FirebaseDB.getInstance();
-        List<Photo> temp = db.downloadAllFriendsPhotos(new DJFriends());
+        FirebaseDB.getInstance().downloadAllFriendsPhotos(new DJFriends());
 
         proximitySwitch = (Switch) findViewById(R.id.proximitySwitch);
         timeOfDaySwitch = (Switch) findViewById(R.id.timeOfDaySwitch);
@@ -114,11 +113,10 @@ public class MainActivity extends AppCompatActivity{
         myAlbumSwitch = (Switch) findViewById(R.id.myAlbum);
         friendsAlbumSwitch = (Switch) findViewById(R.id.friendsAlbum);
         refreshRateBar = (SeekBar) findViewById(R.id.refresh);
-
-        cameraButton = (FloatingActionButton) findViewById(R.id.floatingActionButton);
-
         refreshNow = (Button) findViewById(R.id.refreshNow);
         viewPhotoPicker = (Button) findViewById(R.id.viewPhotoPicker);
+        cameraButton = (FloatingActionButton) findViewById(R.id.floatingActionButton);
+
 
         proximitySwitch.setChecked(Settings.getInstance().isConsideringProximity());
         timeOfDaySwitch.setChecked(Settings.getInstance().isConsideringTOD());
@@ -213,7 +211,6 @@ public class MainActivity extends AppCompatActivity{
     public void openCamera(View view) {
         Camera camera = new Camera();
     }
-
     private void askPermission(String permission, int requestCode){
 
         if (ContextCompat.checkSelfPermission(this, permission) !=

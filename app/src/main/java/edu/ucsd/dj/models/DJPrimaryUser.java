@@ -11,11 +11,15 @@ import edu.ucsd.dj.managers.DJPhoto;
  */
 
 public class DJPrimaryUser extends DJUser {
-
+    private static final DJPrimaryUser ourInstance = new DJPrimaryUser();
     public DJPrimaryUser() {
         super("Primary User", "Unknown");
         userId = "default";
         loadEmail();
+    }
+
+    public static DJPrimaryUser getInstance() {
+        return ourInstance;
     }
 
     public void loadEmail() {
