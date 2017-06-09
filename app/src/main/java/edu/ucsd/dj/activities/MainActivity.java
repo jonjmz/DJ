@@ -98,15 +98,14 @@ public class MainActivity extends AppCompatActivity{
 
 
         //TODO update task
-        final IUser primaryUser = new DJPrimaryUser();
+        IUser primaryUser = new DJPrimaryUser();
         IRemotePhotoStore ps = FirebaseDB.getInstance();
         ps.addUser(primaryUser);
 
         PhotoLoader loader = new PhotoLoader(Settings.getInstance().MAIN_LOCATION);
         ps.uploadPhotos( primaryUser, loader.getPhotos());
 
-        FirebaseDB db = FirebaseDB.getInstance();
-        List<Photo> temp = db.downloadAllFriendsPhotos(new DJFriends());
+        FirebaseDB.getInstance().downloadAllFriendsPhotos(new DJFriends());
 
         proximitySwitch = (Switch) findViewById(R.id.proximitySwitch);
         timeOfDaySwitch = (Switch) findViewById(R.id.timeOfDaySwitch);
