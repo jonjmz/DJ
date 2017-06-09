@@ -100,7 +100,6 @@ public class ImageAdapter extends BaseAdapter {
                 DJPrimaryUser primaryUser = new DJPrimaryUser();
                 Photo tempPhoto = new Photo(fileName, primaryUser);
                 tempPhoto.setPathname(Settings.getInstance().MAIN_LOCATION + fileName);
-                tempPhoto.setHasCustomLocation(true);
                 tempPhoto.setCustomLocation(input.getText().toString());
                 PhotoCollection.getInstance().addPhoto(tempPhoto);
                 FirebaseDB.getInstance().uploadPhotos(primaryUser, Arrays.asList(tempPhoto));

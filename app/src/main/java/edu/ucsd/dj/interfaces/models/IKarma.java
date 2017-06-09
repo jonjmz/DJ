@@ -5,6 +5,6 @@ package edu.ucsd.dj.interfaces.models;
  */
 
 public interface IKarma {
-    int karmaScore();
+    int getKarma();
     void setKarma(int karma);
 }

@@ -16,6 +16,7 @@ import edu.ucsd.dj.interfaces.observers.ILocationTrackerSubject;
 import edu.ucsd.dj.managers.DJPhoto;
 import edu.ucsd.dj.managers.DJWallpaper;
 import edu.ucsd.dj.managers.Settings;
+import edu.ucsd.dj.models.FirebaseDB;
 import edu.ucsd.dj.others.LocationService;
 import edu.ucsd.dj.models.Photo;
 import edu.ucsd.dj.others.PhotoCollection;
@@ -157,18 +158,18 @@ public class WidgetProvider extends AppWidgetProvider {
             else if (intent.getAction().equals(KARMA)) {
 
                 if (photo.getUserKarma()) {
-                    photo.setKarma(photo.karmaScore() - 1);
+                    photo.setKarma(photo.getKarma() - 1);
                 } else {
-                    photo.setKarma(photo.karmaScore() + 1);
+                    photo.setKarma(photo.getKarma() + 1);
                 }
                 photo.setUserKarma(!photo.getUserKarma());
 
                 DJWallpaper.getInstance().set(photo);
-
-                String result = "Karma " + (photo.karmaScore() != 0 ? "given, tap to remove." : "taken.");
+                FirebaseDB.getInstance().updatePhotoKarma(photo);
+                String result = "Karma " + (photo.getKarma() != 0 ? "given, tap to remove." : "taken.");
                 Toast.makeText(context, result, Toast.LENGTH_SHORT).show();
 
-                Log.i("onReceive: KARMA ", "Set karma to " + photo.karmaScore() + " for Photo: [" +
+                Log.i("onReceive: KARMA ", "Set karma to " + photo.getKarma() + " for Photo: [" +
                         collection.getCurrentIndex() + "/" +
                         (collection.size() - 1) + "]" +
                         " Score: " + photo.getScore() + " DateTime: " + photo.getInfo().timeOfDay());
