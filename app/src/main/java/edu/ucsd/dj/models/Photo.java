@@ -19,6 +19,16 @@ import edu.ucsd.dj.interfaces.models.IUser;
 public class Photo implements IPhoto, Comparable, Serializable {
 
     private double score;        // Used to order photos with precalulated scores
+
+    public int getKarma() {
+        return karma;
+    }
+
+    @Override
+    public void setKarma(int karma) {
+        this.karma = karma;
+    }
+
     private int karma;    // Used to keep track of karma
     private boolean userKarma;
 
@@ -35,6 +45,7 @@ public class Photo implements IPhoto, Comparable, Serializable {
         info = new Event();
         customLocation = "";
         hasCustomLocation = false;
+        karma = 0;
 
     }
     public Photo(String reference, IUser user) {
@@ -42,7 +53,7 @@ public class Photo implements IPhoto, Comparable, Serializable {
         this.pathname = reference;
         this.uid = user.getUserId() + "-" + getName();
         customLocation = "";
-
+        karma = 0;
     }
 
     public String getCustomLocation() {
@@ -65,9 +76,6 @@ public class Photo implements IPhoto, Comparable, Serializable {
     @Exclude
     public double getScore(){ return score; }
     public void setScore(double score) { this.score = score; }
-    public int karmaScore() { return karma; }
-
-    public void setKarma(int karma) { this.karma = karma; }
 
     @Exclude
     public boolean getUserKarma() {
@@ -180,6 +188,14 @@ public class Photo implements IPhoto, Comparable, Serializable {
 
     public void setUid(String uid) {
         this.uid = uid;
+    }
+
+    public boolean getHasCustomLocation() {
+        return customLocation.equals("") == false;
+    }
+
+    public void setInfo(Event info) {
+        this.info = info;
     }
 
     public boolean hasCustomLocation() {

@@ -13,7 +13,9 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
@@ -22,8 +24,10 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import edu.ucsd.dj.interfaces.models.IFriendList;
 import edu.ucsd.dj.interfaces.IRemotePhotoStore;
@@ -35,6 +39,7 @@ import edu.ucsd.dj.others.PhotoLoader;
 
 /**
  * Created by nguyen on 6/4/2017.
+ * Class for our database
  */
 public class FirebaseDB implements IRemotePhotoStore {
 
@@ -55,6 +60,7 @@ public class FirebaseDB implements IRemotePhotoStore {
     final long FILE_SIZE = 1024 * 1024;
 
     private static List<Photo> friendsPhotos =  new LinkedList<>();
+    private static List<Photo> releasedPhotos = new LinkedList<>();
 
     public static FirebaseDB getInstance() {
         return ourInstance;
@@ -68,8 +74,6 @@ public class FirebaseDB implements IRemotePhotoStore {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
                 Log.d(TAG, "onChildAdded:" + "New photo added");
-
-
                 Photo tempPhoto = dataSnapshot.getValue(Photo.class);
                 Log.i("FirebaseDB", "Photo: " + tempPhoto.getPathname());
                 //downloadPhotoFromStorage(friend, tempPhoto);
@@ -90,8 +94,9 @@ public class FirebaseDB implements IRemotePhotoStore {
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
                 Log.d(TAG, "onChildRemoved:" + dataSnapshot.getKey());
-                //TODO THIS IS HARD
-
+                Photo tempPhoto = dataSnapshot.getValue(Photo.class);
+                Log.i("FirebaseDB", "Photo removed: " + tempPhoto.getPathname());
+                PhotoCollection.getInstance().release(tempPhoto);
             }
 
             @Override
@@ -204,7 +209,6 @@ public class FirebaseDB implements IRemotePhotoStore {
                         File.separator+
                         photo.getUid()
         );
-
         temp.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
@@ -253,7 +257,87 @@ public class FirebaseDB implements IRemotePhotoStore {
         return ref;
     }
 
+    public void deleteUserPhoto(final Photo photo){
+        StorageReference ref = buildStoragePath(DJPrimaryUser.getInstance(), photo);
+        ref.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Log.i("FirebaseDB", "Delete photo successful: " + photo.getUid());
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.i("FirebaseDB", "Delete photo unsuccessful: " + photo.getUid());
 
+            }
+        });
+        Query ref2 = primaryUserPhotoRef.orderByChild("uid").equalTo(photo.getUid());
+        ref2.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot dsp: dataSnapshot.getChildren()){
+                    dataSnapshot.getRef().removeValue();
+                }
+                Log.i("FirebaseDB", "Delete photo successful (ref): " + photo.getUid());
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.i("FirebaseDB", "Delete photo unsuccessful (ref): " + photo.getUid());
+
+            }
+        });
+
+    }
+
+    public void updatePhotoKarma(final Photo photo){
+        DatabaseReference ref = databaseRef.child(photo.getUid().substring(0, photo.getUid().indexOf('-')))
+                .child("photos");
+
+        Query ref2 = ref.orderByChild("uid").equalTo(photo.getUid());
+        //ref2.getRef().setValue(photo.getKarma());
+//        ref2.getRef().child("karma").runTransaction(new Transaction.Handler() {
+//            @Override
+//            public Transaction.Result doTransaction(MutableData mutableData) {
+//                Photo s = mutableData.getValue(Photo.class);
+//                if (s == null) {
+//                    return Transaction.success(mutableData);
+//                }
+//
+//                s.setKarma(photo.getKarma());
+//                // Set value and report transaction success
+//                mutableData.setValue(s);
+//                return Transaction.success(mutableData);
+//            }
+//
+//            @Override
+//            public void onComplete(DatabaseError databaseError, boolean b,
+//                                   DataSnapshot dataSnapshot) {
+//                // Transaction completed
+//                Log.d(TAG, "postTransaction:onComplete:" + databaseError);
+//            }
+//        });
+        ref2.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot dsp: dataSnapshot.getChildren()){
+                    dsp.getRef().setValue(photo);
+                    Log.i("FirebaseDB", "Ref: " + dsp.getRef());
+
+                }
+                Log.i("FirebaseDB", "Karma photo successful (ref): " + photo.getUid());
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.i("FirebaseDB", "Karma photo unsuccessful (ref): " + photo.getUid());
+
+            }
+        });
+
+    }
     private StorageReference buildStoragePath(IUser user, Photo photo ){
         String str = user.getUserId() + DELIMITER + photo.getName();
         return storageRef.child(str);

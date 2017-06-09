@@ -43,10 +43,8 @@ public class BitmapLabeler implements ILabelKarma {
         Log.i("Label: ", text);
         if (text.equals("")) return bitmap;
 
-        int width = context.getResources().getDisplayMetrics().widthPixels;
         int height = context.getResources().getDisplayMetrics().heightPixels;
 
-        bitmap = bitmap.createScaledBitmap( bitmap, width, height, false );
         Canvas canvas = new Canvas(bitmap);
 
         Paint paint = new Paint();
@@ -58,10 +56,18 @@ public class BitmapLabeler implements ILabelKarma {
         return bitmap;
     }
 
+    public static Bitmap resize(Bitmap bitmap){
+        Context context = DJPhoto.getAppContext();
+        int width = context.getResources().getDisplayMetrics().widthPixels;
+        int height = context.getResources().getDisplayMetrics().heightPixels;
+        bitmap = bitmap.createScaledBitmap( bitmap, width, height, false );
+        return bitmap;
+    }
+
     @Override
     public Bitmap createBitmapWithKarmaLabel(Bitmap bitmap, IPhoto photo) {
 
-        Log.i("Label: ", "Karma: " + photo.karmaScore());
+        Log.i("Label: ", "Karma: " + photo.getKarma());
 
         int width = DJPhoto.getAppContext().getResources().getDisplayMetrics().widthPixels;
         int height = DJPhoto.getAppContext().getResources().getDisplayMetrics().heightPixels;
@@ -73,7 +79,7 @@ public class BitmapLabeler implements ILabelKarma {
         paint.setColor(Color.WHITE);
         paint.setTextSize(35);
         paint.setShadowLayer(6.0f, 0.0f, 0.0f, Color.BLACK);
-        String label = "Karma: " + photo.karmaScore();
+        String label = "Karma: " + photo.getKarma();
         canvas.drawText(label, 500, (height/3) * 3 - 10, paint);
 
         return bitmap;

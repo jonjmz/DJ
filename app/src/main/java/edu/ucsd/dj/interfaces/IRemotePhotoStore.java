@@ -10,6 +10,7 @@ import edu.ucsd.dj.models.Photo;
 
 /**
  * Created by Jake Sutton on 6/1/17.
+ * Interface for sending and receiving photos
  */
 
 public interface IRemotePhotoStore {

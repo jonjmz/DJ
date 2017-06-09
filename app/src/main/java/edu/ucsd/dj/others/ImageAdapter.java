@@ -25,6 +25,7 @@ import edu.ucsd.dj.models.Photo;
 
 /**
  * Created by jonathanjimenez on 6/6/17.
+ * Adapter to shoehorn in our images
  */
 
 public class ImageAdapter extends BaseAdapter {
@@ -56,8 +57,8 @@ public class ImageAdapter extends BaseAdapter {
 
         if (!PhotoCollection.getInstance().getAlbum().contains(photos.get(position))) {
             image.makeGrey();
+            image.setOnClickListener(new ImageClickedListener());
         }
-        image.setOnClickListener(new ImageClickedListener());
 
         return image;
     }
@@ -68,6 +69,7 @@ public class ImageAdapter extends BaseAdapter {
             final GreyImage image = (GreyImage) v;
             // It should now be a color image
             image.makeColor();
+            image.setOnClickListener(null);
             // Copy the file over
             FileUtilities.copy(
                     Settings.getInstance().DCIM_LOCATION + image.getFileName(),
@@ -99,7 +101,6 @@ public class ImageAdapter extends BaseAdapter {
                 DJPrimaryUser primaryUser = new DJPrimaryUser();
                 Photo tempPhoto = new Photo(fileName, primaryUser);
                 tempPhoto.setPathname(Settings.getInstance().MAIN_LOCATION + fileName);
-                tempPhoto.setHasCustomLocation(true);
                 tempPhoto.setCustomLocation(input.getText().toString());
                 PhotoCollection.getInstance().addPhoto(tempPhoto);
                 FirebaseDB.getInstance().uploadPhotos(primaryUser, Arrays.asList(tempPhoto));

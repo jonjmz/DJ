@@ -7,14 +7,19 @@ import edu.ucsd.dj.managers.DJPhoto;
 
 /**
  * Created by Jake Sutton on 6/4/17.
+ * To signify the primary user
  */
 
 public class DJPrimaryUser extends DJUser {
-
+    private static final DJPrimaryUser ourInstance = new DJPrimaryUser();
     public DJPrimaryUser() {
         super("Primary User", "Unknown");
         userId = "default";
         loadEmail();
+    }
+
+    public static DJPrimaryUser getInstance() {
+        return ourInstance;
     }
 
     public void loadEmail() {

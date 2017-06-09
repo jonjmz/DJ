@@ -49,9 +49,11 @@ public class DJWallpaper implements ICollectionObserver {
         try {
             labelStrategy = new AddressLabelStrategy(context);
             Bitmap newBackground = null;
-            Bitmap bitmap = BitmapFactory.decodeFile(photo.getPathname());
+            BitmapFactory.Options opt = new BitmapFactory.Options();
+            opt.inMutable = true;
+            Bitmap bitmap = BitmapFactory.decodeFile(photo.getPathname(), opt);
 
-            if (photo.hasCustomLocation()){
+            if (photo.getHasCustomLocation()){
                 newBackground = labeler.label( bitmap, photo.getCustomLocation(), context );
             } else {
                 String label = "";

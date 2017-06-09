@@ -5,6 +5,7 @@ import edu.ucsd.dj.interfaces.models.IDateTimeable;
 
 /**
  * Created by nguyen on 6/4/2017.
+ * Class to create a mock event for unit testing
  */
 
 public class MockEvent implements IDateTimeable, IAddressable {

@@ -2,6 +2,8 @@ package edu.ucsd.dj.others;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 
 import java.io.File;
@@ -17,24 +19,18 @@ import edu.ucsd.dj.managers.Settings;
 
 /**
  * Created by jonathanjimenez on 6/8/17.
+ * Class for handling i/o operations
  */
 
 public class FileUtilities {
     public static void copy(String fromFile, String toFile){
-        File from = new File(fromFile);
+        Bitmap bitmap = BitmapFactory.decodeFile(fromFile);
+        bitmap = BitmapLabeler.resize(bitmap);
         File to = new File(toFile);
-
-        InputStream is = null;
         OutputStream os = null;
         try {
-            is = new FileInputStream(from);
             os = new FileOutputStream(to);
-            byte[] buffer = new byte[1024];
-            int length;
-            while ((length = is.read(buffer)) > 0) {
-                os.write(buffer, 0, length);
-            }
-            is.close();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, os);
             os.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -49,4 +45,9 @@ public class FileUtilities {
         intent.setData(Uri.fromFile(file));
         DJPhoto.getAppContext().sendBroadcast(intent);
     }
+    public static void deleteFile(String fileName){
+        File file = new File(fileName);
+        file.delete();
+    }
+
 }

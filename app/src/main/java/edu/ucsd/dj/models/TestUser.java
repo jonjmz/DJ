@@ -4,6 +4,7 @@ import edu.ucsd.dj.interfaces.models.IUser;
 
 /**
  * Created by nguyen on 6/4/2017.
+ * Class for unit testing of IUser
  */
 
 public class TestUser implements IUser {

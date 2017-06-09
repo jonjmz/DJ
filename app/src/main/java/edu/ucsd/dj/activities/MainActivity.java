@@ -130,11 +130,10 @@ public class MainActivity extends AppCompatActivity{
         myAlbumSwitch = (Switch) findViewById(R.id.myAlbum);
         friendsAlbumSwitch = (Switch) findViewById(R.id.friendsAlbum);
         refreshRateBar = (SeekBar) findViewById(R.id.refresh);
-
-        cameraButton = (FloatingActionButton) findViewById(R.id.floatingActionButton);
-
         refreshNow = (Button) findViewById(R.id.refreshNow);
         viewPhotoPicker = (Button) findViewById(R.id.viewPhotoPicker);
+        cameraButton = (FloatingActionButton) findViewById(R.id.floatingActionButton);
+
 
         proximitySwitch.setChecked(Settings.getInstance().isConsideringProximity());
         timeOfDaySwitch.setChecked(Settings.getInstance().isConsideringTOD());
