@@ -34,19 +34,6 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-
-    <!--<include-->
-        <!--layout="@layout/content_main"-->
-        <!--tools:layout_constraintTop_creator="1"-->
-        <!--android:layout_height="0dp"-->
-        <!--tools:layout_constraintBottom_creator="1"-->
-        <!--app:layout_constraintBottom_toTopOf="parent"-->
-        <!--tools:layout_constraintLeft_creator="1"-->
-        <!--android:layout_width="0dp"-->
-        <!--app:layout_constraintLeft_toLeftOf="parent"-->
-        <!--app:layout_constraintTop_toTopOf="parent"-->
-        <!--android:id="@+id/include" />-->
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -124,7 +111,7 @@
             android:layout_marginLeft="15dp"
             android:layout_marginStart="15dp"
             android:layout_marginTop="25dp"
-            android:text="When selecting background image,\nconsider the photo's:"
+            android:text="When selecting background image, use:"
             android:textSize="14sp"
             android:textStyle="bold" />
 
@@ -136,7 +123,7 @@
             android:layout_alignRight="@+id/recencySwitch"
             android:layout_below="@+id/myAlbum"
             android:layout_marginTop="20dp"
-            android:text="Use friend's album"
+            android:text="Friend albums"
             android:textAlignment="textStart"
             android:textSize="14sp"
             android:typeface="normal" />
@@ -149,7 +136,7 @@
             android:layout_alignRight="@+id/recencySwitch"
             android:layout_below="@+id/recencySwitch"
             android:layout_marginTop="20dp"
-            android:text="Use my album"
+            android:text="My album"
             android:textAlignment="textStart"
             android:textSize="14sp"
             android:typeface="normal" />
