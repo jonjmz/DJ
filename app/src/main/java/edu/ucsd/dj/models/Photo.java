@@ -178,14 +178,11 @@ public class Photo implements IPhoto, Comparable, Serializable {
     }
 
     public boolean getHasCustomLocation() {
-        return hasCustomLocation;
+        return customLocation.equals("") == false;
     }
 
     public void setInfo(Event info) {
         this.info = info;
     }
 
-    public void setHasCustomLocation(boolean hasCustomLocation) {
-        this.hasCustomLocation = hasCustomLocation;
-    }
 }

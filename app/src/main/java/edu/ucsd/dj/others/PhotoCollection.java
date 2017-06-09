@@ -167,6 +167,8 @@ public class PhotoCollection implements ICollectionSubject,
         Log.i("PhotoCollection", "User Name: " + DJPrimaryUser.getInstance().getUserId());
         if(photo.getUid().startsWith(DJPrimaryUser.getInstance().getUserId())){
             FirebaseDB.getInstance().deleteUserPhoto(photo);
+            FileUtilities.deleteFile(photo.getPathname());
+            FileUtilities.updateMediastore(photo.getPathname());
         }
         notifyObservers();
     }
@@ -175,6 +177,9 @@ public class PhotoCollection implements ICollectionSubject,
         updatePhotoFromStorage(photo);
         album.remove(photo);
         releasedList.add(photo);
+        FileUtilities.deleteFile(photo.getPathname());
+        FileUtilities.updateMediastore(photo.getPathname());
+
 
     }
     /**

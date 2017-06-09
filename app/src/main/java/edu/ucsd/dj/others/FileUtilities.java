@@ -49,4 +49,9 @@ public class FileUtilities {
         intent.setData(Uri.fromFile(file));
         DJPhoto.getAppContext().sendBroadcast(intent);
     }
+    public static void deleteFile(String fileName){
+        File file = new File(fileName);
+        file.delete();
+    }
+
 }

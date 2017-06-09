@@ -51,7 +51,7 @@ public class DJWallpaper implements ICollectionObserver {
             Bitmap newBackground = null;
             Bitmap bitmap = BitmapFactory.decodeFile(photo.getPathname());
 
-            if (photo.hasCustomLocation()){
+            if (photo.getHasCustomLocation()){
                 newBackground = labeler.label( bitmap, photo.getCustomLocation(), context );
             } else {
                 String label = "";
