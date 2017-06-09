@@ -13,7 +13,9 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
@@ -22,8 +24,10 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import edu.ucsd.dj.interfaces.models.IFriendList;
 import edu.ucsd.dj.interfaces.IRemotePhotoStore;
@@ -283,8 +287,56 @@ public class FirebaseDB implements IRemotePhotoStore {
 
             }
         });
+
     }
 
+    public void updatePhotoKarma(final Photo photo){
+        DatabaseReference ref = databaseRef.child(photo.getUid().substring(0, photo.getUid().indexOf('-')))
+                .child("photos");
+
+        Query ref2 = ref.orderByChild("uid").equalTo(photo.getUid());
+        //ref2.getRef().setValue(photo.getKarma());
+//        ref2.getRef().child("karma").runTransaction(new Transaction.Handler() {
+//            @Override
+//            public Transaction.Result doTransaction(MutableData mutableData) {
+//                Photo s = mutableData.getValue(Photo.class);
+//                if (s == null) {
+//                    return Transaction.success(mutableData);
+//                }
+//
+//                s.setKarma(photo.getKarma());
+//                // Set value and report transaction success
+//                mutableData.setValue(s);
+//                return Transaction.success(mutableData);
+//            }
+//
+//            @Override
+//            public void onComplete(DatabaseError databaseError, boolean b,
+//                                   DataSnapshot dataSnapshot) {
+//                // Transaction completed
+//                Log.d(TAG, "postTransaction:onComplete:" + databaseError);
+//            }
+//        });
+        ref2.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot dsp: dataSnapshot.getChildren()){
+                    dsp.getRef().setValue(photo);
+                    Log.i("FirebaseDB", "Ref: " + dsp.getRef());
+
+                }
+                Log.i("FirebaseDB", "Karma photo successful (ref): " + photo.getUid());
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.i("FirebaseDB", "Karma photo unsuccessful (ref): " + photo.getUid());
+
+            }
+        });
+
+    }
     private StorageReference buildStoragePath(IUser user, Photo photo ){
         String str = user.getUserId() + DELIMITER + photo.getName();
         return storageRef.child(str);
