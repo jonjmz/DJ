@@ -17,6 +17,7 @@ import edu.ucsd.dj.managers.Settings;
 
 /**
  * Created by jonathanjimenez on 6/8/17.
+ * Class for handling i/o operations
  */
 
 public class FileUtilities {

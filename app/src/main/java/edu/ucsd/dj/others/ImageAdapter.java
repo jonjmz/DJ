@@ -25,6 +25,7 @@ import edu.ucsd.dj.models.Photo;
 
 /**
  * Created by jonathanjimenez on 6/6/17.
+ * Adapter to shoehorn in our images
  */
 
 public class ImageAdapter extends BaseAdapter {

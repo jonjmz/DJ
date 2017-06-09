@@ -13,6 +13,7 @@ import edu.ucsd.dj.managers.Settings;
 
 /**
  * Created by jonathanjimenez on 6/8/17.
+ * Class to grey out or return color to an image
  */
 
 public class GreyImage extends AppCompatImageView {
