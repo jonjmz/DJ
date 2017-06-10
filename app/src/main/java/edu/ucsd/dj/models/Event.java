@@ -34,11 +34,11 @@ public class Event implements IEvent {
         tod = None;
     }
 
-    public void setTod(TimeOfDay tod) {
+    public void setTimeOfDay(TimeOfDay tod) {
         this.tod = tod;
     }
 
-    public TimeOfDay getTod(){
+    public TimeOfDay getTimeOfDay(){
         return tod;
     }
     // IAddressable

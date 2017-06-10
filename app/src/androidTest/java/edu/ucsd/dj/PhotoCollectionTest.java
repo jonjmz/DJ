@@ -1,6 +1,7 @@
 package edu.ucsd.dj;
 
 import android.content.Context;
+import android.location.Location;
 import android.support.test.InstrumentationRegistry;
 
 import org.junit.Test;
@@ -9,9 +10,8 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import edu.ucsd.dj.interfaces.IRating;
+import edu.ucsd.dj.interfaces.models.IAddressable;
 import edu.ucsd.dj.interfaces.models.IPhoto;
-import edu.ucsd.dj.interfaces.observers.ICollectionObserver;
-import edu.ucsd.dj.managers.DJPhoto;
 import edu.ucsd.dj.managers.Settings;
 import edu.ucsd.dj.models.Event;
 import edu.ucsd.dj.models.Photo;
@@ -92,7 +92,7 @@ public class PhotoCollectionTest {
         Photo photo = new Photo();
         photo.setPathname("testPath.jpg");
         Event info = new Event();
-        info.setTod(Event.TimeOfDay.Afternoon);
+        info.setTimeOfDay(Event.TimeOfDay.Afternoon);
         photo.setInfo(info);
         collection.addPhoto(photo);
 
@@ -101,7 +101,46 @@ public class PhotoCollectionTest {
 
         // get the current photo, it has to be an Afternoon photo (we have at least one)
         IPhoto bestPhoto = collection.current();
-        //assertEquals(bestPhoto.getInfo().getTod(), Event.TimeOfDay.Afternoon);
+        assertEquals(bestPhoto.getTimeOfDay(), Event.TimeOfDay.Afternoon);
+    }
+
+    @Test
+    public void prioritizeProximity() {
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTimeInMillis(10);
+
+        // get relevent objects
+        PhotoCollection collection = PhotoCollection.getInstance();
+        Settings settings = Settings.getInstance();
+        IRating rating = collection.getRating();
+
+        // remove old rating and replace with new rating
+        settings.removeObserver(rating);
+        rating = new RatingStrategy(false, false, true, calendar);
+
+        // we need to fake our location
+        IAddressable loc = rating.getCurrentLocation();
+        loc.setLongitude(0);
+        loc.setLatitude(0);
+
+        collection.setRatingStrategy(rating);
+        settings.addObserver(rating);
+
+        // Let's add a fake photo to the collection
+        Photo photo = new Photo();
+        photo.setPathname("testPath.jpg");
+        Event info = new Event();
+        info.setLatitude(0);
+        info.setLongitude(0);
+        photo.setInfo(info);
+        collection.addPhoto(photo);
+
+        // Now the time is set to the earliest time
+        collection.update();
+
+        // get the current photo, it has to be an Afternoon photo (we have at least one)
+        IPhoto bestPhoto = collection.current();
+        assertEquals(bestPhoto, photo);
     }
 
     @Test

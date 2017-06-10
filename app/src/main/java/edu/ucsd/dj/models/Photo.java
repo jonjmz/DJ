@@ -180,7 +180,7 @@ public class Photo implements IPhoto, Comparable, Serializable {
 
     @Override
     public Event.TimeOfDay getTimeOfDay() {
-        return info.getTod();
+        return info.getTimeOfDay();
     }
 
     public String getUid() {
