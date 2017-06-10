@@ -1,4 +1,4 @@
-package edu.ucsd.dj.models;
+package edu.ucsd.dj.models.mocks;
 
 import edu.ucsd.dj.interfaces.models.IAddressable;
 import edu.ucsd.dj.interfaces.models.IDateTimeable;

@@ -157,12 +157,7 @@ public class WidgetProvider extends AppWidgetProvider {
             }
             else if (intent.getAction().equals(KARMA)) {
 
-                if (photo.getUserKarma()) {
-                    photo.setKarma(photo.getKarma() - 1);
-                } else {
-                    photo.setKarma(photo.getKarma() + 1);
-                }
-                photo.setUserKarma(!photo.getUserKarma());
+                photo.karma();
 
                 DJWallpaper.getInstance().set(photo);
                 FirebaseDB.getInstance().updatePhotoKarma(photo);

@@ -24,11 +24,6 @@ public class Photo implements IPhoto, Comparable, Serializable {
         return karma;
     }
 
-    @Override
-    public void setKarma(int karma) {
-        this.karma = karma;
-    }
-
     private int karma;    // Used to keep track of karma
     private boolean userKarma;
 
@@ -78,13 +73,14 @@ public class Photo implements IPhoto, Comparable, Serializable {
     public void setScore(double score) { this.score = score; }
 
     @Exclude
-    public boolean getUserKarma() {
-        return userKarma;
+    public void karma() {
+        if (userKarma) --karma; else ++karma;
+        userKarma = !userKarma;
     }
 
     @Exclude
-    public void setUserKarma(boolean uk) {
-        userKarma = uk;
+    public boolean getUserKarma() {
+        return userKarma;
     }
 
     /**

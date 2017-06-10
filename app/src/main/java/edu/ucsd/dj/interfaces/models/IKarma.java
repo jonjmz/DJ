@@ -7,5 +7,4 @@ package edu.ucsd.dj.interfaces.models;
 
 public interface IKarma {
     int getKarma();
-    void setKarma(int karma);
 }

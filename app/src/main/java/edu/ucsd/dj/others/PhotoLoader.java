@@ -1,7 +1,6 @@
 package edu.ucsd.dj.others;
 
 import android.content.ContentResolver;
-import android.content.ContentUris;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -16,19 +15,12 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.net.URI;
 import java.util.List;
 import java.util.ArrayList;
 
-import edu.ucsd.dj.interfaces.models.IPhoto;
-import edu.ucsd.dj.interfaces.models.IUser;
 import edu.ucsd.dj.managers.DJPhoto;
-import edu.ucsd.dj.managers.Settings;
 import edu.ucsd.dj.models.DJPrimaryUser;
-import edu.ucsd.dj.models.FirebaseDB;
-import edu.ucsd.dj.models.MockEvent;
 import edu.ucsd.dj.models.Photo;
-import edu.ucsd.dj.models.TestUser;
 
 /**
  * Load photos from the phone's gallery

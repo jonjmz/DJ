@@ -53,16 +53,16 @@ public class DJWallpaper implements ICollectionObserver {
             opt.inMutable = true;
             Bitmap bitmap = BitmapFactory.decodeFile(photo.getPathname(), opt);
 
+            String label = "";
             if (photo.getHasCustomLocation()){
-                newBackground = labeler.label( bitmap, photo.getCustomLocation(), context );
+                label = photo.getCustomLocation();
             } else {
-                String label = "";
                 if (photo.getInfo().getHasValidCoordinates()) {
                     label = labelStrategy.getLabel(photo.getInfo());
                 }
-                newBackground = labeler.label( bitmap, label, context );
             }
 
+            newBackground = labeler.label( bitmap, label, context );
             newBackground = labeler.createBitmapWithKarmaLabel(newBackground, photo);
             WallpaperManager.getInstance(context).setBitmap( newBackground );
 

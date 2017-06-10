@@ -31,12 +31,12 @@ public class PhotoCollectionTest {
     }
 
     @Test
-    public void prioritizeRecent(){
+    public void prioritizeRecent() {
         // This test requires manipulation of current time
     }
 
     @Test
-    public void prioritizeTimeOfDay(){
+    public void prioritizeTimeOfDay() {
         // This test requires manipulation of current time
     }
 

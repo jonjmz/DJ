@@ -4,7 +4,6 @@ import edu.ucsd.dj.interfaces.models.IUser;
 
 /**
  * Created by Jake Sutton on 6/4/17.
- * For each user, to set name email and id
  */
 
 public class DJUser implements IUser {
