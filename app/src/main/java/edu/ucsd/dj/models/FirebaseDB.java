@@ -281,7 +281,7 @@ public class FirebaseDB implements IRemotePhotoStore {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for(DataSnapshot dsp: dataSnapshot.getChildren()){
-                    dataSnapshot.getRef().removeValue();
+                    dsp.getRef().removeValue();
                 }
                 Log.i("FirebaseDB", "Delete photo successful (ref): " + photo.getUid());
 
@@ -323,7 +323,7 @@ public class FirebaseDB implements IRemotePhotoStore {
 //                Log.d(TAG, "postTransaction:onComplete:" + databaseError);
 //            }
 //        });
-        ref2.addValueEventListener(new ValueEventListener() {
+        ref2.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for(DataSnapshot dsp: dataSnapshot.getChildren()){
