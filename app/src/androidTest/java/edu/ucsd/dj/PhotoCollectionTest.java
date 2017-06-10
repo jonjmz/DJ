@@ -1,11 +1,22 @@
 package edu.ucsd.dj;
 
 import android.content.Context;
+import android.location.Location;
 import android.support.test.InstrumentationRegistry;
-import android.test.AndroidTestCase;
-import android.util.Log;
 
 import org.junit.Test;
+
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+
+import edu.ucsd.dj.interfaces.IRating;
+import edu.ucsd.dj.interfaces.models.IAddressable;
+import edu.ucsd.dj.interfaces.models.IPhoto;
+import edu.ucsd.dj.managers.Settings;
+import edu.ucsd.dj.models.Event;
+import edu.ucsd.dj.models.Photo;
+import edu.ucsd.dj.others.PhotoCollection;
+import edu.ucsd.dj.strategies.RatingStrategy;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
@@ -30,28 +41,118 @@ public class PhotoCollectionTest {
     }
 
     @Test
-    public void prioritizeRecent(){
+    public void prioritizeRecent() {
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTimeInMillis(10);
+
+        // get relevent objects
         PhotoCollection collection = PhotoCollection.getInstance();
-        Context appContext = InstrumentationRegistry.getTargetContext().getApplicationContext();
-        collection.update(appContext);
-        assert(collection.current().getPathname().startsWith("Now"));
+        Settings settings = Settings.getInstance();
+        IRating rating = collection.getRating();
+
+        // remove old rating and replace with new rating
+        settings.removeObserver(rating);
+        rating = new RatingStrategy(true, false, false, calendar);
+        collection.setRatingStrategy(rating);
+        settings.addObserver(rating);
+
+        // Let's add a fake photo to the collection
+        Photo photo = new Photo();
+        photo.setPathname("testPath.jpg");
+        Event info = new Event();
+        info.setDateTime(5); // Right before the supposed current time
+        photo.setInfo(info);
+        collection.addPhoto(photo);
+
+        // Now the time is set to the earliest time
+        collection.update();
+
+        // get the current photo, it should be the earliest
+        IPhoto bestPhoto = collection.current();
+        assertEquals(bestPhoto, photo);
+
+        collection.getAlbum().remove(photo);
     }
 
     @Test
-    public void testUpdate() throws Exception {
+    public void prioritizeTimeOfDay() {
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTimeInMillis(10);
 
+        // get relevent objects
+        PhotoCollection collection = PhotoCollection.getInstance();
+        Settings settings = Settings.getInstance();
+        IRating rating = collection.getRating();
+
+        // remove old rating and replace with new rating
+        settings.removeObserver(rating);
+        rating = new RatingStrategy(false, true, false, calendar);
+        collection.setRatingStrategy(rating);
+        settings.addObserver(rating);
+
+        // Let's add a fake photo to the collection
+        Photo photo = new Photo();
+        photo.setPathname("testPath.jpg");
+        Event info = new Event();
+        info.setTimeOfDay(Event.TimeOfDay.Afternoon);
+        photo.setInfo(info);
+        collection.addPhoto(photo);
+
+        // Now the time is set to the earliest time
+        collection.update();
+
+        // get the current photo, it has to be an Afternoon photo (we have at least one)
+        IPhoto bestPhoto = collection.current();
+        assertEquals(bestPhoto.getTimeOfDay(), Event.TimeOfDay.Afternoon);
+
+        collection.getAlbum().remove(photo);
     }
 
     @Test
-    public void testRelease() throws Exception {
+    public void prioritizeProximity() {
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTimeInMillis(10);
 
+        // get relevent objects
+        PhotoCollection collection = PhotoCollection.getInstance();
+        Settings settings = Settings.getInstance();
+        IRating rating = collection.getRating();
+
+        // remove old rating and replace with new rating
+        settings.removeObserver(rating);
+        rating = new RatingStrategy(false, false, true, calendar);
+
+        // we need to fake our location
+        IAddressable loc = rating.getCurrentLocation();
+        loc.setLongitude(10);
+        loc.setLatitude(10);
+
+        collection.setRatingStrategy(rating);
+        settings.addObserver(rating);
+
+        // Let's add a fake photo to the collection
+        Photo photo = new Photo();
+        photo.setPathname("testPath.jpg");
+        Event info = new Event();
+        info.setLatitude(10);
+        info.setLongitude(10);
+        photo.setInfo(info);
+        collection.addPhoto(photo);
+
+        // Now the time is set to the earliest time
+        collection.update();
+
+        // get the current photo, it has to be an Afternoon photo (we have at least one)
+        IPhoto bestPhoto = collection.current();
+        assertEquals(bestPhoto, photo);
+
+        collection.getAlbum().remove(photo);
     }
 
     @Test
     public void testNext() throws Exception {
         PhotoCollection collection = PhotoCollection.getInstance();
-        Context appContext = InstrumentationRegistry.getTargetContext().getApplicationContext();
-        collection.update(appContext);
+        collection.update();
         Photo last = collection.current();
         Photo current = collection.next();
         assert(!current.equals(last));
@@ -60,29 +161,10 @@ public class PhotoCollectionTest {
     @Test
     public void testPrevious() throws Exception {
         PhotoCollection collection = PhotoCollection.getInstance();
-        Context appContext = InstrumentationRegistry.getTargetContext().getApplicationContext();
-        collection.update(appContext);
+        collection.update();
         Photo current = collection.current();
         collection.next();
         Photo previous = collection.previous();
         assert(current.equals(previous));
     }
-
-    @Test
-    public void testCurrent() throws Exception {
-
-    }
-
-    @Test
-    public void testHasPrevious() throws Exception {
-
-    }
-    
-    @Test
-    public void testSaveToFile() throws Exception {
-
-    }
-
-
-
 }
