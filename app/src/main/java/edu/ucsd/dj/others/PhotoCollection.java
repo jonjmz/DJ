@@ -68,7 +68,7 @@ public class PhotoCollection implements ICollectionSubject,
      *
      */
     public void update() {
-
+        album.clear();
         if(Settings.getInstance().isViewingMyAlbum() && Settings.getInstance().isViewingFriendsAlbum()){
             PhotoLoader loader = new PhotoLoader(Settings.getInstance().MAIN_LOCATION);
             List<Photo> newAlbum = loader.getPhotos();
@@ -94,11 +94,13 @@ public class PhotoCollection implements ICollectionSubject,
                     album.add( photo );
                 }
             }
+            FirebaseDB.getInstance().downloadAllFriendsPhotos(new DJFriends());
+
 
 
         }
         else if(!Settings.getInstance().isViewingMyAlbum() && !Settings.getInstance().isViewingFriendsAlbum()){
-            album.clear();
+            FirebaseDB.getInstance().removeFriendsListeners();
         }
         else if(Settings.getInstance().isViewingMyAlbum() && !Settings.getInstance().isViewingFriendsAlbum()){
             PhotoLoader loader = new PhotoLoader(Settings.getInstance().MAIN_LOCATION);
@@ -117,9 +119,11 @@ public class PhotoCollection implements ICollectionSubject,
                     album.add( photo );
                 }
             }
+            FirebaseDB.getInstance().removeFriendsListeners();
+
 
         }
-        if(!Settings.getInstance().isViewingMyAlbum() && Settings.getInstance().isViewingFriendsAlbum()){
+        else if(!Settings.getInstance().isViewingMyAlbum() && Settings.getInstance().isViewingFriendsAlbum()){
             PhotoLoader loader = new PhotoLoader(Settings.getInstance().FRIENDS_LOCATION);
             List<Photo> newAlbum = loader.getPhotos();
             //TODO optimization problem
@@ -128,31 +132,9 @@ public class PhotoCollection implements ICollectionSubject,
                     album.add( photo );
                 }
             }
-        }
-        /*
-        //TODO REFACTOR
-        if(Settings.getInstance().isViewingFriendsAlbum()){
-            PhotoLoader loader = new PhotoLoader("DejaPhotoFriends");
-            List<Photo> newAlbum = loader.getPhotos();
-            for(Photo photo: newAlbum) {
-                if (!album.contains(photo) && !releasedList.contains(photo)) {
-                    album.add(photo);
-                }
-            }
-        }
+            FirebaseDB.getInstance().downloadAllFriendsPhotos(new DJFriends());
 
-        //TODO delete
-        else{
-            DJFriends friendsList = new DJFriends();
-            for(IUser friend: friendsList.getFriends()){
-                for(Iterator<Photo> it = album.listIterator(); it.hasNext();){
-                    Photo temp = it.next();
-                    if(temp.getUid().startsWith(friend.getUserId()))
-                        it.remove();
-                }
-            }
         }
-        */
 
         sort(); // this notifies the observers
     }

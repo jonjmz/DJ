@@ -24,6 +24,7 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -60,8 +61,8 @@ public class FirebaseDB implements IRemotePhotoStore {
     final long FILE_SIZE = 1024 * 1024;
 
     private static List<Photo> friendsPhotos =  new LinkedList<>();
-    private static List<Photo> releasedPhotos = new LinkedList<>();
-
+    private static List<ChildEventListener> listeners = new ArrayList<>();
+    private static List<DatabaseReference> friendsRef = new ArrayList<>();
     public static FirebaseDB getInstance() {
         return ourInstance;
     }
@@ -69,7 +70,7 @@ public class FirebaseDB implements IRemotePhotoStore {
 //TODO ADD THIS TO CURRENT USER TOO MAN
     public void addFriendsListeners(final IUser user){
         DatabaseReference temp = databaseRef.child(user.getUserId()).child("photos");
-
+        friendsRef.add(temp);
         ChildEventListener childEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
@@ -112,6 +113,7 @@ public class FirebaseDB implements IRemotePhotoStore {
             }
         };
         temp.addChildEventListener(childEventListener);
+        listeners.add(childEventListener);
     }
 
     @Override
@@ -346,6 +348,11 @@ public class FirebaseDB implements IRemotePhotoStore {
         return storageRef.child(str);
     }
 
+    public void removeFriendsListeners(){
+        for(int i = 0; i < friendsRef.size(); i++){
+            friendsRef.get(i).removeEventListener(listeners.get(i));
+        }
+    }
     @Override
     public DatabaseReference getPrimaryUserPhotoRef() {
         return primaryUserPhotoRef;
