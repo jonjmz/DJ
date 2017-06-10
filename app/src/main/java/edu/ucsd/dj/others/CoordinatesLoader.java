@@ -68,7 +68,7 @@ public class CoordinatesLoader {
      * @param hemisphere The current hemisphere
      * @return the correct format
      */
-    static double format(String location, String hemisphere){
+    public static double format(String location, String hemisphere){
         Double value;
         // Using DMS
         if (location.contains("/")){

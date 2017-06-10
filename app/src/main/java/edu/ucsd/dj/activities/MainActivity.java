@@ -95,8 +95,6 @@ public class MainActivity extends AppCompatActivity{
         collection.update();
         Settings.getInstance().initTimer();
 
-
-        //TODO update task
         final IUser primaryUser = new DJPrimaryUser();
         IRemotePhotoStore ps = FirebaseDB.getInstance();
         ps.addUser(primaryUser);

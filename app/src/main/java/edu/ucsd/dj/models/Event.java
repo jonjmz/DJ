@@ -7,34 +7,40 @@ import java.util.GregorianCalendar;
 
 import edu.ucsd.dj.interfaces.models.IEvent;
 
+import static edu.ucsd.dj.models.Event.TimeOfDay.None;
+
 /**
  * Event class that holds the information of a photo
  * Created by jonathanjimenez on 5/9/17.
  */
 public class Event implements IEvent {
 
-    public enum TimeOfDay{ Night, Morning, Afternoon, Evening}
+    public enum TimeOfDay{ Night, Morning, Afternoon, Evening, None}
 
     private long date;
     private boolean hasValidCoordinates;
     private boolean hasValidDate;
     private Location loc;
+    private TimeOfDay tod;
 
     //private double latitude;
     //private double longitude;
 
     public Event() {
         loc = new Location("");
+        date = 0;
+        hasValidCoordinates = false;
+        hasValidDate = false;
+        tod = None;
     }
 
-    public long getDateTime() { return date; }
-
-    public TimeOfDay getTimeOfDay(){
-        Calendar calendar = new GregorianCalendar();
-        calendar.setTimeInMillis(date);
-        return timeOfDayFromCalendar(calendar);
+    public void setTod(TimeOfDay tod) {
+        this.tod = tod;
     }
 
+    public TimeOfDay getTod(){
+        return tod;
+    }
     // IAddressable
     public boolean getHasValidCoordinates() { return hasValidCoordinates; }
     public void setHasValidCoordinates(boolean hasValidCoordinates) {
@@ -55,10 +61,16 @@ public class Event implements IEvent {
     public void setHasValidDate(boolean hvd) {
         this.hasValidDate = hvd;
     }
+
     @Override
     public void setDateTime(long dateTime) {
         this.date = dateTime;
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTimeInMillis(date);
+        tod =  timeOfDayFromCalendar(calendar);
     }
+
+    public long getDateTime() { return date; }
 
     /**
      * Set the current time of day using hour
