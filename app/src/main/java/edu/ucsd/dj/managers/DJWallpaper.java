@@ -1,14 +1,18 @@
 package edu.ucsd.dj.managers;
 
 import android.app.WallpaperManager;
+import android.appwidget.AppWidgetManager;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
 
 import java.io.IOException;
 
+import edu.ucsd.dj.activities.WidgetProvider;
 import edu.ucsd.dj.interfaces.observers.ICollectionObserver;
+import edu.ucsd.dj.models.DJPrimaryUser;
 import edu.ucsd.dj.others.PhotoCollection;
 import edu.ucsd.dj.strategies.AddressLabelStrategy;
 import edu.ucsd.dj.others.BitmapLabeler;
@@ -71,6 +75,15 @@ public class DJWallpaper implements ICollectionObserver {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        // The widget doesn't know that the wallpaper has changed. Tell it
+        Intent intent = new Intent(DJPhoto.getAppContext(), WidgetProvider.class);
+        intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+        // Use an array and EXTRA_APPWIDGET_IDS instead of AppWidgetManager.EXTRA_APPWIDGET_ID,
+        // since it seems the onUpdate() is only fired on that:
+        int[] ids = {R.xml.widget_info};
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS,ids);
+        DJPhoto.getAppContext().sendBroadcast(intent);
     }
 
     /**

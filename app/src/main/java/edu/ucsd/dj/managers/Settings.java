@@ -1,6 +1,7 @@
 package edu.ucsd.dj.managers;
 
 import android.os.Environment;
+import android.os.Handler;
 import android.util.Log;
 
 import java.io.File;
@@ -16,7 +17,7 @@ import edu.ucsd.dj.interfaces.observers.ISettingsSubject;
  * Created by jonathanjimenez on 5/9/17.
  */
 public final class Settings implements ISettingsSubject {
-    private final int MILLIS_PER_MINUTE = 60000;
+    private final int MILLIS_PER_SECONDS = 1000;
     private boolean considerProximity = true;
     private boolean considerTOD = true;
     private boolean considerRecency = true;
@@ -26,9 +27,9 @@ public final class Settings implements ISettingsSubject {
 
     private List<ISettingsObserver> observers;
 
-    private static Timer timer;
+    private static PhotoUpdateTask timer;
 
-    private static int refreshRate = 60;
+    private static int refreshRate = 60*60; // In seconds
 
     public String DCIM_LOCATION;
     public String MAIN_LOCATION;
@@ -107,18 +108,26 @@ public final class Settings implements ISettingsSubject {
     }
 
     public long getRefreshRateMillis() {
-        return refreshRate * MILLIS_PER_MINUTE;
+        return refreshRate * MILLIS_PER_SECONDS;
     }
 
-    public void setRefreshRateMinutes(int refreshRate) { Settings.refreshRate = refreshRate; }
+    public void setRefreshRatePercent(int refreshPercent) {
+        int max_value = 60 * 60; // At most on one hour
+        int min_value = 10; // at least 10 seconds
+        // Get percent of max value that we are at
+        int refresh = (int)(refreshPercent * (max_value / 100.0));
+        if (refresh < min_value)
+            refresh = min_value;
+        Settings.refreshRate = refresh;
+        timer.reset();
+    }
 
     /**
      * Initialize a timer to run the updateLocation procedure task
      */
     public void initTimer(){
         Log.i("Running timer: ", "timer is being initialized");
-        timer = new Timer();
-        timer.schedule(new PhotoUpdateTask(), 0, getRefreshRateMillis());
+        timer = new PhotoUpdateTask();
     }
 
     @Override
