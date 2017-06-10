@@ -1,5 +1,7 @@
 package edu.ucsd.dj.interfaces.models;
 
+import edu.ucsd.dj.models.Event;
+
 /**
  * Created by Jake Sutton on 6/4/17.
  * Interface for photo attributes
@@ -8,4 +10,6 @@ package edu.ucsd.dj.interfaces.models;
 public interface IPhoto extends IEvent, IKarma {
     IEvent getInfo();
     String getName();
+
+    Event.TimeOfDay getTimeOfDay();
 }

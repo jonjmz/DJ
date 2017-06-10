@@ -17,6 +17,7 @@ import android.widget.CompoundButton;
 import android.widget.SeekBar;
 import android.widget.Switch;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import edu.ucsd.dj.R;
 import edu.ucsd.dj.interfaces.IRating;
@@ -79,7 +80,8 @@ public class MainActivity extends AppCompatActivity{
         IRating rating = new RatingStrategy(
                 Settings.getInstance().isConsideringRecency(),
                 Settings.getInstance().isConsideringTOD(),
-                Settings.getInstance().isConsideringProximity());
+                Settings.getInstance().isConsideringProximity(),
+                Calendar.getInstance());
 
         Settings.getInstance().addObserver( rating );
 

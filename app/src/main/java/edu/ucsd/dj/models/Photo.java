@@ -178,6 +178,11 @@ public class Photo implements IPhoto, Comparable, Serializable {
         info.setLongitude(lng);
     }
 
+    @Override
+    public Event.TimeOfDay getTimeOfDay() {
+        return info.getTimeOfDay();
+    }
+
     public String getUid() {
         return uid;
     }

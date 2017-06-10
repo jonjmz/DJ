@@ -3,7 +3,7 @@ package edu.ucsd.dj.models;
 import android.location.Location;
 
 import java.util.Calendar;
-import java.util.TimeZone;
+import java.util.GregorianCalendar;
 
 import edu.ucsd.dj.interfaces.models.IEvent;
 
@@ -29,6 +29,12 @@ public class Event implements IEvent {
 
     public long getDateTime() { return date; }
 
+    public TimeOfDay getTimeOfDay(){
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTimeInMillis(date);
+        return timeOfDayFromCalendar(calendar);
+    }
+
     // IAddressable
     public boolean getHasValidCoordinates() { return hasValidCoordinates; }
     public void setHasValidCoordinates(boolean hasValidCoordinates) {
@@ -38,16 +44,6 @@ public class Event implements IEvent {
     public void setLatitude(double latitude) { loc.setLatitude(latitude); }
     public double getLongitude() { return loc.getLongitude(); }
     public void setLongitude(double longitude) { loc.setLongitude(longitude); }
-
-    /**
-     * Get the currentTimeOfDay using an enum
-     * @return enum that shows the current time of day
-     */
-    public static Event.TimeOfDay currentTimeOfDay() {
-        Calendar calendar = Calendar.getInstance();
-        int hour = calendar.get(Calendar.HOUR_OF_DAY);
-        return todFromHour(hour);
-    }
 
     // IDateTimeable
     @Override
@@ -59,7 +55,6 @@ public class Event implements IEvent {
     public void setHasValidDate(boolean hvd) {
         this.hasValidDate = hvd;
     }
-    //TODO set the datetime into location. Sincel ocation has location.time();
     @Override
     public void setDateTime(long dateTime) {
         this.date = dateTime;
@@ -88,11 +83,7 @@ public class Event implements IEvent {
      * Get the current time of day
      * @return current time of day
      */
-    public TimeOfDay timeOfDay() {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(getDateTime());
-        calendar.setTimeZone(TimeZone.getTimeZone("PST"));
-        int hour = calendar.get(Calendar.HOUR_OF_DAY);
-        return todFromHour(hour);
+    static public TimeOfDay timeOfDayFromCalendar(Calendar calendar) {
+        return todFromHour(calendar.get(Calendar.HOUR_OF_DAY));
     }
 }

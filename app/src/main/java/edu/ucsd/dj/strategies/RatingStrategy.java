@@ -3,6 +3,7 @@ package edu.ucsd.dj.strategies;
 import android.location.Location;
 import android.util.Log;
 
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.LinkedList;
 import java.util.List;
@@ -30,10 +31,13 @@ public class RatingStrategy implements IRating {
     private IAddressable currentLocation;
     private List<IRatingObserver> observers;
 
-    public RatingStrategy(boolean recency, boolean tod, boolean proximity){
+    private Calendar calendar;
+
+    public RatingStrategy(boolean recency, boolean tod, boolean proximity, Calendar calendar){
         this.consideringRecency = recency;
         this.consideringTOD = tod;
         this.consideringProximity = proximity;
+        this.calendar = calendar;
 
         currentLocation = new Event();
         currentLocation.setLatitude(DEFAULT_LATITUDE);
@@ -63,12 +67,12 @@ public class RatingStrategy implements IRating {
             scoreSquared += ratio;
         }
 
-//        // If considering time of day, add distance to photo
-//        if (consideringTOD) {
-//            if(photo.timeOfDay() != photo.currentTimeOfDay()) {
-//                scoreSquared += 1;
-//            }
-//        }
+        // If considering time of day, add distance to photo
+        if (consideringTOD) {
+            if(photo.getTimeOfDay() != Event.timeOfDayFromCalendar(calendar)) {
+                scoreSquared += 1;
+            }
+        }
 
         // If considering generateAddress
         if (consideringProximity) {

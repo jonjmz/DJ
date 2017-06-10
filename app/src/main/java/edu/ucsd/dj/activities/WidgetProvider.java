@@ -137,7 +137,7 @@ public class WidgetProvider extends AppWidgetProvider {
 //        Settings.initTimer();
 
         PhotoCollection collection = PhotoCollection.getInstance();
-
+        //calendar.setTimeInMillis(getDateTime());
         if (!collection.isEmpty()) {
             Photo photo = collection.current();
 
@@ -146,14 +146,14 @@ public class WidgetProvider extends AppWidgetProvider {
 
                 Log.i("onReceive: NEXT ", "Photo: [" +
                         collection.getCurrentIndex() + "/" + (collection.size() - 1) + "]" +
-                        " Score: " + photo.getScore() + " DateTime: " + photo.getInfo().timeOfDay());
+                        " Score: " + photo.getScore());
             }
             else if (intent.getAction().equals(PREVIOUS)) {
                 photo = collection.previous();
 
                 Log.i("onReceive: PREVIOUS ", "Photo: [" +
                         collection.getCurrentIndex() + "/" + (collection.size() - 1) + "]"
-                        + " Score: " + photo.getScore() + " DateTime: " + photo.getInfo().timeOfDay());
+                        + " Score: " + photo.getScore());
             }
             else if (intent.getAction().equals(KARMA)) {
 
@@ -167,7 +167,7 @@ public class WidgetProvider extends AppWidgetProvider {
                 Log.i("onReceive: KARMA ", "Set karma to " + photo.getKarma() + " for Photo: [" +
                         collection.getCurrentIndex() + "/" +
                         (collection.size() - 1) + "]" +
-                        " Score: " + photo.getScore() + " DateTime: " + photo.getInfo().timeOfDay());
+                        " Score: " + photo.getScore());
             }
             else if (intent.getAction().equals(RELEASE)) {
 
@@ -175,7 +175,7 @@ public class WidgetProvider extends AppWidgetProvider {
                         collection.getCurrentIndex() + "/" +
                         (collection.size() - 1) + "]" + "will be " +
                         "released." +
-                        " Score: " + photo.getScore() + " DateTime: " + photo.getInfo().timeOfDay());
+                        " Score: " + photo.getScore());
 
                 collection.release();
 
