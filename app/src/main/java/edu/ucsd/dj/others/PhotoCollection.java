@@ -69,8 +69,7 @@ public class PhotoCollection implements ICollectionSubject,
      */
     public void update() {
 
-        //TODO REFACTOR
-        if(Settings.getInstance().isViewingMyAlbum()){
+        if(Settings.getInstance().isViewingMyAlbum() && Settings.getInstance().isViewingFriendsAlbum()){
             PhotoLoader loader = new PhotoLoader(Settings.getInstance().MAIN_LOCATION);
             List<Photo> newAlbum = loader.getPhotos();
             //TODO optimization problem
@@ -79,7 +78,6 @@ public class PhotoCollection implements ICollectionSubject,
                     album.add( photo );
                 }
             }
-
             loader = new PhotoLoader(Settings.getInstance().CAMERA_LOCATION);
             newAlbum = loader.getPhotos();
             //TODO optimization problem
@@ -88,16 +86,48 @@ public class PhotoCollection implements ICollectionSubject,
                     album.add( photo );
                 }
             }
-        }
-
-        else{
-            DJPrimaryUser user = new DJPrimaryUser();
-            for(Iterator<Photo> it = album.listIterator(); it.hasNext();){
-                Photo temp = it.next();
-                if(temp.getUid().startsWith(user.getUserId()))
-                    it.remove();
+            loader = new PhotoLoader(Settings.getInstance().FRIENDS_LOCATION);
+            newAlbum = loader.getPhotos();
+            //TODO optimization problem
+            for(Photo photo: newAlbum){
+                if(!album.contains(photo) && !releasedList.contains(photo)) {
+                    album.add( photo );
+                }
             }
 
+
+        }
+        else if(!Settings.getInstance().isViewingMyAlbum() && !Settings.getInstance().isViewingFriendsAlbum()){
+            album.clear();
+        }
+        else if(Settings.getInstance().isViewingMyAlbum() && !Settings.getInstance().isViewingFriendsAlbum()){
+            PhotoLoader loader = new PhotoLoader(Settings.getInstance().MAIN_LOCATION);
+            List<Photo> newAlbum = loader.getPhotos();
+            //TODO optimization problem
+            for(Photo photo: newAlbum){
+                if(!album.contains(photo) && !releasedList.contains(photo)) {
+                    album.add( photo );
+                }
+            }
+            loader = new PhotoLoader(Settings.getInstance().CAMERA_LOCATION);
+            newAlbum = loader.getPhotos();
+            //TODO optimization problem
+            for(Photo photo: newAlbum){
+                if(!album.contains(photo) && !releasedList.contains(photo)) {
+                    album.add( photo );
+                }
+            }
+
+        }
+        if(!Settings.getInstance().isViewingMyAlbum() && Settings.getInstance().isViewingFriendsAlbum()){
+            PhotoLoader loader = new PhotoLoader(Settings.getInstance().FRIENDS_LOCATION);
+            List<Photo> newAlbum = loader.getPhotos();
+            //TODO optimization problem
+            for(Photo photo: newAlbum){
+                if(!album.contains(photo) && !releasedList.contains(photo)) {
+                    album.add( photo );
+                }
+            }
         }
         /*
         //TODO REFACTOR

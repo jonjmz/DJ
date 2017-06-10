@@ -104,8 +104,8 @@ public class MainActivity extends AppCompatActivity{
 
         if(Settings.getInstance().isSharePhotos())
             ps.uploadPhotos( primaryUser, loader.getPhotos());
-
-        FirebaseDB.getInstance().downloadAllFriendsPhotos(new DJFriends());
+        if(Settings.getInstance().isViewingFriendsAlbum())
+            FirebaseDB.getInstance().downloadAllFriendsPhotos(new DJFriends());
 
         proximitySwitch = (Switch) findViewById(R.id.proximitySwitch);
         timeOfDaySwitch = (Switch) findViewById(R.id.timeOfDaySwitch);
