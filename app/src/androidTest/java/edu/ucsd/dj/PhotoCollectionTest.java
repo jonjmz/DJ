@@ -124,8 +124,8 @@ public class PhotoCollectionTest {
 
         // we need to fake our location
         IAddressable loc = rating.getCurrentLocation();
-        loc.setLongitude(0);
-        loc.setLatitude(0);
+        loc.setLongitude(10);
+        loc.setLatitude(10);
 
         collection.setRatingStrategy(rating);
         settings.addObserver(rating);
@@ -134,8 +134,8 @@ public class PhotoCollectionTest {
         Photo photo = new Photo();
         photo.setPathname("testPath.jpg");
         Event info = new Event();
-        info.setLatitude(0);
-        info.setLongitude(0);
+        info.setLatitude(10);
+        info.setLongitude(10);
         photo.setInfo(info);
         collection.addPhoto(photo);
 
