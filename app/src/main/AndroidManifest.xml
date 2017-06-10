@@ -35,8 +35,7 @@
 
         <receiver
             android:name=".activities.WidgetProvider"
-            android:icon="@drawable/heartx"
-            android:label="Simple Widget">
+            android:label="DeJa Widget">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>

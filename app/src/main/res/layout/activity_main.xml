@@ -16,7 +16,7 @@
         android:layout_margin="16sp"
         android:clickable="true"
         app:fabSize="mini"
-        android:layout_gravity="bottom|right"
+        android:layout_gravity="bottom|center"
         app:srcCompat="@drawable/camera" />
 
     <android.support.v7.widget.Toolbar
