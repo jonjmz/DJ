@@ -301,7 +301,6 @@ public class PhotoCollection implements ICollectionSubject,
     public List<Photo> getAlbum() {
         return album;
     }
-
 }
 
 

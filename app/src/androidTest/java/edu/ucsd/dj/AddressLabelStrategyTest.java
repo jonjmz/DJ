@@ -40,10 +40,7 @@ public class AddressLabelStrategyTest {
         result4 = "34 Rue Saint-Roch 75001 Paris France";
         defaultResult = "";
     }
-    @Test
-    public void constructorTest() throws Exception {
 
-    }
     @Test
     public void generateAddressTest() throws Exception {
         AddressLabelStrategy loader = new AddressLabelStrategy(InstrumentationRegistry.getTargetContext());

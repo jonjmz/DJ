@@ -14,4 +14,5 @@ import edu.ucsd.dj.interfaces.observers.ISettingsObserver;
 public interface IRating extends ISettingsObserver, IRatingSubject {
     double rate(IPhoto photo);
     void setCurrentLocation(IAddressable location);
+    public IAddressable getCurrentLocation();
 }

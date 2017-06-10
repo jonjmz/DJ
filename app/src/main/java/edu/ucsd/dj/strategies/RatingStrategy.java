@@ -46,6 +46,10 @@ public class RatingStrategy implements IRating {
         observers = new LinkedList<>();
     }
 
+    public IAddressable getCurrentLocation() {
+        return currentLocation;
+    }
+
     /**
      * Calculates score for this photo at this time/generateAddress with these settings.
      * Used to prepare photo for sorting by photo set. Implemented as distance function
@@ -57,7 +61,7 @@ public class RatingStrategy implements IRating {
     @Override
     public double rate(IPhoto photo) {
 
-        long  now = new GregorianCalendar().getTimeInMillis();
+        long  now = calendar.getTimeInMillis();
         double scoreSquared = 0;
         // If considering consideringRecency, add distance to photo
         if (consideringRecency) {
