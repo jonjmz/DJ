@@ -13,6 +13,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 import edu.ucsd.dj.R;
 import edu.ucsd.dj.activities.MainActivity;
@@ -118,7 +119,8 @@ public class ImageAdapter extends BaseAdapter {
                 Photo tempPhoto = new Photo(fileName, primaryUser);
                 tempPhoto.setPathname(Settings.getInstance().MAIN_LOCATION + fileName);
                 PhotoCollection.getInstance().addPhoto(tempPhoto);
-                FirebaseDB.getInstance().uploadPhotos(primaryUser, Arrays.asList(tempPhoto));
+                if(Settings.getInstance().isSharePhotos())
+                    FirebaseDB.getInstance().uploadPhotos(primaryUser, Arrays.asList(tempPhoto));
             }
         }
     }
