@@ -100,7 +100,7 @@ public class PhotoCollection implements ICollectionSubject,
 
         }
         else if(!Settings.getInstance().isViewingMyAlbum() && !Settings.getInstance().isViewingFriendsAlbum()){
-            FirebaseDB.getInstance().removeFriendsListeners();
+            //FirebaseDB.getInstance().removeFriendsListeners();
         }
         else if(Settings.getInstance().isViewingMyAlbum() && !Settings.getInstance().isViewingFriendsAlbum()){
             PhotoLoader loader = new PhotoLoader(Settings.getInstance().MAIN_LOCATION);
@@ -119,7 +119,7 @@ public class PhotoCollection implements ICollectionSubject,
                     album.add( photo );
                 }
             }
-            FirebaseDB.getInstance().removeFriendsListeners();
+            //FirebaseDB.getInstance().removeFriendsListeners();
 
 
         }
