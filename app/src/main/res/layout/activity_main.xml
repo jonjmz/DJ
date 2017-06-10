@@ -104,6 +104,20 @@
             android:textSize="14sp"
             android:typeface="normal" />
 
+        <Switch
+            android:id="@+id/shareOwnPhotoSwitch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/proximitySwitch"
+            android:layout_alignRight="@+id/proximitySwitch"
+            android:layout_below="@+id/timeOfDaySwitch"
+            android:layout_marginTop="17sp"
+            android:text="Sharing photos"
+            android:textAlignment="textStart"
+            android:textSize="14sp"
+            android:typeface="normal"
+            android:checked="true"/>
+
         <TextView
             android:id="@+id/text"
             android:layout_width="match_parent"

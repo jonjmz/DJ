@@ -11,6 +11,9 @@ import java.util.Timer;
 
 import edu.ucsd.dj.interfaces.observers.ISettingsObserver;
 import edu.ucsd.dj.interfaces.observers.ISettingsSubject;
+import edu.ucsd.dj.models.DJPrimaryUser;
+import edu.ucsd.dj.models.FirebaseDB;
+import edu.ucsd.dj.others.PhotoLoader;
 
 /**
  * Setting class that holds all configurations
@@ -24,6 +27,23 @@ public final class Settings implements ISettingsSubject {
 
     private boolean viewingMyAlbum  = true;
     private boolean viewingFriendsAlbum = true;
+    private boolean sharePhotos = true;
+
+    public boolean isSharePhotos() {
+        return sharePhotos;
+    }
+
+    public void setSharePhotos(boolean sharePhotos) {
+        this.sharePhotos = sharePhotos;
+        FirebaseDB db = FirebaseDB.getInstance();
+        if(sharePhotos){
+            PhotoLoader loader = new PhotoLoader(Settings.getInstance().MAIN_LOCATION);
+            db.uploadPhotos(DJPrimaryUser.getInstance(), loader.getPhotos());
+        }
+        else{
+            db.removeSharedPhotos();
+        }
+    }
 
     private List<ISettingsObserver> observers;
 

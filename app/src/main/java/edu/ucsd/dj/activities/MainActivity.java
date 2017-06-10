@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity{
             proximitySwitch,
             timeOfDaySwitch,
             recencySwitch,
+            sharePhotosSwitch,
             myAlbumSwitch,
             friendsAlbumSwitch;
 
@@ -102,7 +103,9 @@ public class MainActivity extends AppCompatActivity{
         ps.addUser(primaryUser);
 
         PhotoLoader loader = new PhotoLoader(Settings.getInstance().MAIN_LOCATION);
-        ps.uploadPhotos( primaryUser, loader.getPhotos());
+
+        if(Settings.getInstance().isSharePhotos())
+            ps.uploadPhotos( primaryUser, loader.getPhotos());
 
         FirebaseDB.getInstance().downloadAllFriendsPhotos(new DJFriends());
 
@@ -115,7 +118,7 @@ public class MainActivity extends AppCompatActivity{
         refreshNow = (Button) findViewById(R.id.refreshNow);
         viewPhotoPicker = (Button) findViewById(R.id.viewPhotoPicker);
         cameraButton = (FloatingActionButton) findViewById(R.id.floatingActionButton);
-
+        sharePhotosSwitch = (Switch) findViewById(R.id.shareOwnPhotoSwitch);
         proximitySwitch.setChecked(Settings.getInstance().isConsideringProximity());
         timeOfDaySwitch.setChecked(Settings.getInstance().isConsideringTOD());
         recencySwitch.setChecked(Settings.getInstance().isConsideringRecency());
@@ -151,6 +154,13 @@ public class MainActivity extends AppCompatActivity{
             }
         });
 
+        sharePhotosSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                Settings.getInstance().setSharePhotos(isChecked);
+            }
+        });
         myAlbumSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
             @Override

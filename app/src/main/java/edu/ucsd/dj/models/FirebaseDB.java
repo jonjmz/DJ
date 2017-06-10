@@ -138,6 +138,9 @@ public class FirebaseDB implements IRemotePhotoStore {
 
     }
 
+    public void removeSharedPhotos(){
+        primaryUserPhotoRef.removeValue();
+    }
     @Override
     public void uploadPhotos(IUser user, List<Photo> photos) {
         int count = 0;
