@@ -70,6 +70,8 @@ public class PhotoCollectionTest {
         // get the current photo, it should be the earliest
         IPhoto bestPhoto = collection.current();
         assertEquals(bestPhoto, photo);
+
+        collection.getAlbum().remove(photo);
     }
 
     @Test
@@ -102,6 +104,8 @@ public class PhotoCollectionTest {
         // get the current photo, it has to be an Afternoon photo (we have at least one)
         IPhoto bestPhoto = collection.current();
         assertEquals(bestPhoto.getTimeOfDay(), Event.TimeOfDay.Afternoon);
+
+        collection.getAlbum().remove(photo);
     }
 
     @Test
@@ -141,6 +145,8 @@ public class PhotoCollectionTest {
         // get the current photo, it has to be an Afternoon photo (we have at least one)
         IPhoto bestPhoto = collection.current();
         assertEquals(bestPhoto, photo);
+
+        collection.getAlbum().remove(photo);
     }
 
     @Test
